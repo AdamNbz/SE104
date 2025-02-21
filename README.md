@@ -27,8 +27,8 @@
 ## GIẢNG VIÊN HƯỚNG DẪN
 <a name="giangvien"></a>
 * TS. **Nguyễn Tấn Trần Minh Khang** - *khangnttm@uit.edu.vn*
-* KS. **Quan Chí Khánh An** - *anqck@uit.edu.vn
-* ThS. **Nguyễn Tấn Toàn** - *toannt@uit.edu.vn
+* KS. **Quan Chí Khánh An** - *anqck@uit.edu.vn*
+* ThS. **Nguyễn Tấn Toàn** - *toannt@uit.edu.vn*
 
 
 ## THÀNH VIÊN NHÓM
