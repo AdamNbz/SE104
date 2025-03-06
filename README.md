@@ -44,7 +44,7 @@
 | 1      | 23521341      | Huỳnh Thanh Sang       |[1811htsang](https://github.com/htsang)               |23521341@gm.uit.edu.vn   |
 | 1      | 23521473      | Nguyễn Duy Tường Thi   |[Piltoverian](https://github.com/Piltoverian)         |23521473@gm.uit.edu.vn   |
 | 1      | 23520289      | Nguyễn Thị Thu Diệu    |                                                      |23520289@gm.uit.edu.vn   |
-| 1      | 23521729      | Trần Anh Tuấn          |                                                      |23521729@gm.uit.edu.vn   |
+| 1      | 23521729      | Trần Anh Tuấn          |[flourineV](https://github.com/flourineV)             |23521729@gm.uit.edu.vn   |
 
 
 ## ĐỒ ÁN MÔN HỌC
