@@ -49,4 +49,4 @@
 
 ## ĐỒ ÁN MÔN HỌC
 <a name="doan"></a>
-Đồ án Nhóm: Quản lý học sinh
+Đồ án Nhóm: Ứng dụng quản lý học sinh
