@@ -37,7 +37,7 @@
 | ------ |:-------------:| ----------------------:|-----------------------------------------------------:|-------------------------:
 | 1      | 23520131      | Nguyễn Võ Ngọc Bảo     |[AdamNbz](https://github.com/AdamNbz)                 |23520131@gm.uit.edu.vn   |
 | 2      | 23520357      | Tiền Minh Dương        |[tienminhduong](https://github.com/tienminhduong)     |23520357@gm.uit.edu.vn   |
-| 3      | 23521548      | Dương Quốc Thuận       |                                                      |23521548@gm.uit.edu.vn   |
+| 3      | 23521548      | Dương Quốc Thuận       |[duongthuan0405](https://github.com/duongthuan0405)   |23521548@gm.uit.edu.vn   |
 | 4      | 23521036      | Bùi Bách Nguyên        |[BuiBachNguyen](https://github.com/BuiBachNguyen)     |23521036@gm.uit.edu.vn   |
 | 5      | 23521261      | Nguyễn Đình Hoàng Quân |[DSeaNguyen](https://github.com/DSeaNguyen)           |23521261@gm.uit.edu.vn   |
 | 6      | 23520305      | Lữ Nguyễn Duy Đức      |[DucLove1](https://github.com/DucLove1)               |23520305@gm.uit.edu.vn   |
