@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FE87B8BB-F7A3-4156-8927-BB517D0A07B8}</ProjectGuid>
+    <ProjectGuid>{55AD5A92-D1E4-4674-B63A-EB165BAB1421}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>GUI</RootNamespace>
     <AssemblyName>GUI</AssemblyName>
@@ -95,12 +95,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BUS\BUS.csproj">
-      <Project>{a7102be8-8135-4595-8142-9e7310559400}</Project>
-      <Name>BUS</Name>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{ae2ce933-c3bb-435c-b161-c2710296a4c4}</Project>
+      <Name>BLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DTO\DTO.csproj">
-      <Project>{952d11ca-021e-4fc8-9fed-483402b17716}</Project>
+      <Project>{2eee5b96-cd94-4493-bd17-2043300a1c60}</Project>
       <Name>DTO</Name>
     </ProjectReference>
   </ItemGroup>

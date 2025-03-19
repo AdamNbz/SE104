@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24A9DC03-FD5A-4BEA-9565-3662162D542D}</ProjectGuid>
+    <ProjectGuid>{05C7C28B-3316-403D-B6BD-065CC44B842D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DAL</RootNamespace>
@@ -41,12 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProvider.cs" />
+    <Compile Include="HocSinhDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestDAL.cs" />
+    <Compile Include="ThamSoDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj">
-      <Project>{952d11ca-021e-4fc8-9fed-483402b17716}</Project>
+      <Project>{2eee5b96-cd94-4493-bd17-2043300a1c60}</Project>
       <Name>DTO</Name>
     </ProjectReference>
   </ItemGroup>
