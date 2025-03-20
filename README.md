@@ -43,7 +43,7 @@
 | 6      | 23520305      | Lữ Nguyễn Duy Đức      |[DucLove1](https://github.com/DucLove1)               |23520305@gm.uit.edu.vn   |
 | 7      | 23521341      | Huỳnh Thanh Sang       |[1811htsang](https://github.com/htsang)               |23521341@gm.uit.edu.vn   |
 | 8      | 23521473      | Nguyễn Duy Tường Thi   |[Piltoverian](https://github.com/Piltoverian)         |23521473@gm.uit.edu.vn   |
-| 9      | 23520289      | Nguyễn Thị Thu Diệu    |                                                      |23520289@gm.uit.edu.vn   |
+| 9      | 23520289      | Nguyễn Thị Thu Diệu    |[thudieung](https://github.com/thudieung)             |23520289@gm.uit.edu.vn   |
 | 10     | 23521729      | Trần Anh Tuấn          |[flourineV](https://github.com/flourineV)             |23521729@gm.uit.edu.vn   |
 
 
