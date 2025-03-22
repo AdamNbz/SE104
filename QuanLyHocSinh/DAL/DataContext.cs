@@ -5,45 +5,33 @@ namespace DAL;
 
 public class DataContext : DbContext
 {
-    public DbSet<HocSinh> HocSinhs { get; set; }
+    public DbSet<HocSinh> HOCSINH { get; set; }
+    public DbSet<ThamSo> THAMSO { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    override protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseSqlite("Data Source=../hocsinh.db");
+        optionsBuilder.UseSqlite("Data Source=hocsinh.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<HocSinh>().HasData(
-            new HocSinh
+        modelBuilder.Entity<ThamSo>().HasData(
+            new ThamSo
             {
-                MaHS = "HS001",
-                HoTen = "Nguyen Van A",
-                GioiTinh = "Nam",
-                NgaySinh = new DateTime(2000, 1, 1),
-                DiaChi = "Ha Noi",
-                Email = "hello"
-            },
-            new HocSinh
-            {
-                MaHS = "HS002",
-                HoTen = "Nguyen Van B",
-                GioiTinh = "Nam",
-                NgaySinh = new DateTime(2000, 1, 1),
-                DiaChi = "Ha Noi",
-                Email = "hello"
-            },
-            new HocSinh
-            {
-                MaHS = "HS003",
-                HoTen = "Nguyen Van C",
-                GioiTinh = "Nam",
-                NgaySinh = new DateTime(2000, 1, 1),
-                DiaChi = "Ha Noi",
-                Email = "hello"
+                Id = 1,
+                TuoiToiDa = 20,
+                TuoiToiThieu = 15
             }
         );
     }
+
+    private DataContext()
+    {
+        Database.EnsureCreated();
+    }
+
+    private static DataContext _instance = new();
+    public static DataContext Context => _instance;
+
 }

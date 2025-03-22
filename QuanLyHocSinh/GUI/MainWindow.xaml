@@ -5,7 +5,107 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-    </Grid>
+        Title="MainWindow" Height="400" Width="800"
+        Loaded="Window_Loaded">
+    <StackPanel>
+        <StackPanel x:Name="stPn_ThongTin">
+            <StackPanel.Resources>
+                <Style x:Key="grid" TargetType="Grid">
+                    <Setter Property="Width" Value="700"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                    <Setter Property="Margin" Value="0,20,0,0"/>
+                </Style>
+
+                <Style x:Key="lb" TargetType="Label">
+                    <Setter Property="FontSize" Value="20"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+
+                <Style x:Key="txBx" TargetType="TextBox">
+                    <Setter Property="FontSize" Value="24"/>
+                </Style>
+            </StackPanel.Resources>
+            <Grid Style="{StaticResource grid}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Label Style="{StaticResource lb}" Content="Mã HS"/>
+                    <TextBox x:Name="txBx_MaHS" Style="{StaticResource txBx}"
+                         IsReadOnly="True"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <Label Style="{StaticResource lb}" Content="Họ và tên"/>
+                    <TextBox x:Name="txBx_HoTen" Style="{StaticResource txBx}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <Label Style="{StaticResource lb}" Content="Giới tính"/>
+                    <TextBox x:Name="txBx_GioiTinh" Style="{StaticResource txBx}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Style="{StaticResource grid}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Label Style="{StaticResource lb}" Content="Email"/>
+                    <TextBox x:Name="txBx_Email" Style="{StaticResource txBx}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <Label Style="{StaticResource lb}" Content="Ngày sinh"/>
+                    <DatePicker x:Name="dtPk_NgaySinh" 
+                            Focusable="False"
+                            FontSize="{Binding ElementName=txBx_Email, Path=FontSize}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Style="{StaticResource grid}">
+
+                <StackPanel Grid.Column="0">
+                    <Label Style="{StaticResource lb}" Content="Địa chỉ"/>
+                    <TextBox x:Name="txBx_DiaChi" Style="{StaticResource txBx}"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Width="700"
+                    Margin="0,20,0,0"
+                    Orientation="Horizontal">
+
+            <StackPanel.Resources>
+                <Style x:Key="btn" TargetType="Button">
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="Padding" Value="5,5,5,5"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="btn_TiepNhan" 
+                    Content="Tiếp nhận"
+                    Style="{StaticResource btn}"
+                    Click="btn_TiepNhan_Click"/>
+            <Border Width="20"/>
+            <Button x:Name="btn_LamMoi"
+                    Content="Làm mới"
+                    Style="{StaticResource btn}" Click="btn_LamMoi_Click"/>
+        </StackPanel>
+
+    </StackPanel>
 </Window>
