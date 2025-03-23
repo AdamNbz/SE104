@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DTO;
-using System.Diagnostics;
-using System.Windows;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System.Security.Cryptography.X509Certificates;
 
 namespace DAL;
 
@@ -16,25 +12,61 @@ public class DataContext : DbContext
 
     override protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=.\\QLHS.db");
+        optionsBuilder.UseSqlite("Data Source=QLHS.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<ThamSo>().HasData(
-            new ThamSo
-            {
-                Id = 1,
-                TuoiToiDa = 20,
-                TuoiToiThieu = 15
-            }
-        );
         modelBuilder.Entity<Khoi>()
             .HasMany(k => k.Lops)
             .WithOne(l => l.Khoi)
             .HasForeignKey(l => l.MaKhoi);
+
+        modelBuilder.Entity<Lop>()
+            .HasMany(l => l.HocSinhs)
+            .WithOne(hs => hs.Lop)
+            .HasForeignKey(hs => hs.MaLop);
+
+        SeedThamSoData(modelBuilder);
+        SeedKhoiData(modelBuilder);
+        SeedLopData(modelBuilder);
+
+        TestDataSeeder.SeedStudentData(modelBuilder);
+    }
+
+    public DataContext()
+    {
+        Database.EnsureCreated();
+    }
+
+    private static DataContext? _instance;
+    public static DataContext Context
+    {
+        get
+        {
+            _instance ??= new DataContext();
+            return _instance;
+        }
+    }
+
+    public void SeedThamSoData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ThamSo>()
+            .HasData(
+                new ThamSo
+                {
+                    Id = 1,
+                    TuoiToiDa = 20,
+                    TuoiToiThieu = 15,
+                    SiSoToiDa = 40
+                }
+            );
+    }
+
+    public void SeedKhoiData(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Khoi>()
             .HasData(
                 new Khoi
@@ -53,7 +85,10 @@ public class DataContext : DbContext
                     TenKhoi = "Khối 12"
                 }
             );
-        // There are these classes: 10A1, 10A2, 10A3, 10A4, 11A1, 11A2, 11A3, 12A1, 12A2
+    }
+
+    public void SeedLopData(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Lop>()
             .HasData(
                 new Lop
@@ -111,19 +146,5 @@ public class DataContext : DbContext
                     MaKhoi = "K012",
                 }
             );
-    }
-
-    public DataContext()
-    {
-        Database.EnsureCreated();
-    }
-    private static DataContext? _instance;
-    public static DataContext Context
-    {
-        get
-        {
-            _instance ??= new DataContext();
-            return _instance;
-        }
     }
 }

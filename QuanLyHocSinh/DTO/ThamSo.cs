@@ -12,4 +12,5 @@ public class ThamSo
     public int Id { get; set; }
     public int TuoiToiDa { get; set; }
     public int TuoiToiThieu { get; set; }
+    public int SiSoToiDa { get; set; }
 }
