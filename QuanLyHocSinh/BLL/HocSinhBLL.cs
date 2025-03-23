@@ -11,13 +11,6 @@ namespace BLL;
 
 public static class HocSinhBLL
 {
-    public static void GetAllHocSinh()
-    {
-        DataContext.Context.HOCSINH.ToList().ForEach(hs => {
-            Debug.WriteLine($"{hs.HoTen} {hs.MaHS}");
-        });
-    }
-
     public static string LayMaHocSinhTuDong()
     {
         string maHS = "HS";
@@ -35,8 +28,8 @@ public static class HocSinhBLL
     }
     private static bool KiemTraHopLeVoiHocSinh(HocSinh hs)
     {
-        int tuoiToiThieu = DAL.ThamSoDAL.LayTuoiToiThieu();
-        int tuoiToiDa = DAL.ThamSoDAL.LayTuoiToiDa();
+        int tuoiToiThieu = ThamSoDAL.LayTuoiToiThieu();
+        int tuoiToiDa = ThamSoDAL.LayTuoiToiDa();
 
         DateTime ngayToiDa = DateTime.Now.AddYears(-tuoiToiThieu);
         DateTime ngayToiThieu = DateTime.Now.AddYears(-tuoiToiDa);
