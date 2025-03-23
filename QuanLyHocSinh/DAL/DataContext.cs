@@ -10,7 +10,7 @@ public class DataContext : DbContext
 
     override protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=hocsinh.db");
+        optionsBuilder.UseSqlite("Data Source=QLHS.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
