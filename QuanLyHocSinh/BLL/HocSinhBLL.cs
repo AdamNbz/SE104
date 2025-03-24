@@ -23,8 +23,9 @@ public static class HocSinhBLL
         if (!KiemTraHopLeVoiHocSinh(hs))
             return false;
 
-        HocSinhDAL.TiepNhanHocSinh(hs);
-        return true;
+        if (HocSinhDAL.TiepNhanHocSinh(hs) == 1)
+            return true;
+        return false;
     }
     private static bool KiemTraHopLeVoiHocSinh(HocSinh hs)
     {

@@ -16,4 +16,6 @@ public class HocSinh
     public DateTime NgaySinh { get; set; }
     public required string DiaChi { get; set; }
     public required string Email { get; set; }
+    public string? MaLop { get; set; }
+    public Lop? Lop { get; set; }
 }
