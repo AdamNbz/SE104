@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DTO;
+using System.Diagnostics;
 
 namespace DAL;
 
@@ -32,13 +33,11 @@ public class DataContext : DbContext
         SeedThamSoData(modelBuilder);
         SeedKhoiData(modelBuilder);
         SeedLopData(modelBuilder);
-
-        TestDataSeeder.SeedStudentData(modelBuilder);
     }
 
     public DataContext()
     {
-        Database.EnsureCreated();
+        Migrations();
     }
 
     private static DataContext? _instance;
@@ -51,7 +50,27 @@ public class DataContext : DbContext
         }
     }
 
-    public void SeedThamSoData(ModelBuilder modelBuilder)
+    private void Migrations()
+    {
+        var migrations = Database.GetAppliedMigrations();
+        Trace.WriteLine("Applied migrations:");
+        foreach (var migration in migrations)
+        {
+            Trace.WriteLine(migration);
+        }
+
+        migrations = Database.GetMigrations();
+        Trace.WriteLine("All migrations:");
+        foreach (var migration in migrations)
+        {
+            Trace.WriteLine(migration);
+        }
+
+        Database.Migrate();
+        Trace.WriteLine("Database migrated!");
+    }
+
+    private void SeedThamSoData(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ThamSo>()
             .HasData(
@@ -65,7 +84,7 @@ public class DataContext : DbContext
             );
     }
 
-    public void SeedKhoiData(ModelBuilder modelBuilder)
+    private void SeedKhoiData(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Khoi>()
             .HasData(
@@ -87,7 +106,7 @@ public class DataContext : DbContext
             );
     }
 
-    public void SeedLopData(ModelBuilder modelBuilder)
+    private void SeedLopData(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Lop>()
             .HasData(

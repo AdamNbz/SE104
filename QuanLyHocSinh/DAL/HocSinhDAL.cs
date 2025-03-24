@@ -15,11 +15,6 @@ public static class HocSinhDAL
 {
     public static int LaySoLuongHocSinh()
     {
-        var ds = LayDanhSachHocSinh();
-        foreach (var hs in ds)
-        {
-            Debug.WriteLine($"Hoc sinh: {hs.HoTen}, Lop: {hs.Lop?.MaLop}");
-        }
         return DataContext.Context.HOCSINH.Count();
     }
     public static int TiepNhanHocSinh(HocSinh hs)
@@ -34,10 +29,5 @@ public static class HocSinhDAL
         {
             return 0;
         }
-    }
-
-    public static ICollection<HocSinh> LayDanhSachHocSinh()
-    {
-        return DataContext.Context.HOCSINH.Include(hs => hs.Lop).ToList();
     }
 }
