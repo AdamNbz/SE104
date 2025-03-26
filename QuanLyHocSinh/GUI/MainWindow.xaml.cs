@@ -41,12 +41,13 @@ namespace GUI
 
         private void btn_TiepNhan_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txBx_HoTen.Text))
-            {
-                MessageBox.Show("Không được bỏ trống tên", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
-                txBx_HoTen.Focus();
-            }
-            else if (string.IsNullOrEmpty(txBx_GioiTinh.Text))
+            //if (string.IsNullOrEmpty(txBx_HoTen.Text))
+            //{
+            //    MessageBox.Show("Không được bỏ trống tên", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    txBx_HoTen.Focus();
+            //}
+            //else
+            if (string.IsNullOrEmpty(txBx_GioiTinh.Text))
             {
                 MessageBox.Show("Không được bỏ trống giới tính", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
                 txBx_GioiTinh.Focus();
