@@ -21,34 +21,30 @@ public static class HocSinhBLL
 
     public static bool TiepNhanHocSinh(HocSinh hs)
     {
-        if (hs.Email == "")
+        string ErrorMessage = "";
+        if (string.IsNullOrEmpty(hs.HoTen))
         {
-            MessageBox.Show("EMAIL KHÔNG HỢP LỆ", "TIẾP NHẬN THẤT BẠI", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+            ErrorMessage += "Họ tên không được để trống\n";
         }
-        else if (hs.GioiTinh == "")
+        if (string.IsNullOrEmpty(hs.GioiTinh))
         {
-            MessageBox.Show("GIOITINH KHÔNG HỢP LỆ", "TIẾP NHẬN THẤT BẠI", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+            ErrorMessage += "Giới tính không được để trống\n";
         }
-        else if (hs.DiaChi == "")
+        if (string.IsNullOrEmpty(hs.Email))
         {
-            MessageBox.Show("DIACHI KHÔNG HỢP LỆ", "TIẾP NHẬN THẤT BẠI", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+            ErrorMessage += "Email không được để trống\n";
         }
-        else if (hs.HoTen == "")
+        if (!KiemTraTuoiHopLeVoiHocSinh(hs))
         {
-            MessageBox.Show("HOTEN KHÔNG HỢP LỆ", "TIẾP NHẬN THẤT BẠI", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+            ErrorMessage += "Ngày sinh không hợp lệ\n";
         }
-        else if (hs.MaHS == "")
+        if (string.IsNullOrEmpty(hs.DiaChi))
         {
-            MessageBox.Show("MAHS KHÔNG HỢP LỆ", "TIẾP NHẬN THẤT BẠI", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+            ErrorMessage += "Địa chỉ không được để trống\n";
         }
-        else if (!KiemTraTuoiHopLeVoiHocSinh(hs))
+        if (!string.IsNullOrEmpty(ErrorMessage))
         {
-            MessageBox.Show("Tuoi KHÔNG HỢP LỆ", "TIẾP NHẬN THẤT BẠI", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(ErrorMessage, "Tiếp nhận thất bại", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
 
