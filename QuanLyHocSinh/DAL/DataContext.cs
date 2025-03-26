@@ -35,17 +35,17 @@ public class DataContext : DbContext
         SeedLopData(modelBuilder);
     }
 
-    public DataContext()
-    {
-        Migrations();
-    }
 
-    private static DataContext? _instance;
+    private static DataContext? _instance = null;
     public static DataContext Context
     {
         get
         {
-            _instance ??= new DataContext();
+            if (_instance == null)
+            {
+                _instance = new DataContext();
+                _instance.Migrations();
+            }
             return _instance;
         }
     }

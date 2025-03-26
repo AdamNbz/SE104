@@ -11,11 +11,11 @@ public class HocSinh
 {
     [Key]
     public required string MaHS { get; set; }
-    public required string HoTen { get; set; }
-    public required string GioiTinh { get; set; }
-    public DateTime NgaySinh { get; set; }
-    public required string DiaChi { get; set; }
-    public required string Email { get; set; }
+    public string? HoTen { get; set; }
+    public string? GioiTinh { get; set; }
+    public DateTime? NgaySinh { get; set; }
+    public string? DiaChi { get; set; }
+    public string? Email { get; set; }
     public string? MaLop { get; set; }
     public Lop? Lop { get; set; }
 }

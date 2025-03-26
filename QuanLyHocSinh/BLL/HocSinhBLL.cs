@@ -20,20 +20,37 @@ public static class HocSinhBLL
 
     public static bool TiepNhanHocSinh(HocSinh hs)
     {
-        if (!KiemTraHopLeVoiHocSinh(hs))
-            return false;
+        KiemTraHopLeVoiHocSinh(hs);
 
         if (HocSinhDAL.TiepNhanHocSinh(hs) == 1)
             return true;
         return false;
     }
-    private static bool KiemTraHopLeVoiHocSinh(HocSinh hs)
+    private static void KiemTraHopLeVoiHocSinh(HocSinh hs)
     {
+        if (string.IsNullOrEmpty(hs.HoTen))
+            throw new ArgumentException("Không được bỏ trống họ tên");
+        if (string.IsNullOrEmpty(hs.GioiTinh))
+            throw new ArgumentException("Không được bỏ trống giới tính");
+        if (string.IsNullOrEmpty(hs.Email))
+            throw new ArgumentException("Không được bỏ trống email");
+        if (string.IsNullOrEmpty(hs.DiaChi))
+            throw new ArgumentException("Không được bỏ trống địa chỉ");
+
+        KiemTraNgaySinh(hs.NgaySinh);
+    }
+
+    private static void KiemTraNgaySinh(DateTime? ngaySinh)
+    {
+        if (ngaySinh == null)
+            throw new ArgumentException("Không được bỏ trống ngày sinh");
         int tuoiToiThieu = ThamSoDAL.LayTuoiToiThieu();
         int tuoiToiDa = ThamSoDAL.LayTuoiToiDa();
 
         DateTime ngayToiDa = DateTime.Now.AddYears(-tuoiToiThieu);
         DateTime ngayToiThieu = DateTime.Now.AddYears(-tuoiToiDa);
-        return hs.NgaySinh >= ngayToiThieu && hs.NgaySinh <= ngayToiDa;
+
+        if (ngaySinh < ngayToiThieu || ngaySinh > ngayToiDa)
+            throw new ArgumentException($"Tuổi phải từ {tuoiToiThieu} đến {tuoiToiDa}");
     }
 }

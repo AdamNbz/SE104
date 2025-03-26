@@ -41,61 +41,28 @@ namespace GUI
 
         private void btn_TiepNhan_Click(object sender, RoutedEventArgs e)
         {
-            //if (string.IsNullOrEmpty(txBx_HoTen.Text))
-            //{
-            //    MessageBox.Show("Không được bỏ trống tên", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    txBx_HoTen.Focus();
-            //}
-            //else
-            if (string.IsNullOrEmpty(txBx_GioiTinh.Text))
-            {
-                MessageBox.Show("Không được bỏ trống giới tính", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
-                txBx_GioiTinh.Focus();
-            }
-            else if (string.IsNullOrEmpty(txBx_Email.Text))
-            {
-                MessageBox.Show("Không được bỏ trống email", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
-                txBx_Email.Focus();
-            }
-            else if (dtPk_NgaySinh.SelectedDate == null)
-            {
-                MessageBox.Show("Không được bỏ trống ngày sinh", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
-                dtPk_NgaySinh.Focus();
-            }
-            else if (string.IsNullOrEmpty(txBx_DiaChi.Text))
-            {
-                MessageBox.Show("Không được bỏ trống địa chỉ", "Lỗi: NHẬP LIỆU", MessageBoxButton.OK, MessageBoxImage.Error);
-                txBx_DiaChi.Focus();
-            }
-            else
+            try
             {
                 HocSinh hs = new HocSinh
                 {
                     MaHS = txBx_MaHS.Text,
                     HoTen = txBx_HoTen.Text,
                     GioiTinh = txBx_GioiTinh.Text,
-                    NgaySinh = dtPk_NgaySinh.SelectedDate.Value,
+                    NgaySinh = dtPk_NgaySinh.SelectedDate,
                     DiaChi = txBx_DiaChi.Text,
                     Email = txBx_Email.Text
                 };
-                try
+                if (BLL.HocSinhBLL.TiepNhanHocSinh(hs))
                 {
-                    if (BLL.HocSinhBLL.TiepNhanHocSinh(hs))
-                    {
-                        MessageBox.Show("Tiếp nhận hoc sinh thành công", "Thông báo: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Information);
-                        btn_TiepNhan.IsEnabled = false;
-                        stPn_ThongTin.IsEnabled = false;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Tuổi của học sinh không hợp lệ", "Lỗi - Thất bại: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    MessageBox.Show("Tiếp nhận hoc sinh thành công", "Thông báo: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Information);
+                    btn_TiepNhan.IsEnabled = false;
+                    stPn_ThongTin.IsEnabled = false;
+                }
 
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Lỗi tiếp nhận", "Lỗi - Thất bại: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message, "Lỗi tiếp nhận", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

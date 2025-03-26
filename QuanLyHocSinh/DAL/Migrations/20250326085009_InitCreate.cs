@@ -8,27 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddKhoiLop : Migration
+    public partial class InitCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "HOCSINH",
-                keyColumn: "MaHS",
-                keyValue: "HS0001");
-
-            migrationBuilder.DeleteData(
-                table: "HOCSINH",
-                keyColumn: "MaHS",
-                keyValue: "HS0002");
-
-            migrationBuilder.AddColumn<string>(
-                name: "MaLop",
-                table: "HOCSINH",
-                type: "TEXT",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "KHOI",
                 columns: table => new
@@ -39,6 +23,21 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KHOI", x => x.MaKhoi);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "THAMSO",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TuoiToiDa = table.Column<int>(type: "INTEGER", nullable: false),
+                    TuoiToiThieu = table.Column<int>(type: "INTEGER", nullable: false),
+                    SiSoToiDa = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_THAMSO", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,6 +59,28 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "HOCSINH",
+                columns: table => new
+                {
+                    MaHS = table.Column<string>(type: "TEXT", nullable: false),
+                    HoTen = table.Column<string>(type: "TEXT", nullable: true),
+                    GioiTinh = table.Column<string>(type: "TEXT", nullable: true),
+                    NgaySinh = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DiaChi = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    MaLop = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HOCSINH", x => x.MaHS);
+                    table.ForeignKey(
+                        name: "FK_HOCSINH_LOP_MaLop",
+                        column: x => x.MaLop,
+                        principalTable: "LOP",
+                        principalColumn: "MaLop");
+                });
+
             migrationBuilder.InsertData(
                 table: "KHOI",
                 columns: new[] { "MaKhoi", "TenKhoi" },
@@ -69,6 +90,11 @@ namespace DAL.Migrations
                     { "K011", "Khối 11" },
                     { "K012", "Khối 12" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "THAMSO",
+                columns: new[] { "Id", "SiSoToiDa", "TuoiToiDa", "TuoiToiThieu" },
+                values: new object[] { 1, 40, 20, 15 });
 
             migrationBuilder.InsertData(
                 table: "LOP",
@@ -95,44 +121,22 @@ namespace DAL.Migrations
                 name: "IX_LOP_MaKhoi",
                 table: "LOP",
                 column: "MaKhoi");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_HOCSINH_LOP_MaLop",
-                table: "HOCSINH",
-                column: "MaLop",
-                principalTable: "LOP",
-                principalColumn: "MaLop");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_HOCSINH_LOP_MaLop",
-                table: "HOCSINH");
+            migrationBuilder.DropTable(
+                name: "HOCSINH");
+
+            migrationBuilder.DropTable(
+                name: "THAMSO");
 
             migrationBuilder.DropTable(
                 name: "LOP");
 
             migrationBuilder.DropTable(
                 name: "KHOI");
-
-            migrationBuilder.DropIndex(
-                name: "IX_HOCSINH_MaLop",
-                table: "HOCSINH");
-
-            migrationBuilder.DropColumn(
-                name: "MaLop",
-                table: "HOCSINH");
-
-            migrationBuilder.InsertData(
-                table: "HOCSINH",
-                columns: new[] { "MaHS", "DiaChi", "Email", "GioiTinh", "HoTen", "NgaySinh" },
-                values: new object[,]
-                {
-                    { "HS0001", "Ở đây", "thuandq@uit.edu.vn", "Nam", "Dương Quốc Thuận", new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { "HS0002", "Ở đây", "1234@lmao.com", "Nam", "Tiền Minh Dương", new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
-                });
         }
     }
 }

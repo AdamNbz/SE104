@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250324051427_AddKhoiLop")]
-    partial class AddKhoiLop
+    [Migration("20250326085009_InitCreate")]
+    partial class InitCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,25 +26,21 @@ namespace DAL.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DiaChi")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GioiTinh")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("HoTen")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MaLop")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("NgaySinh")
+                    b.Property<DateTime?>("NgaySinh")
                         .HasColumnType("TEXT");
 
                     b.HasKey("MaHS");

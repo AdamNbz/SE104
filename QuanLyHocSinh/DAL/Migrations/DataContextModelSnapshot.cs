@@ -23,25 +23,21 @@ namespace DAL.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DiaChi")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GioiTinh")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("HoTen")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MaLop")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("NgaySinh")
+                    b.Property<DateTime?>("NgaySinh")
                         .HasColumnType("TEXT");
 
                     b.HasKey("MaHS");
