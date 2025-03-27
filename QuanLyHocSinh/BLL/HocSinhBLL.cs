@@ -44,13 +44,75 @@ public static class HocSinhBLL
         }
         if (!string.IsNullOrEmpty(ErrorMessage))
         {
-            MessageBox.Show(ErrorMessage, "Tiếp nhận thất bại", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+            throw new Exception(ErrorMessage);
         }
 
         if (HocSinhDAL.TiepNhanHocSinh(hs) == 1)
             return true;
         return false;
+    }
+    public static List<HocSinh> TimKiemHocSinh(string DuLieu,List<HocSinh>TatCaHocSinh)
+    {
+        List<HocSinh> CacKetQuaKhaThi = new List<HocSinh>();
+        try
+        {
+           
+            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            {
+                if (DuLieu == TatCaHocSinh[i].MaHS)
+                {
+                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    return CacKetQuaKhaThi;
+                }
+            }
+            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            {
+                if (DuLieu == TatCaHocSinh[i].Email)
+                {
+                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    return CacKetQuaKhaThi;
+                }
+            }
+            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            {
+                if (DuLieu == TatCaHocSinh[i].HoTen)
+                {
+                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                }
+                return CacKetQuaKhaThi;
+            }
+            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            {
+                if (DuLieu == TatCaHocSinh[i].GioiTinh)
+                {
+                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                }
+                return CacKetQuaKhaThi;
+            }
+            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            {
+                if (DuLieu == TatCaHocSinh[i].MaLop)
+                {
+                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                }
+                return CacKetQuaKhaThi;
+            }
+            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            {
+                if (DuLieu == TatCaHocSinh[i].DiaChi)
+                {
+                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                }
+                return CacKetQuaKhaThi;
+            }
+            throw new Exception("Khong Tim Thay hoc Sinh");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "LOI TIM KIEM", MessageBoxButton.OK, MessageBoxImage.Error);
+            
+        }
+        return CacKetQuaKhaThi;
     }
     private static bool KiemTraTuoiHopLeVoiHocSinh(HocSinh hs)
     {

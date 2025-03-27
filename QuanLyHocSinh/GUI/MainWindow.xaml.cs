@@ -51,17 +51,19 @@ namespace GUI
                     DiaChi = txBx_DiaChi.Text ?? "",
                     Email = txBx_Email.Text ?? ""
                 };
-                
+            try
+            {
                 if (BLL.HocSinhBLL.TiepNhanHocSinh(hs))
                 {
-                        MessageBox.Show("Tiếp nhận hoc sinh thành công", "Thông báo: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Information);
-                        btn_TiepNhan.IsEnabled = false;
-                        stPn_ThongTin.IsEnabled = false;
+                    MessageBox.Show("Tiếp nhận hoc sinh thành công", "Thông báo: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Information);
+                    btn_TiepNhan.IsEnabled = false;
+                    stPn_ThongTin.IsEnabled = false;
                 }
-                else
-                {
-                        MessageBox.Show("Tiếp nhận thất bại", "Lỗi - Thất bại: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Thong Bao Loi Tiep Nhan",MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void btn_LamMoi_Click(object sender, RoutedEventArgs e)
