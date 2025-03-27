@@ -70,8 +70,8 @@ public static class HocSinhBLL
                 if (DuLieu == TatCaHocSinh[i].Email)
                 {
                     CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
-                    return CacKetQuaKhaThi;
                 }
+                return CacKetQuaKhaThi;
             }
             for (int i = 0; i < TatCaHocSinh.Count; i++)
             {
