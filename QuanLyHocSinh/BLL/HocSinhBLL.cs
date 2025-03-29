@@ -14,6 +14,19 @@ namespace BLL;
 public static class HocSinhBLL
 {
     static List<HocSinh> hocSinh = new List<HocSinh>();
+    public static bool XoaHocSinh(string MaHS)
+    {
+        for (int i = 0; i < hocSinh.Count; i++)
+        {
+            if (hocSinh[i].MaHS==MaHS)
+            {
+                hocSinh.Remove(hocSinh[i]);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static string LayMaHocSinhTuDong()
     {
         
