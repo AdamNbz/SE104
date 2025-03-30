@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -28,6 +29,51 @@ public static class HocSinhDAL
         catch
         {
             return 0;
+        }
+    }
+    public static List<HocSinh> LayTatCaHocSinh()
+    {
+        return DataContext.Context.HOCSINH.Include(hs => hs.Lop).ToList();
+    }
+    public static HocSinh? LayHocSinh(string MaHS)
+    {
+        return DataContext.Context.HOCSINH.Include(hs => hs.Lop).FirstOrDefault(hs => hs.MaHS == MaHS);
+    }
+    public static int CapNhatHocSinh(HocSinh hs)
+    {
+        try
+        {
+            var hocSinh = DataContext.Context.HOCSINH.FirstOrDefault(h => h.MaHS == hs.MaHS);
+            if (hocSinh == null)
+                return 0;
+            hocSinh.HoTen = hs.HoTen;
+            hocSinh.GioiTinh = hs.GioiTinh;
+            hocSinh.NgaySinh = hs.NgaySinh;
+            hocSinh.DiaChi = hs.DiaChi;
+            hocSinh.Email = hs.Email;
+            hocSinh.MaLop = hs.MaLop;
+            hocSinh.Lop = hs.Lop;
+            DataContext.Context.SaveChanges();
+            return 1;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+    public static void XoaHocSinh(string MaHS)
+    {
+        try
+        {
+            var hocSinh = DataContext.Context.HOCSINH.FirstOrDefault(h => h.MaHS == MaHS);
+            if (hocSinh == null)
+                return;
+            DataContext.Context.HOCSINH.Remove(hocSinh);
+            DataContext.Context.SaveChanges();
+        }
+        catch
+        {
+            return;
         }
     }
 }
