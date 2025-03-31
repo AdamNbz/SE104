@@ -26,6 +26,48 @@ public static class HocSinhDAL
             DataContext.Context.SaveChanges();
             return 1;
         }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+            return 0;
+        }
+    }
+
+    public static int CapNhatHocSinh(HocSinh hs)
+    {
+        var hocSinh = DataContext.Context.HOCSINH.FirstOrDefault(HocSinh => HocSinh.MaHS == hs.MaHS);
+        if (hocSinh == null)
+            return 0;
+
+        hocSinh.HoTen = hs.HoTen;
+        hocSinh.GioiTinh = hs.GioiTinh;
+        hocSinh.NgaySinh = hs.NgaySinh;
+        hocSinh.DiaChi = hs.DiaChi;
+        hocSinh.Email = hs.Email;
+        hocSinh.MaLop = hs.MaLop;
+
+        try
+        {
+            DataContext.Context.SaveChanges();
+            return 1;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+
+    public static int XoaHocSinh(string maHS)
+    {
+        var hocSinh = DataContext.Context.HOCSINH.FirstOrDefault(HocSinh => HocSinh.MaHS == maHS);
+        if (hocSinh == null)
+            return 0;
+        try
+        {
+            DataContext.Context.HOCSINH.Remove(hocSinh);
+            DataContext.Context.SaveChanges();
+            return 1;
+        }
         catch
         {
             return 0;
