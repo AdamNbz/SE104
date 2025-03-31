@@ -13,7 +13,7 @@ namespace BLL;
 
 public static class HocSinhBLL
 {
-    static List<HocSinh> hocSinh = new List<HocSinh>();
+    static List<HocSinh> hocSinh = HocSinhDAL.LayTatCaHocSinh();
     public static bool XoaHocSinh(string MaHS)
     {
         for (int i = 0; i < hocSinh.Count; i++)
@@ -21,15 +21,16 @@ public static class HocSinhBLL
             if (hocSinh[i].MaHS==MaHS)
             {
                 hocSinh.Remove(hocSinh[i]);
+                
                 return true;
             }
         }
+        HocSinhDAL.XoaHocSinh(MaHS);
         return false;
     }
 
     public static string LayMaHocSinhTuDong()
     {
-        
         string maHS = "HS";
         int soLuongHSHienTai = HocSinhDAL.LaySoLuongHocSinh();
         return maHS + string.Format("{0:D4}", LaySoThuTuTuDong(hocSinh));
@@ -152,6 +153,48 @@ public static class HocSinhBLL
         DateTime ngayToiDa = DateTime.Now.AddYears(-tuoiToiThieu);
         DateTime ngayToiThieu = DateTime.Now.AddYears(-tuoiToiDa);
         return hs.NgaySinh >= ngayToiThieu && hs.NgaySinh <= ngayToiDa;
+    }
+    public static bool SuaHocSinh(HocSinh hs)
+    {
+        string ErrorMessage = "";
+        if (string.IsNullOrEmpty(hs.HoTen))
+        {
+            ErrorMessage += "Họ tên không được để trống\n";
+        }
+        if (string.IsNullOrEmpty(hs.GioiTinh))
+        {
+            ErrorMessage += "Giới tính không được để trống\n";
+        }
+        if (string.IsNullOrEmpty(hs.Email))
+        {
+            ErrorMessage += "Email không được để trống\n";
+        }
+        if (!KiemTraTuoiHopLeVoiHocSinh(hs))
+        {
+            ErrorMessage += "Ngày sinh không hợp lệ\n";
+        }
+        if (string.IsNullOrEmpty(hs.DiaChi))
+        {
+            ErrorMessage += "Địa chỉ không được để trống\n";
+        }
+        if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            throw new Exception(ErrorMessage);
+        }
+
+        if (HocSinhDAL.CapNhatHocSinh(hs) == 1)
+        {
+            for (int i = 0;i<hocSinh.Count;i++)
+            {
+                if(hocSinh[i].MaHS == hs.MaHS)
+                {
+                    hocSinh[i] = hs;
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
 public static class Algorithm
