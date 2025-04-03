@@ -70,5 +70,6 @@ namespace GUI
         {
             Window_Loaded(sender, e);
         }
+      
     }
 }
