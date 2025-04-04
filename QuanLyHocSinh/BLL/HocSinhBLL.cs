@@ -21,11 +21,11 @@ public static class HocSinhBLL
             if (hocSinh[i].MaHS==MaHS)
             {
                 hocSinh.Remove(hocSinh[i]);
-                
+                HocSinhDAL.XoaHocSinh(MaHS);
                 return true;
             }
         }
-        HocSinhDAL.XoaHocSinh(MaHS);
+        
         return false;
     }
 
@@ -82,59 +82,64 @@ public static class HocSinhBLL
         }
         return false;
     }
-    public static List<HocSinh> TimKiemHocSinh(string DuLieu,List<HocSinh>TatCaHocSinh)
+    public static List<HocSinh> TimKiemHocSinh(string DuLieu)
     {
         List<HocSinh> CacKetQuaKhaThi = new List<HocSinh>();
         try
         {
            
-            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == TatCaHocSinh[i].MaHS)
+                if (DuLieu == hocSinh[i].MaHS)
                 {
-                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    CacKetQuaKhaThi.Add(hocSinh[i]);
                     return CacKetQuaKhaThi;
                 }
             }
-            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == TatCaHocSinh[i].Email)
+                if (DuLieu == hocSinh[i].Email)
                 {
-                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    CacKetQuaKhaThi.Add(hocSinh[i]);
                 }
+                if(CacKetQuaKhaThi.Count > 0)
                 return CacKetQuaKhaThi;
             }
-            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == TatCaHocSinh[i].HoTen)
+                if (DuLieu == hocSinh[i].HoTen)
                 {
-                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    CacKetQuaKhaThi.Add(hocSinh[i]);
                 }
-                return CacKetQuaKhaThi;
+                if (CacKetQuaKhaThi.Count > 0)
+                    return CacKetQuaKhaThi;
             }
-            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == TatCaHocSinh[i].GioiTinh)
+                if (DuLieu == hocSinh[i].GioiTinh)
                 {
-                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    CacKetQuaKhaThi.Add(hocSinh[i]);
                 }
-                return CacKetQuaKhaThi;
+                if (CacKetQuaKhaThi.Count > 0)
+                    return CacKetQuaKhaThi;
             }
-            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == TatCaHocSinh[i].MaLop)
+                if (DuLieu == hocSinh[i].MaLop)
                 {
-                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    CacKetQuaKhaThi.Add(hocSinh[i]);
                 }
-                return CacKetQuaKhaThi;
+                if (CacKetQuaKhaThi.Count > 0)
+                    return CacKetQuaKhaThi;
             }
-            for (int i = 0; i < TatCaHocSinh.Count; i++)
+            for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == TatCaHocSinh[i].DiaChi)
+                if (DuLieu == hocSinh[i].DiaChi)
                 {
-                    CacKetQuaKhaThi.Add(TatCaHocSinh[i]);
+                    CacKetQuaKhaThi.Add(hocSinh[i]);
                 }
-                return CacKetQuaKhaThi;
+                if (CacKetQuaKhaThi.Count > 0)
+                    return CacKetQuaKhaThi;
             }
             throw new Exception("Khong Tim Thay hoc Sinh");
         }
