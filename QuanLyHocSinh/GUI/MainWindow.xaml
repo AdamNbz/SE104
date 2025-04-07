@@ -7,7 +7,6 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="MainWindow" Height="440" Width="800"
-        Background="#CCCCCC"
         Loaded="Window_Loaded">
     <StackPanel>
         <StackPanel x:Name="stPn_ThongTin">
@@ -43,13 +42,14 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="Mã HS" 
+                    <TextBlock Text="Mã học sinh" 
                                Style="{StaticResource MaterialDesignBody1TextBlock}" 
                                Margin="0,0,0,5"/>
                     <TextBox x:Name="txBx_MaHS"
                              Style="{StaticResource CustomTextBox1}"
-                             materialDesign:HintAssist.Hint="Mã HS"
+                             materialDesign:HintAssist.Hint="Mã học sinh"
                              IsReadOnly="True"
+                             Background="#CCCCCC"
                              Cursor="Arrow"/>
                 </StackPanel>
 
@@ -126,6 +126,16 @@
                     Content="Làm mới"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     FontSize="16"
+                    Margin="0,0,35,0"
+                    Padding="30,5"
+                    MinWidth="100"
+                    MinHeight="40"/>
+            <Button x:Name="btn_TimKiem"
+                    Click="btn_TimKiem_Click"
+                    Content="Tìm kiếm"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    FontSize="16"
+                    Margin="0,0,35,0"
                     Padding="30,5"
                     MinWidth="100"
                     MinHeight="40"/>
