@@ -70,6 +70,12 @@ namespace GUI
         {
             Window_Loaded(sender, e);
         }
-      
+
+        private void btn_TimKiem_Click(object sender, RoutedEventArgs e)
+        {
+            TimKiemWindow timKiemWindow = new TimKiemWindow();
+            timKiemWindow.Owner = this;
+            timKiemWindow.ShowDialog();
+        }
     }
 }
