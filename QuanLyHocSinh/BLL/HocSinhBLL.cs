@@ -32,6 +32,10 @@ public static class HocSinhBLL
     {
         return hocSinh.Find(x => x.MaHS == MaHS);
     }
+    public static List<HocSinh> GetDanhSachHocSinh()
+    {
+        return hocSinh;
+    }
     public static string LayMaHocSinhTuDong()
     {
         string maHS = "HS";
