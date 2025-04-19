@@ -3,28 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using DAL;
 using DTO;
 
 namespace BLL
 {
-    internal class PhanLopBLL
+    internal static class PhanLopBLL
     {
-        HocSinh HocSinhCanPhanLop;
-        Lop LopDuocPhanVao;
-        List<Lop> DanhSachLop;
-        public void PhanLopChoTungHocSinh(string MaHS,string MaLop)
+        static HocSinh HocSinhCanPhanLop;
+        static List<HocSinh> HocSinhList;
+        static Lop LopDuocPhanVao;
+        static List<Lop> DanhSachLop;
+        public static void PhanLopChoTungHocSinh(string MaHS,string MaLop)
         {
-            HocSinhCanPhanLop = HocSinhDAL.LayHocSinh(MaHS);
-            LopDuocPhanVao = DanhSachLop.Find(x => x.MaLop == MaLop);
-            HocSinhCanPhanLop.MaLop = LopDuocPhanVao.MaLop;
-            HocSinhDAL.CapNhatHocSinh(HocSinhCanPhanLop);
-        }
-        public void PhanLopChoMotDanhSachHocSinh(string MaLop,List<string> DanhSachMaHS)
-        {
-            for (int i = 0;i<DanhSachMaHS.Count;i++)
+            try
             {
-                PhanLopChoTungHocSinh(DanhSachMaHS[i], MaLop);
+                
+                int count = 0;
+                for (int i=0;i<HocSinhList.Count;i++)
+                {
+                    
+                    if (HocSinhList[i].MaLop== MaLop)
+                    {
+                        count++;
+                    }
+                    if (count>=40)
+                    {
+                        throw new Exception("SoLuongHocSinhVuotGioiHan");
+                    }
+                }
+                HocSinhCanPhanLop = HocSinhDAL.LayHocSinh(MaHS);
+                LopDuocPhanVao = DanhSachLop.Find(x => x.MaLop == MaLop);
+                HocSinhCanPhanLop.MaLop = LopDuocPhanVao.MaLop;
+                HocSinhDAL.CapNhatHocSinh(HocSinhCanPhanLop);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message,"Loi Lap Danh Sach Lop",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+        }
+        public static void PhanLopChoMotDanhSachHocSinh(string MaLop,List<string> DanhSachMaHS)
+        {
+            try
+            {
+                if (DanhSachLop.Find(x => x.MaLop == MaLop) == null)
+                {
+                    throw new Exception("LopKhongNamTrongDanhSachLop");
+                }
+                for (int i = 0; i < DanhSachMaHS.Count; i++)
+                {
+                    PhanLopChoTungHocSinh(DanhSachMaHS[i], MaLop);
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message, "Loi Lap Danh Sach Lop", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
