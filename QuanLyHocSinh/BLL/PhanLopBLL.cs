@@ -15,23 +15,15 @@ namespace BLL
         static List<HocSinh> HocSinhList;
         static Lop LopDuocPhanVao;
         static List<Lop> DanhSachLop;
+        static List<Khoi> DanhSachKhoiLop;
         public static void PhanLopChoTungHocSinh(string MaHS,string MaLop)
         {
             try
             {
-                
-                int count = 0;
-                for (int i=0;i<HocSinhList.Count;i++)
+
+                if (LopBLL.TinhSiSo(HocSinhBLL.GetDanhSachHocSinh(),MaLop) >= 40)
                 {
-                    
-                    if (HocSinhList[i].MaLop== MaLop)
-                    {
-                        count++;
-                    }
-                    if (count>=40)
-                    {
-                        throw new Exception("SoLuongHocSinhVuotGioiHan");
-                    }
+                    throw new Exception("SoLuongHocSinhVuotGioiHan");
                 }
                 HocSinhCanPhanLop = HocSinhDAL.LayHocSinh(MaHS);
                 LopDuocPhanVao = DanhSachLop.Find(x => x.MaLop == MaLop);
