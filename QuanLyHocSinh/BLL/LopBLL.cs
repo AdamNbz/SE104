@@ -10,6 +10,7 @@ namespace BLL
     internal static class LopBLL
     {
         static List<Lop> DanhSachLop;
+        static List<Khoi> DanhSachKhoiLop;
         public static List<Lop> GetDanhSachLop()
         {
             return DanhSachLop;

@@ -15,7 +15,7 @@ namespace BLL
         static List<HocSinh> HocSinhList;
         static Lop LopDuocPhanVao;
         static List<Lop> DanhSachLop;
-        static List<Khoi> DanhSachKhoiLop;
+        
         public static void PhanLopChoTungHocSinh(string MaHS,string MaLop)
         {
             try
