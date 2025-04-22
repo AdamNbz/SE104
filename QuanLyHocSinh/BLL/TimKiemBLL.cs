@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    internal static class TimKiemBLL
+    public static class TimKiemBLL
     {
-        internal class ThongTinTimKiem
+        public class ThongTinTimKiem
         {
             public string? MaHS;
             public string? HoTen;
