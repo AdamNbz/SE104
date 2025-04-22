@@ -26,21 +26,66 @@ namespace BLL
             public int? MaxSiSo;
             public string? MaKhoi;
             public string? MaLop;
-            ThongTinTimKiem(string? maHS, string? hoTen, string? gioiTinh, string? diaChi, string? email, float? maxDiemTrungBinhHK1, float? maxDiemTrungBinhHK2, float? minDiemTrungBinhHK1, float? minDiemTrungBinhHK2, DateTime? maxNgaySinh, DateTime? minNgaySinh, int? minSiSo, int? maxSiSo, string? maKhoi, string? maLop)
+            public ThongTinTimKiem(string? maHS, string? hoTen, string? gioiTinh, string? diaChi, string? email, string? maxDiemTrungBinhHK1, string? maxDiemTrungBinhHK2, string? minDiemTrungBinhHK1, string? minDiemTrungBinhHK2, DateTime? maxNgaySinh, DateTime? minNgaySinh, string? minSiSo, string? maxSiSo, string? maKhoi, string? maLop)
             {
                 MaHS = maHS;
                 HoTen = hoTen;
                 GioiTinh = gioiTinh;
                 DiaChi = diaChi;
                 Email = email;
-                MaxDiemTrungBinhHK1 = maxDiemTrungBinhHK1;
-                MaxDiemTrungBinhHK2 = maxDiemTrungBinhHK2;
-                MinDiemTrungBinhHK1 = minDiemTrungBinhHK1;
-                MinDiemTrungBinhHK2 = minDiemTrungBinhHK2;
+                if (float.TryParse(maxDiemTrungBinhHK1, out var resultMax1))
+                {
+                    MaxDiemTrungBinhHK1 = resultMax1;
+                }
+                else
+                {
+                    MaxDiemTrungBinhHK1 = null;
+                }
+
+                if (float.TryParse(maxDiemTrungBinhHK2, out var resultMax2))
+                {
+                    MaxDiemTrungBinhHK2 = resultMax2;
+                }
+                else
+                {
+                    MaxDiemTrungBinhHK2 = null;
+                }
+
+                if (float.TryParse(minDiemTrungBinhHK1, out var resultMin1))
+                {
+                    MinDiemTrungBinhHK1 = resultMin1;
+                }
+                else
+                {
+                    MinDiemTrungBinhHK1 = null;
+                }
+
+                if (float.TryParse(minDiemTrungBinhHK2, out var resultMin2))
+                {
+                    MinDiemTrungBinhHK2 = resultMin2;
+                }
+                else
+                {
+                    MinDiemTrungBinhHK2 = null;
+                }
                 MaxNgaySinh = maxNgaySinh;
                 MinNgaySinh = minNgaySinh;
-                MinSiSo = minSiSo;
-                MaxSiSo = maxSiSo;
+                if(int.TryParse(minSiSo,out var resultmin))
+                {
+                    MinSiSo = resultmin;
+                }
+                else
+                {
+                    MinSiSo = null;
+                }
+                if (int.TryParse(minSiSo, out var resultmax))
+                {
+                    MaxSiSo = resultmax;
+                }
+                else
+                {
+                    MaxSiSo = null;
+                }
                 MaKhoi = maKhoi;
                 MaLop = maLop;
             }
