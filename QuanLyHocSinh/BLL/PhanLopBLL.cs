@@ -9,7 +9,7 @@ using DTO;
 
 namespace BLL
 {
-    internal static class PhanLopBLL
+    public static class PhanLopBLL
     {
         static HocSinh HocSinhCanPhanLop;
         static List<HocSinh> HocSinhList;

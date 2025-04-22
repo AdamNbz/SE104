@@ -13,3 +13,9 @@ foreach (var khoi in list1)
 {
     Console.WriteLine($"Khoi: {khoi.MaKhoi}");
 }
+var ThongTinTimKiem = new TimKiemBLL.ThongTinTimKiem("", "NguyenDuyTuongThi", "", "", "", "", "", "", "", null, null, "", "", "", "");
+var result = TimKiemBLL.TimKiem(ThongTinTimKiem);
+if (result.Count != 0)
+{
+    Console.WriteLine("Tim Thay Ket Qua");
+}
