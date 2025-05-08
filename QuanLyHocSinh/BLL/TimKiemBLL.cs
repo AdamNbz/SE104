@@ -11,21 +11,21 @@ namespace BLL
     {
         public class ThongTinTimKiem
         {
-            internal string? MaHS;
-            internal string? HoTen;
-            internal string? GioiTinh;
-            internal string? DiaChi;
-            internal string? Email;
-            internal float? MaxDiemTrungBinhHK1;
-            internal float? MaxDiemTrungBinhHK2;
-            internal float? MinDiemTrungBinhHK1;
-            internal float? MinDiemTrungBinhHK2;
-            internal DateTime? MaxNgaySinh;
-            internal DateTime? MinNgaySinh;
-            internal int? MinSiSo;
-            internal int? MaxSiSo;
-            internal string? MaKhoi;
-            internal string? MaLop;
+            public string? MaHS;
+            public string? HoTen;
+            public string? GioiTinh;
+            public string? DiaChi;
+            public string? Email;
+            public float? MaxDiemTrungBinhHK1;
+            public float? MaxDiemTrungBinhHK2;
+            public float? MinDiemTrungBinhHK1;
+            public float? MinDiemTrungBinhHK2;
+            public DateTime? MaxNgaySinh;
+            public DateTime? MinNgaySinh;
+            public int? MinSiSo;
+            public int? MaxSiSo;
+            public string? MaKhoi;
+            public string? MaLop;
             public ThongTinTimKiem(string? maHS, string? hoTen, string? gioiTinh, string? diaChi, string? email, string? maxDiemTrungBinhHK1, string? maxDiemTrungBinhHK2, string? minDiemTrungBinhHK1, string? minDiemTrungBinhHK2, DateTime? maxNgaySinh, DateTime? minNgaySinh, string? minSiSo, string? maxSiSo, string? maKhoi, string? maLop)
             {
                 MaHS = maHS;
