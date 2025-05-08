@@ -28,5 +28,19 @@ namespace BLL
             }
             return siso;
         }
+        public static List<HocSinh> LayDanhSachHocsinh(string MaLop)
+        {
+            List<HocSinh> DanhSachHocSinhTrongLop = new List<HocSinh>();
+            List<HocSinh> DanhSachHocSinh = HocSinhBLL.GetDanhSachHocSinh();
+            for (int i = 0; i < DanhSachHocSinh.Count; i++)//Sau Khi Co Lay Lop Theo Ma Lop Co The Thay Bang Viec Dung Count Cua HocSinhs
+            {
+
+                if (DanhSachHocSinh[i].MaLop == MaLop)
+                {
+                    DanhSachHocSinhTrongLop.Add(DanhSachHocSinh[i]);
+                }
+            }
+            return DanhSachHocSinhTrongLop;
+        }
     }
 }
