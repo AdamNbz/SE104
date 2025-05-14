@@ -12,9 +12,8 @@ namespace BLL
     public static class PhanLopBLL
     {
         static HocSinh HocSinhCanPhanLop;
-        static List<HocSinh> HocSinhList;
         static Lop LopDuocPhanVao;
-        static List<Lop> DanhSachLop;
+        static List<Lop> DanhSachLop=LopBLL.GetDanhSachLop();
         
         public static void PhanLopChoTungHocSinh(string MaHS,string MaLop)
         {
