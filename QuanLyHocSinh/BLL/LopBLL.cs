@@ -1,16 +1,16 @@
-﻿using DTO;
+﻿using DAL;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace BLL
 {
     public static class LopBLL
     {
-        static List<Lop> DanhSachLop;
-        static List<Khoi> DanhSachKhoiLop;
+        static List<Lop> DanhSachLop=LopDAL.LayDanhSachLop();
+        static List<Khoi> DanhSachKhoiLop=KhoiDAL.LayDanhSachKhoi();
         public static List<Lop> GetDanhSachLop()
         {
             return DanhSachLop;
