@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace GUI
+namespace GUI.Sprint1
 {
     public partial class TimKiemWindow : Window
     {
@@ -32,27 +32,27 @@ namespace GUI
             {
                 string duLieuTimKiem = txBx_TimKiem.Text.Trim();
                 List<HocSinh> ketQuaTimKiem = BLL.HocSinhBLL.TimKiemHocSinh(duLieuTimKiem);
-                
+
                 if (ketQuaTimKiem != null && ketQuaTimKiem.Count > 0)
                 {
                     dgv_KetQuaTimKiem.ItemsSource = ketQuaTimKiem;
                 }
                 else
                 {
-                    MessageBox.Show("Không tìm thấy học sinh phù hợp với thông tin đã nhập!", 
-                        "Thông báo kết quả tìm kiếm", 
-                        MessageBoxButton.OK, 
+                    MessageBox.Show("Không tìm thấy học sinh phù hợp với thông tin đã nhập!",
+                        "Thông báo kết quả tìm kiếm",
+                        MessageBoxButton.OK,
                         MessageBoxImage.Information);
                     dgv_KetQuaTimKiem.ItemsSource = null;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tìm kiếm: {ex.Message}", 
-                    "Lỗi", 
-                    MessageBoxButton.OK, 
+                MessageBox.Show($"Lỗi khi tìm kiếm: {ex.Message}",
+                    "Lỗi",
+                    MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
     }
-} 
+}

@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <!-- Tắt tính năng tự động bao gồm các file -->
+    <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +23,34 @@
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj" />
     <ProjectReference Include="..\DTO\DTO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Sprint2\" />
+    <Folder Include="Sprint4\" />
+    <Folder Include="Sprint3\" />
+  </ItemGroup>
+
+  <!-- Thêm các file cần thiết vào project -->
+  <ItemGroup>
+    <!-- Main files -->
+    <Compile Include="App.xaml.cs" DependentUpon="App.xaml" />
+    <Compile Include="MainWindow.xaml.cs" DependentUpon="MainWindow.xaml" />
+    <Compile Include="Program.cs" />
+
+    <!-- Sprint1 files -->
+    <Compile Include="Sprint1\*.cs" />
+    <Page Include="Sprint1\*.xaml" />
+
+    <!-- Sprint2 files -->
+
+    <!-- App and MainWindow XAML -->
+    <ApplicationDefinition Include="App.xaml" />
+    <Page Include="MainWindow.xaml" />
+
+    <!-- Other resources -->
+    <EmbeddedResource Include="**\*.resx" Exclude="obj\**" />
+    <None Include="**\*.config" Exclude="obj\**" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="GUI.Sprint2.Sprint2Control"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI.Sprint2"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Loaded="UserControl_Loaded">
+    <Grid>
+        <materialDesign:Card Margin="16" UniformCornerRadius="8">
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <TextBlock Grid.Row="0"
+                           Text="LẬP DANH SÁCH LỚP"
+                           Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,16"/>
+
+                <!-- Thông tin lớp -->
+                <Grid Grid.Row="1" Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Labels -->
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Lớp" Margin="0,0,8,4"/>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="Khối" Margin="8,0,8,4"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="Sĩ số" Margin="8,0,8,4"/>
+                    <TextBlock Grid.Column="3" Grid.Row="0" Text="Sĩ số tối đa" Margin="8,0,8,4"/>
+
+                    <!-- Input fields -->
+                    <ComboBox x:Name="cbx_Lop" Grid.Column="0" Grid.Row="1" Margin="0,0,8,0"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              SelectionChanged="cbx_Lop_SelectionChanged"/>
+
+                    <TextBox x:Name="txb_Khoi" Grid.Column="1" Grid.Row="1" Margin="8,0,8,0" IsReadOnly="True"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                    <TextBox x:Name="txb_SiSo" Grid.Column="2" Grid.Row="1" Margin="8,0,8,0" IsReadOnly="True"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                    <TextBox x:Name="txb_SiSoToiDa" Grid.Column="3" Grid.Row="1" Margin="8,0,0,0" IsReadOnly="True"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                </Grid>
+
+                <!-- Danh sách học sinh -->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Headers -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="STT" Margin="0,8,0,8"/>
+                        <TextBlock Grid.Column="1" Text="Họ tên" Margin="0,8,0,8"/>
+                        <TextBlock Grid.Column="2" Text="Giới tính" Margin="0,8,0,8"/>
+                        <TextBlock Grid.Column="3" Text="Ngày sinh" Margin="0,8,0,8"/>
+                        <TextBlock Grid.Column="4" Text="Địa chỉ" Margin="0,8,0,8"/>
+                    </Grid>
+
+                    <!-- Student list -->
+                    <ListView x:Name="lv_DanhSachHocSinh" Grid.Row="1" Margin="0,8,0,0"
+                              Style="{StaticResource MaterialDesignListView}"
+                              ItemContainerStyle="{StaticResource MaterialDesignGridViewItem}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="STT" Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding STT}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Họ tên" Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="180"
+                                                      ItemsSource="{Binding DanhSachHocSinh}"
+                                                      DisplayMemberPath="HoTen"
+                                                      SelectedItem="{Binding HocSinhDuocChon, Mode=TwoWay}"
+                                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Giới tính" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding GioiTinh}" IsReadOnly="True"
+                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Ngày sinh" Width="120">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding NgaySinh, StringFormat=dd/MM/yyyy}" IsReadOnly="True"
+                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Địa chỉ" Width="250">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding DiaChi}" IsReadOnly="True"
+                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+
+                <!-- Buttons -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+                    <Button x:Name="btn_LapDanhSachLop" Content="Lập danh sách lớp"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="{DynamicResource PrimaryHueMidBrush}"
+                            Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                            Margin="8,0" Padding="16,8" Click="btn_LapDanhSachLop_Click"/>
+
+                    <Button x:Name="btn_LamMoi" Content="Làm mới"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Margin="8,0" Padding="16,8" Click="btn_LamMoi_Click"/>
+
+                    <Button x:Name="btn_TimKiemHocSinh" Content="Tìm kiếm học sinh"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Margin="8,0" Padding="16,8" Click="btn_TimKiemHocSinh_Click"/>
+
+                    <Button x:Name="btn_XoaDanhSachLop" Content="Xóa danh sách lớp"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Margin="8,0" Padding="16,8" Click="btn_XoaDanhSachLop_Click"/>
+
+                    <Button x:Name="btn_Thoat" Content="Thoát"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Margin="8,0" Padding="16,8" Click="btn_Thoat_Click"/>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

@@ -1,18 +1,7 @@
-﻿using DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using GUI.Sprint1;
+using GUI.Sprint2;
 
 namespace GUI
 {
@@ -24,58 +13,76 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
+            // Select the first item by default
+            if (NavList.Items.Count > 0)
+            {
+                NavList.SelectedIndex = 0;
+            }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void NavList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string maHS = BLL.HocSinhBLL.LayMaHocSinhTuDong();
-            txBx_MaHS.Text = maHS;
-            btn_TiepNhan.IsEnabled = true;
-            stPn_ThongTin.IsEnabled = true;
-            txBx_DiaChi.Clear();
-            txBx_Email.Clear();
-            txBx_GioiTinh.Clear();
-            txBx_HoTen.Clear();
-            dtPk_NgaySinh.SelectedDate = null;
-        }
-
-        private void btn_TiepNhan_Click(object sender, RoutedEventArgs e)
-        {
-           
-                HocSinh hs = new HocSinh
-                {
-                    MaHS = txBx_MaHS.Text ?? "",
-                    HoTen = txBx_HoTen.Text ?? "",
-                    GioiTinh = txBx_GioiTinh.Text ?? "",
-                    NgaySinh = dtPk_NgaySinh.SelectedDate.GetValueOrDefault(DateTime.Now),
-                    DiaChi = txBx_DiaChi.Text ?? "",
-                    Email = txBx_Email.Text ?? ""
-                };
             try
             {
-                if (BLL.HocSinhBLL.TiepNhanHocSinh(hs))
+                if (NavList.SelectedItem == null) return;
+
+                // Get the selected ListBoxItem
+                ListBoxItem selectedListBoxItem = NavList.SelectedItem as ListBoxItem;
+                if (selectedListBoxItem == null) return;
+
+                // Find the TextBlock inside the StackPanel
+                StackPanel stackPanel = selectedListBoxItem.Content as StackPanel;
+                if (stackPanel == null || stackPanel.Children.Count < 2) return;
+
+                TextBlock textBlock = stackPanel.Children[1] as TextBlock;
+                if (textBlock == null) return;
+
+                // Get the text content
+                string selectedItem = textBlock.Text;
+                UserControl selectedControl = null;
+
+                switch (selectedItem)
                 {
-                    MessageBox.Show("Tiếp nhận hoc sinh thành công", "Thông báo: TÌNH TRẠNG TIẾP NHẬN", MessageBoxButton.OK, MessageBoxImage.Information);
-                    btn_TiepNhan.IsEnabled = false;
-                    stPn_ThongTin.IsEnabled = false;
+                    case "Sprint 1":
+                        selectedControl = new Sprint1Control();
+                        break;
+                    case "Sprint 2":
+                        try
+                        {
+                            selectedControl = new FixedSprint2Control();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Lỗi khi tạo FixedSprint2Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                            try
+                            {
+                                selectedControl = new MinimalControl();
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Không thể tải Sprint 2. Vui lòng liên hệ nhà phát triển.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        break;
+                    case "Sprint 3":
+                        MessageBox.Show("Sprint 3 chưa được triển khai");
+                        break;
+                    case "Sprint 4":
+                        MessageBox.Show("Sprint 4 chưa được triển khai");
+                        break;
+                }
+
+                // Hiển thị nội dung trong ContentControl
+                if (selectedControl != null)
+                {
+                    MainContent.Content = selectedControl;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Thong Bao Loi Tiep Nhan",MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi khi chuyển đổi tab: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void btn_LamMoi_Click(object sender, RoutedEventArgs e)
-        {
-            Window_Loaded(sender, e);
-        }
-
-        private void btn_TimKiem_Click(object sender, RoutedEventArgs e)
-        {
-            TimKiemWindow timKiemWindow = new TimKiemWindow();
-            timKiemWindow.Owner = this;
-            timKiemWindow.ShowDialog();
         }
     }
 }
