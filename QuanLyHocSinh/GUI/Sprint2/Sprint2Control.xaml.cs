@@ -1,11 +1,11 @@
 ﻿using DTO;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using DAL;
+using System.Windows.Media;
+using System.ComponentModel;
 
 namespace GUI.Sprint2
 {
@@ -15,24 +15,15 @@ namespace GUI.Sprint2
     public partial class Sprint2Control : UserControl
     {
         // Khai báo các biến cần thiết
-        private ObservableCollection<HocSinhLopViewModel> danhSachHocSinhLop;
         private List<Lop> danhSachLop;
         private List<HocSinh> danhSachHocSinh;
 
         public Sprint2Control()
         {
             InitializeComponent();
-            danhSachHocSinhLop = new ObservableCollection<HocSinhLopViewModel>(); 
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Khởi tạo dữ liệu khi control được load
-            LoadDanhSachLop();
-            LoadDanhSachHocSinh();
-        }
-
-        private void LoadDanhSachLop()
         {
             try
             {
@@ -44,6 +35,81 @@ namespace GUI.Sprint2
                 cbx_Lop.DisplayMemberPath = "TenLop";
                 cbx_Lop.SelectedValuePath = "MaLop";
 
+                // Lấy danh sách học sinh
+                try
+                {
+                    danhSachHocSinh = BLL.HocSinhBLL.GetDanhSachHocSinh();
+
+                    // Hiển thị thông báo debug
+                    string message = "Thông tin danh sách học sinh:\n";
+
+                    // Kiểm tra danh sách học sinh
+                    if (danhSachHocSinh == null)
+                    {
+                        message += "Danh sách học sinh là NULL";
+                        MessageBox.Show(message, "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        danhSachHocSinh = new List<HocSinh>();
+                    }
+                    else if (danhSachHocSinh.Count == 0)
+                    {
+                        message += "Danh sách học sinh trống (Count = 0)";
+                        MessageBox.Show(message, "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        message += $"Số lượng học sinh: {danhSachHocSinh.Count}\n";
+                        foreach (var hs in danhSachHocSinh)
+                        {
+                            message += $"Học sinh: {hs.MaHS} - {hs.HoTen}\n";
+                        }
+                        MessageBox.Show(message, "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi lấy danh sách học sinh: {ex.Message}\n{ex.StackTrace}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    danhSachHocSinh = new List<HocSinh>();
+                }
+
+                // Khởi tạo ComboBox cho các dòng học sinh
+                foreach (UIElement element in sp_DanhSachHocSinh.Children)
+                {
+                    if (element is Grid hocSinhGrid)
+                    {
+                        foreach (UIElement control in hocSinhGrid.Children)
+                        {
+                            if (control is ComboBox comboBox)
+                            {
+                                comboBox.ItemsSource = danhSachHocSinh;
+                                comboBox.DisplayMemberPath = "HoTen";
+                                comboBox.SelectedValuePath = "MaHS";
+
+                                // Thêm sự kiện SelectionChanged
+                                comboBox.SelectionChanged += HocSinh_ComboBox_SelectionChanged;
+                            }
+                        }
+                    }
+                }
+
+                // Lấy sĩ số tối đa từ ThamSo
+                try
+                {
+                    var thamSo = DAL.DataContext.Context.THAMSO.FirstOrDefault();
+                    if (thamSo != null)
+                    {
+                        txb_SiSoToiDa.Text = thamSo.SiSoToiDa.ToString();
+                    }
+                    else
+                    {
+                        txb_SiSoToiDa.Text = "40"; // Giá trị mặc định
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi lấy sĩ số tối đa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    txb_SiSoToiDa.Text = "40"; // Giá trị mặc định
+                }
+
                 // Chọn lớp đầu tiên nếu có
                 if (danhSachLop.Count > 0)
                 {
@@ -52,22 +118,51 @@ namespace GUI.Sprint2
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải danh sách lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi khi tải dữ liệu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void LoadDanhSachHocSinh()
+        // Sự kiện khi chọn học sinh trong ComboBox
+        private void HocSinh_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                // Lấy danh sách học sinh chưa có lớp từ BLL
-                danhSachHocSinh = BLL.HocSinhBLL.LayDanhSachHocSinhChuaPhanLop();
+                if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
+                {
+                    // Debug: Hiển thị loại đối tượng được chọn
+                    MessageBox.Show($"Loại đối tượng được chọn: {comboBox.SelectedItem.GetType().FullName}", "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    HocSinh hocSinh = comboBox.SelectedItem as HocSinh;
+                    if (hocSinh != null)
+                    {
+                        // Debug: Hiển thị thông tin học sinh
+                        MessageBox.Show($"Học sinh được chọn: {hocSinh.MaHS} - {hocSinh.HoTen}", "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        // Tìm Grid cha của ComboBox
+                        FrameworkElement parent = comboBox.Parent as FrameworkElement;
+                        while (parent != null && !(parent is Grid))
+                        {
+                            parent = parent.Parent as FrameworkElement;
+                        }
+
+                        if (parent is Grid grid)
+                        {
+                            // Cập nhật thông tin học sinh
+                            UpdateHocSinhInfo(grid, hocSinh);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể chuyển đổi đối tượng được chọn thành HocSinh", "Debug Info", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải danh sách học sinh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi khi cập nhật thông tin học sinh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
 
         private void cbx_Lop_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -78,7 +173,7 @@ namespace GUI.Sprint2
                     Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
                     if (lopDuocChon == null) return;
 
-                    // Cập nhật thông tin lớp
+                    // Cập nhật thông tin khối
                     txb_Khoi.Text = lopDuocChon.MaKhoi ?? "";
 
                     // Tính sĩ số lớp
@@ -91,12 +186,6 @@ namespace GUI.Sprint2
                     }
 
                     txb_SiSo.Text = danhSachHocSinhTrongLop.Count.ToString();
-
-                    // Lấy sĩ số tối đa từ ThamSo
-                    txb_SiSoToiDa.Text = LaySiSoToiDa().ToString();
-
-                    // Tạo danh sách học sinh cho lớp
-                    TaoDanhSachHocSinhLop();
                 }
             }
             catch (Exception ex)
@@ -105,160 +194,67 @@ namespace GUI.Sprint2
             }
         }
 
-        private void TaoDanhSachHocSinhLop()
-        {
-            try
-            {
-                danhSachHocSinhLop.Clear();
 
-                // Đảm bảo danh sách học sinh không null
-                if (danhSachHocSinh == null)
-                {
-                    danhSachHocSinh = new List<HocSinh>();
-                }
 
-                // Lấy sĩ số tối đa
-                int siSoToiDa = LaySiSoToiDa();
 
-                // Tạo danh sách học sinh cho lớp
-                for (int i = 0; i < siSoToiDa; i++)
-                {
-                    danhSachHocSinhLop.Add(new HocSinhLopViewModel
-                    {
-                        STT = i + 1,
-                        DanhSachHocSinh = danhSachHocSinh
-                    });
-                }
-
-                lv_DanhSachHocSinh.ItemsSource = danhSachHocSinhLop;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi tạo danh sách học sinh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private int LaySiSoToiDa()
-        {
-            try
-            {
-                // Lấy sĩ số tối đa từ bảng ThamSo trong database
-                var thamSo = DAL.DataContext.Context.THAMSO.FirstOrDefault();
-                if (thamSo != null)
-                {
-                    return thamSo.SiSoToiDa;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi lấy sĩ số tối đa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            // Giá trị mặc định nếu không lấy được từ database
-            return 40;
-        }
-
-        private bool KiemTraDanhSachHopLe()
-        {
-            if (cbx_Lop.SelectedItem == null)
-            {
-                MessageBox.Show("Vui lòng chọn lớp trước khi lập danh sách", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            // Kiểm tra xem có học sinh nào được chọn không
-            bool coHocSinhDuocChon = false;
-            foreach (var item in danhSachHocSinhLop)
-            {
-                if (item.HocSinhDuocChon != null)
-                {
-                    coHocSinhDuocChon = true;
-                    break;
-                }
-            }
-
-            if (!coHocSinhDuocChon)
-            {
-                MessageBox.Show("Vui lòng chọn ít nhất một học sinh cho lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            // Kiểm tra xem có học sinh nào bị trùng không
-            var danhSachMaHS = new List<string>();
-            foreach (var item in danhSachHocSinhLop)
-            {
-                if (item.HocSinhDuocChon != null)
-                {
-                    if (danhSachMaHS.Contains(item.HocSinhDuocChon.MaHS))
-                    {
-                        MessageBox.Show($"Học sinh {item.HocSinhDuocChon.HoTen} được chọn nhiều lần", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return false;
-                    }
-                    danhSachMaHS.Add(item.HocSinhDuocChon.MaHS);
-                }
-            }
-
-            return true;
-        }
-
-        private void CapNhatDanhSachLop()
-        {
-            if (cbx_Lop.SelectedItem == null) return;
-
-            Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
-            List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocsinh(lopDuocChon.MaLop);
-            txb_SiSo.Text = danhSachHocSinhTrongLop.Count.ToString();
-
-            // Cập nhật lại danh sách học sinh chưa phân lớp
-            LoadDanhSachHocSinh();
-
-            // Cập nhật lại danh sách học sinh trong lớp
-            TaoDanhSachHocSinhLop();
-        }
 
         private void btn_LapDanhSachLop_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (!KiemTraDanhSachHopLe()) return;
-
-                Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
-                var danhSachMaHS = new List<string>();
-
-                // Lấy danh sách mã học sinh được chọn
-                foreach (var item in danhSachHocSinhLop)
+                if (cbx_Lop.SelectedItem == null)
                 {
-                    if (item.HocSinhDuocChon != null)
-                    {
-                        danhSachMaHS.Add(item.HocSinhDuocChon.MaHS);
-                    }
-                }
-
-                // Kiểm tra sĩ số lớp sau khi thêm học sinh
-                int siSoHienTai = int.Parse(txb_SiSo.Text);
-                int siSoToiDa = LaySiSoToiDa();
-
-                if (siSoHienTai + danhSachMaHS.Count > siSoToiDa)
-                {
-                    MessageBox.Show($"Sĩ số lớp vượt quá giới hạn cho phép ({siSoToiDa})", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Vui lòng chọn lớp trước khi lập danh sách", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                // Phân lớp cho các học sinh được chọn
-                foreach (string maHS in danhSachMaHS)
+                Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
+                if (lopDuocChon == null) return;
+
+                // Lấy danh sách học sinh đã chọn
+                List<HocSinh> danhSachHocSinhDaChon = new List<HocSinh>();
+                List<string> danhSachMaHS = new List<string>();
+
+                foreach (UIElement element in sp_DanhSachHocSinh.Children)
                 {
-                    HocSinh hocSinh = BLL.HocSinhBLL.LayThongTinHocSinh(maHS);
-                    if (hocSinh != null)
+                    if (element is Grid hocSinhGrid)
                     {
-                        hocSinh.MaLop = lopDuocChon.MaLop;
-                        BLL.HocSinhBLL.SuaHocSinh(hocSinh);
+                        // Tìm ComboBox trong grid
+                        foreach (UIElement control in hocSinhGrid.Children)
+                        {
+                            if (control is ComboBox comboBox && comboBox.SelectedItem != null)
+                            {
+                                HocSinh hocSinh = comboBox.SelectedItem as HocSinh;
+                                if (hocSinh != null)
+                                {
+                                    danhSachHocSinhDaChon.Add(hocSinh);
+                                    danhSachMaHS.Add(hocSinh.MaHS);
+                                }
+                            }
+                        }
                     }
                 }
 
-                MessageBox.Show("Lập danh sách lớp thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (danhSachHocSinhDaChon.Count == 0)
+                {
+                    MessageBox.Show("Vui lòng chọn ít nhất một học sinh để lập danh sách", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                // Cập nhật lại giao diện
-                CapNhatDanhSachLop();
+                // Xác nhận lập danh sách
+                MessageBoxResult result = MessageBox.Show($"Bạn có chắc chắn muốn lập danh sách {danhSachHocSinhDaChon.Count} học sinh cho lớp {lopDuocChon.TenLop}?",
+                    "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Lập danh sách học sinh
+                    BLL.PhanLopBLL.PhanLopChoMotDanhSachHocSinh(lopDuocChon.MaLop, danhSachMaHS);
+
+                    // Cập nhật sĩ số lớp
+                    txb_SiSo.Text = BLL.LopBLL.TinhSiSo(BLL.HocSinhBLL.GetDanhSachHocSinh(), lopDuocChon.MaLop).ToString();
+
+                    MessageBox.Show($"Đã lập danh sách {danhSachHocSinhDaChon.Count} học sinh cho lớp {lopDuocChon.TenLop}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -268,11 +264,63 @@ namespace GUI.Sprint2
 
         private void btn_LamMoi_Click(object sender, RoutedEventArgs e)
         {
-            // Làm mới danh sách học sinh và thông tin lớp
-            LoadDanhSachHocSinh();
-            if (cbx_Lop.SelectedItem != null)
+            try
             {
-                cbx_Lop_SelectionChanged(null, null);
+                // Cập nhật lại danh sách lớp
+                danhSachLop = BLL.LopBLL.GetDanhSachLop();
+                cbx_Lop.ItemsSource = danhSachLop;
+
+                // Cập nhật lại thông tin lớp
+                if (cbx_Lop.SelectedItem != null)
+                {
+                    cbx_Lop_SelectionChanged(null, null);
+                }
+
+                // Cập nhật lại danh sách học sinh trong các ComboBox
+                foreach (UIElement element in sp_DanhSachHocSinh.Children)
+                {
+                    if (element is Grid hocSinhGrid)
+                    {
+                        foreach (UIElement control in hocSinhGrid.Children)
+                        {
+                            if (control is ComboBox comboBox)
+                            {
+                                // Lưu lại item đã chọn
+                                var selectedItem = comboBox.SelectedItem;
+
+                                // Cập nhật lại danh sách
+                                comboBox.ItemsSource = BLL.HocSinhBLL.GetDanhSachHocSinh();
+                                comboBox.DisplayMemberPath = "HoTen";
+                                comboBox.SelectedValuePath = "MaHS";
+
+                                // Khôi phục lại item đã chọn
+                                if (selectedItem != null)
+                                {
+                                    HocSinh hocSinh = selectedItem as HocSinh;
+                                    if (hocSinh != null)
+                                    {
+                                        // Tìm học sinh trong danh sách mới
+                                        var danhSachHocSinh = BLL.HocSinhBLL.GetDanhSachHocSinh();
+                                        var hocSinhMoi = danhSachHocSinh.FirstOrDefault(hs => hs.MaHS == hocSinh.MaHS);
+                                        if (hocSinhMoi != null)
+                                        {
+                                            comboBox.SelectedItem = hocSinhMoi;
+
+                                            // Cập nhật thông tin học sinh
+                                            UpdateHocSinhInfo(hocSinhGrid, hocSinhMoi);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                MessageBox.Show("Đã làm mới dữ liệu", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi làm mới: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -286,42 +334,90 @@ namespace GUI.Sprint2
 
                 // Hiển thị cửa sổ tìm kiếm
                 bool? result = timKiemWindow.ShowDialog();
-
-                // Nếu người dùng chọn một học sinh, thêm vào danh sách
                 if (result == true && timKiemWindow.HocSinhDuocChon != null)
                 {
-                    // Tìm vị trí trống đầu tiên trong danh sách
-                    for (int i = 0; i < danhSachHocSinhLop.Count; i++)
+                    // Debug: Hiển thị thông tin học sinh được chọn
+                    MessageBox.Show($"Đã chọn học sinh: {timKiemWindow.HocSinhDuocChon.MaHS} - {timKiemWindow.HocSinhDuocChon.HoTen}", "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Tìm ComboBox trống đầu tiên để thêm học sinh
+                    bool daThemHocSinh = false;
+
+                    foreach (UIElement element in sp_DanhSachHocSinh.Children)
                     {
-                        if (danhSachHocSinhLop[i].HocSinhDuocChon == null)
+                        if (element is Grid hocSinhGrid)
                         {
-                            // Kiểm tra xem học sinh đã có trong danh sách chưa
-                            bool daTonTai = false;
-                            foreach (var item in danhSachHocSinhLop)
+                            // Tìm ComboBox trong grid
+                            ComboBox comboBox = null;
+                            foreach (UIElement control in hocSinhGrid.Children)
                             {
-                                if (item.HocSinhDuocChon?.MaHS == timKiemWindow.HocSinhDuocChon.MaHS)
+                                if (control is ComboBox cb)
                                 {
-                                    daTonTai = true;
+                                    comboBox = cb;
                                     break;
                                 }
                             }
 
-                            if (daTonTai)
+                            if (comboBox != null && comboBox.SelectedItem == null)
                             {
-                                MessageBox.Show("Học sinh này đã được chọn trong danh sách", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                                return;
-                            }
+                                // Tạo danh sách học sinh nếu chưa có
+                                if (comboBox.ItemsSource == null)
+                                {
+                                    comboBox.ItemsSource = BLL.HocSinhBLL.GetDanhSachHocSinh();
+                                    comboBox.DisplayMemberPath = "HoTen";
+                                    comboBox.SelectedValuePath = "MaHS";
+                                }
 
-                            // Thêm học sinh vào vị trí trống
-                            danhSachHocSinhLop[i].HocSinhDuocChon = timKiemWindow.HocSinhDuocChon;
-                            break;
+                                // Chọn học sinh
+                                comboBox.SelectedItem = timKiemWindow.HocSinhDuocChon;
+
+                                // Cập nhật các TextBox thông tin học sinh
+                                UpdateHocSinhInfo(hocSinhGrid, timKiemWindow.HocSinhDuocChon);
+
+                                daThemHocSinh = true;
+                                break;
+                            }
                         }
+                    }
+
+                    if (daThemHocSinh)
+                    {
+                        MessageBox.Show($"Đã thêm học sinh: {timKiemWindow.HocSinhDuocChon.HoTen} vào danh sách", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Danh sách đã đầy, không thể thêm học sinh mới", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi tìm kiếm học sinh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Phương thức cập nhật thông tin học sinh vào các TextBox
+        private void UpdateHocSinhInfo(Grid hocSinhGrid, HocSinh hocSinh)
+        {
+            foreach (UIElement control in hocSinhGrid.Children)
+            {
+                if (control is TextBox textBox)
+                {
+                    // Xác định vị trí cột của TextBox
+                    int column = Grid.GetColumn(textBox);
+
+                    // Cập nhật thông tin tương ứng
+                    switch (column)
+                    {
+                        case 2: // Giới tính
+                            textBox.Text = hocSinh.GioiTinh;
+                            break;
+                        case 3: // Ngày sinh
+                            textBox.Text = hocSinh.NgaySinh.ToShortDateString();
+                            break;
+                        case 4: // Địa chỉ
+                            textBox.Text = hocSinh.DiaChi;
+                            break;
+                    }
+                }
             }
         }
 
@@ -336,25 +432,34 @@ namespace GUI.Sprint2
                 }
 
                 // Xác nhận xóa
-                MessageBoxResult result = MessageBox.Show("Bạn có chắc chắn muốn xóa tất cả học sinh khỏi lớp này?",
+                MessageBoxResult result = MessageBox.Show("Bạn có chắc chắn muốn xóa danh sách học sinh của lớp này?",
                     "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
-                    List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocsinh(lopDuocChon.MaLop);
-
-                    // Xóa tất cả học sinh khỏi lớp
-                    foreach (HocSinh hocSinh in danhSachHocSinhTrongLop)
+                    // Xóa danh sách học sinh
+                    foreach (UIElement element in sp_DanhSachHocSinh.Children)
                     {
-                        hocSinh.MaLop = null;
-                        BLL.HocSinhBLL.SuaHocSinh(hocSinh);
+                        if (element is Grid hocSinhGrid)
+                        {
+                            // Tìm ComboBox và TextBox trong grid
+                            foreach (UIElement control in hocSinhGrid.Children)
+                            {
+                                if (control is ComboBox comboBox)
+                                {
+                                    // Xóa lựa chọn
+                                    comboBox.SelectedItem = null;
+                                }
+                                else if (control is TextBox textBox && Grid.GetColumn(control) > 1) // Bỏ qua TextBlock STT
+                                {
+                                    // Xóa nội dung
+                                    textBox.Text = string.Empty;
+                                }
+                            }
+                        }
                     }
 
-                    MessageBox.Show("Đã xóa tất cả học sinh khỏi lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    // Cập nhật lại giao diện
-                    CapNhatDanhSachLop();
+                    MessageBox.Show("Đã xóa danh sách học sinh của lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
@@ -374,16 +479,5 @@ namespace GUI.Sprint2
         }
     }
 
-    // ViewModel cho danh sách học sinh trong lớp
-    public class HocSinhLopViewModel
-    {
-        public int STT { get; set; }
-        public List<HocSinh> DanhSachHocSinh { get; set; }
-        public HocSinh HocSinhDuocChon { get; set; }
 
-        // Các thuộc tính để hiển thị thông tin học sinh
-        public string GioiTinh => HocSinhDuocChon?.GioiTinh ?? "";
-        public DateTime NgaySinh => HocSinhDuocChon?.NgaySinh ?? DateTime.Now;
-        public string DiaChi => HocSinhDuocChon?.DiaChi ?? "";
-    }
 }

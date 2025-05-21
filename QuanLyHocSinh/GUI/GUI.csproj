@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <!-- Tắt tính năng tự động bao gồm các file -->
     <EnableDefaultItems>false</EnableDefaultItems>
+    <StartupObject>GUI.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Sprint2\" />
     <Folder Include="Sprint4\" />
     <Folder Include="Sprint3\" />
   </ItemGroup>
@@ -42,9 +42,26 @@
     <Compile Include="Sprint1\*.cs" />
     <Page Include="Sprint1\*.xaml" />
 
-    <!-- Sprint2 files -->
+	  <!-- Sprint2 files -->
+	  <Page Include="Sprint2\Sprint2Control.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		  <SubType>Designer</SubType>
+	  </Page>
+	  <Compile Include="Sprint2\Sprint2Control.xaml.cs">
+		  <DependentUpon>Sprint2Control.xaml</DependentUpon>
+	  </Compile>
 
-    <!-- App and MainWindow XAML -->
+	  <Page Include="Sprint2\TimKiemHocSinhWindow.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		  <SubType>Designer</SubType>
+	  </Page>
+	  <Compile Include="Sprint2\TimKiemHocSinhWindow.xaml.cs">
+		  <DependentUpon>TimKiemHocSinhWindow.xaml</DependentUpon>
+	  </Compile>
+
+
+
+	  <!-- App and MainWindow XAML -->
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="MainWindow.xaml" />
 

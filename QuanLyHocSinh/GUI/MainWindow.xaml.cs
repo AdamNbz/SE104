@@ -49,20 +49,11 @@ namespace GUI
                     case "Sprint 2":
                         try
                         {
-                            selectedControl = new FixedSprint2Control();
+                            selectedControl = new Sprint2Control();
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Lỗi khi tạo FixedSprint2Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                            try
-                            {
-                                selectedControl = new MinimalControl();
-                            }
-                            catch
-                            {
-                                MessageBox.Show("Không thể tải Sprint 2. Vui lòng liên hệ nhà phát triển.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
+                            MessageBox.Show($"Lỗi khi tạo SimpleSprint2Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
                     case "Sprint 3":
