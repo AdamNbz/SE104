@@ -33,6 +33,9 @@ namespace BLL
                 GioiTinh = gioiTinh;
                 DiaChi = diaChi;
                 Email = email;
+                MaxNgaySinh = maxNgaySinh;
+                MinNgaySinh = minNgaySinh;
+                
                 if (float.TryParse(maxDiemTrungBinhHK1, out var resultMax1))
                 {
                     MaxDiemTrungBinhHK1 = resultMax1;
@@ -68,8 +71,7 @@ namespace BLL
                 {
                     MinDiemTrungBinhHK2 = null;
                 }
-                MaxNgaySinh = maxNgaySinh;
-                MinNgaySinh = minNgaySinh;
+               
                 if(int.TryParse(minSiSo,out var resultmin))
                 {
                     MinSiSo = resultmin;
@@ -78,6 +80,7 @@ namespace BLL
                 {
                     MinSiSo = null;
                 }
+                
                 if (int.TryParse(minSiSo, out var resultmax))
                 {
                     MaxSiSo = resultmax;
@@ -86,6 +89,7 @@ namespace BLL
                 {
                     MaxSiSo = null;
                 }
+                
                 MaKhoi = maKhoi;
                 MaLop = maLop;
             }
@@ -242,51 +246,19 @@ namespace BLL
         }
         //private static void TimKiemTheoMaxDiemTrungBinhHocKiI(ref List<HocSinh> hocSinhs, float MaxDiemTrungBinhHKI)
         //{
-        //    List<HocSinh> KetQua = new List<HocSinh>();
-        //    for (int i = 0; i < hocSinhs.Count; i++)
-        //    {
-        //        if (hocSinhs[i].DiemTrungBinhHKI <= MaxDiemTrungBinhHKI)
-        //        {
-        //            KetQua.Add(hocSinhs[i]);
-        //        }
-        //    }
-        //    hocSinhs = KetQua;
+        //    hocSinhs = hocSinhs.Where(x => x.DiemTrungBinhHKI <= MaxDiemTrungBinhHKI).ToList();
         //}
         //private static void TimKiemTheoMaxDiemTrungBinhHocKiII(ref List<HocSinh> hocSinhs, float MaxDiemTrungBinhHKII)
         //{
-        //    List<HocSinh> KetQua = new List<HocSinh>();
-        //    for (int i = 0; i < hocSinhs.Count; i++)
-        //    {
-        //        if (hocSinhs[i].DiemTrungBinhHKII <= MaxDiemTrungBinhHKII)
-        //        {
-        //            KetQua.Add(hocSinhs[i]);
-        //        }
-        //    }
-        //    hocSinhs = KetQua;
+        //    hocSinhs = hocSinhs.Where(x => x.DiemTrungBinhHKII <= MaxDiemTrungBinhHKII).ToList();
         //}
         //private static void TimKiemTheoMinDiemTrungBinhHocKiI(ref List<HocSinh> hocSinhs, float MinDiemTrungBinhHKI)
         //{
-        //    List<HocSinh> KetQua = new List<HocSinh>();
-        //    for (int i = 0; i < hocSinhs.Count; i++)
-        //    {
-        //        if (hocSinhs[i].DiemTrungBinhHKI >= MinDiemTrungBinhHKI)
-        //        {
-        //            KetQua.Add(hocSinhs[i]);
-        //        }
-        //    }
-        //    hocSinhs = KetQua;
+        //    hocSinhs = hocSinhs.Where(x => x.DiemTrungBinhHKI >= MinDiemTrungBinhHKI).ToList();
         //}
         //private static void TimKiemTheoMinDiemTrungBinhHocKiII(ref List<HocSinh> hocSinhs, float MinDiemTrungBinhHKII)
         //{
-        //    List<HocSinh> KetQua = new List<HocSinh>();
-        //    for (int i = 0; i < hocSinhs.Count; i++)
-        //    {
-        //        if (hocSinhs[i].DiemTrungBinhHKII >= MinDiemTrungBinhHKII)
-        //        {
-        //            KetQua.Add(hocSinhs[i]);
-        //        }
-        //    }
-        //    hocSinhs = KetQua;
+        //    hocSinhs = hocSinhs.Where(x => x.DiemTrungBinhHKII >= MinDiemTrungBinhHKII).ToList();
         //}
         private static void TimKiemTheoMinSiSo(ref List<HocSinh> hocSinhs, int MinSiSo)
         {

@@ -13,7 +13,7 @@ namespace BLL
     {
         static HocSinh HocSinhCanPhanLop;
         static Lop LopDuocPhanVao;
-        static List<Lop> DanhSachLop=LopBLL.GetDanhSachLop();
+        static List<Lop> DanhSachLop = LopBLL.GetDanhSachLop();
         
         public static void PhanLopChoTungHocSinh(string MaHS,string MaLop)
         {
