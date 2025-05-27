@@ -1,7 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using GUI.Sprint1;
 using GUI.Sprint2;
+using GUI.Sprint3;
+using GUI.Sprint4;
+using GUI.Sprint5;
+using GUI.Sprint6;
 
 namespace GUI
 {
@@ -57,10 +62,44 @@ namespace GUI
                         }
                         break;
                     case "Sprint 3":
-                        MessageBox.Show("Sprint 3 chưa được triển khai");
+                        try
+                        {
+                            selectedControl = new Sprint3Control();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Lỗi khi tạo Sprint3Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                         break;
                     case "Sprint 4":
-                        MessageBox.Show("Sprint 4 chưa được triển khai");
+                        try
+                        {
+                            selectedControl = new Sprint4Control();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Lỗi khi tạo Sprint4Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                    case "Sprint 5":
+                        try
+                        {
+                            selectedControl = new Sprint5Control();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Lỗi khi tạo Sprint5Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                    case "Sprint 6":
+                        try
+                        {
+                            selectedControl = new Sprint6Control();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Lỗi khi tạo Sprint6Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                         break;
                 }
 

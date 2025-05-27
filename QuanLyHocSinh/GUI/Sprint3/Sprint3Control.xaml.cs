@@ -1,0 +1,319 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DTO;
+using BLL;
+
+namespace GUI.Sprint3
+{
+    /// <summary>
+    /// Interaction logic for Sprint3Control.xaml
+    /// </summary>
+    public partial class Sprint3Control : UserControl
+    {
+        public Sprint3Control()
+        {
+            InitializeComponent();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadKhoiLop();
+            LoadTenLop();
+            AddEmptyResultRows();
+        }
+
+        private void LoadKhoiLop()
+        {
+            try
+            {
+                cbx_TenKhoiLop.Items.Clear();
+                cbx_TenKhoiLop.Items.Add("Tất Cả");
+
+                var danhSachKhoi = LopBLL.GetDanhSachKhoiLop();
+                foreach (var khoi in danhSachKhoi)
+                {
+                    cbx_TenKhoiLop.Items.Add(khoi.TenKhoi);
+                }
+                cbx_TenKhoiLop.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải danh sách khối lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadTenLop()
+        {
+            try
+            {
+                cbx_TenLop.Items.Clear();
+                cbx_TenLop.Items.Add("Tất Cả");
+
+                var danhSachLop = LopBLL.GetDanhSachLop();
+                foreach (var lop in danhSachLop)
+                {
+                    cbx_TenLop.Items.Add(lop.TenLop);
+                }
+                cbx_TenLop.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải danh sách lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void cbx_TenKhoiLop_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                // TODO: Lọc danh sách lớp theo khối được chọn
+                // Tạm thời để trống, sẽ implement sau
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi thay đổi khối lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btn_TimKiem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Collect search criteria from UI
+                var thongTinTimKiem = new TimKiemBLL.ThongTinTimKiem(
+                    string.IsNullOrWhiteSpace(txb_MaHocSinh.Text) ? null : txb_MaHocSinh.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_HoTen.Text) ? null : txb_HoTen.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_GioiTinh.Text) ? null : txb_GioiTinh.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_DiaChi.Text) ? null : txb_DiaChi.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_Email.Text) ? null : txb_Email.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_DiemTBHK1_Den.Text) ? null : txb_DiemTBHK1_Den.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_DiemTBHK2_Den.Text) ? null : txb_DiemTBHK2_Den.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_DiemTBHK1_Tu.Text) ? null : txb_DiemTBHK1_Tu.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_DiemTBHK2_Tu.Text) ? null : txb_DiemTBHK2_Tu.Text.Trim(),
+                    dp_NgaySinh_Den.SelectedDate,
+                    dp_NgaySinh_Tu.SelectedDate,
+                    string.IsNullOrWhiteSpace(txb_SiSo_Tu.Text) ? null : txb_SiSo_Tu.Text.Trim(),
+                    string.IsNullOrWhiteSpace(txb_SiSo_Den.Text) ? null : txb_SiSo_Den.Text.Trim(),
+                    GetSelectedMaKhoi(),
+                    GetSelectedMaLop()
+                );
+
+                // Perform search using BLL
+                var ketQuaTimKiem = TimKiemBLL.TimKiem(thongTinTimKiem);
+
+                // Clear existing results
+                sp_KetQuaTimKiem.Children.Clear();
+
+                // Display search results
+                DisplaySearchResults(ketQuaTimKiem);
+
+                // Show result count
+                MessageBox.Show($"Tìm thấy {ketQuaTimKiem.Count} học sinh phù hợp", "Kết quả tìm kiếm",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btn_Reset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Clear all input fields
+                txb_MaHocSinh.Text = "";
+                txb_HoTen.Text = "";
+                txb_GioiTinh.Text = "";
+                txb_DiaChi.Text = "";
+                txb_Email.Text = "";
+                txb_DiemTBHK1_Tu.Text = "";
+                txb_DiemTBHK1_Den.Text = "";
+                txb_DiemTBHK2_Tu.Text = "";
+                txb_DiemTBHK2_Den.Text = "";
+                dp_NgaySinh_Tu.SelectedDate = null;
+                dp_NgaySinh_Den.SelectedDate = null;
+                txb_SiSo_Tu.Text = "";
+                txb_SiSo_Den.Text = "";
+
+                cbx_TenKhoiLop.SelectedIndex = 0;
+                cbx_TenLop.SelectedIndex = 0;
+
+                // Clear results
+                sp_KetQuaTimKiem.Children.Clear();
+                AddEmptyResultRows();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi reset form: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void AddSampleResultRows()
+        {
+            // Add sample data for demonstration
+            var sampleData = new[]
+            {
+                new { STT = "1", MaHS = "HS001", HoTen = "Nguyễn Văn A", GioiTinh = "Nam", DiaChi = "Hà Nội", Email = "nva@email.com", Lop = "10A1", DiemHK1 = "8.5", DiemHK2 = "8.7" },
+                new { STT = "2", MaHS = "HS002", HoTen = "Trần Thị B", GioiTinh = "Nữ", DiaChi = "TP.HCM", Email = "ttb@email.com", Lop = "10A2", DiemHK1 = "9.0", DiemHK2 = "8.8" }
+            };
+
+            foreach (var item in sampleData)
+            {
+                AddResultRow(item.STT, item.MaHS, item.HoTen, item.GioiTinh, item.DiaChi, item.Email, item.Lop, item.DiemHK1, item.DiemHK2);
+            }
+        }
+
+        private void AddEmptyResultRows()
+        {
+            // Add 2 empty rows as shown in the image
+            for (int i = 1; i <= 2; i++)
+            {
+                AddResultRow(i.ToString(), "", "", "", "", "", "", "", "");
+            }
+        }
+
+        private void AddResultRow(string stt, string maHS, string hoTen, string gioiTinh, string diaChi, string email, string lop, string diemHK1, string diemHK2)
+        {
+            Border border = new Border
+            {
+                BorderBrush = new SolidColorBrush(Color.FromRgb(224, 224, 224)),
+                BorderThickness = new Thickness(0, 0, 1, 1)
+            };
+
+            Grid grid = new Grid
+            {
+                Margin = new Thickness(8),
+                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)) // Light gray
+            };
+
+            // Define columns
+            for (int i = 0; i < 9; i++)
+            {
+                ColumnDefinition col = new ColumnDefinition();
+                switch (i)
+                {
+                    case 0: col.Width = new GridLength(50); break;
+                    case 1: col.Width = new GridLength(120); break;
+                    case 2: col.Width = new GridLength(200); break;
+                    case 3: col.Width = new GridLength(80); break;
+                    case 4: col.Width = new GridLength(150); break;
+                    case 5: col.Width = new GridLength(150); break;
+                    case 6: col.Width = new GridLength(80); break;
+                    case 7: col.Width = new GridLength(130); break;
+                    case 8: col.Width = new GridLength(130); break;
+                }
+                grid.ColumnDefinitions.Add(col);
+            }
+
+            // Add text blocks
+            string[] values = { stt, maHS, hoTen, gioiTinh, diaChi, email, lop, diemHK1, diemHK2 };
+            for (int i = 0; i < values.Length; i++)
+            {
+                TextBlock textBlock = new TextBlock
+                {
+                    Text = values[i],
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                Grid.SetColumn(textBlock, i);
+                grid.Children.Add(textBlock);
+            }
+
+            border.Child = grid;
+            sp_KetQuaTimKiem.Children.Add(border);
+        }
+
+        private string GetSelectedMaKhoi()
+        {
+            try
+            {
+                if (cbx_TenKhoiLop.SelectedItem == null || cbx_TenKhoiLop.SelectedItem.ToString() == "Tất Cả")
+                    return null;
+
+                var tenKhoi = cbx_TenKhoiLop.SelectedItem.ToString();
+                var danhSachKhoi = LopBLL.GetDanhSachKhoiLop();
+                var khoi = danhSachKhoi.FirstOrDefault(k => k.TenKhoi == tenKhoi);
+                return khoi?.MaKhoi;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string GetSelectedMaLop()
+        {
+            try
+            {
+                if (cbx_TenLop.SelectedItem == null || cbx_TenLop.SelectedItem.ToString() == "Tất Cả")
+                    return null;
+
+                var tenLop = cbx_TenLop.SelectedItem.ToString();
+                var danhSachLop = LopBLL.GetDanhSachLop();
+                var lop = danhSachLop.FirstOrDefault(l => l.TenLop == tenLop);
+                return lop?.MaLop;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private void DisplaySearchResults(List<HocSinh> ketQuaTimKiem)
+        {
+            try
+            {
+                if (ketQuaTimKiem == null || ketQuaTimKiem.Count == 0)
+                {
+                    // Add empty rows if no results
+                    AddEmptyResultRows();
+                    return;
+                }
+
+                // Display actual results
+                for (int i = 0; i < ketQuaTimKiem.Count; i++)
+                {
+                    var hocSinh = ketQuaTimKiem[i];
+
+                    // Get class name
+                    var tenLop = "";
+                    try
+                    {
+                        var lop = LopBLL.GetDanhSachLop().FirstOrDefault(l => l.MaLop == hocSinh.MaLop);
+                        tenLop = lop?.TenLop ?? "";
+                    }
+                    catch { }
+
+                    AddResultRow(
+                        (i + 1).ToString(),
+                        hocSinh.MaHS ?? "",
+                        hocSinh.HoTen ?? "",
+                        hocSinh.GioiTinh ?? "",
+                        hocSinh.DiaChi ?? "",
+                        hocSinh.Email ?? "",
+                        tenLop,
+                        "", // Điểm HK1 - tạm thời để trống vì chưa có trong DTO
+                        ""  // Điểm HK2 - tạm thời để trống vì chưa có trong DTO
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi hiển thị kết quả: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
+}

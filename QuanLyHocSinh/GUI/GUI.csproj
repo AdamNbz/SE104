@@ -26,10 +26,7 @@
     <ProjectReference Include="..\DTO\DTO.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Sprint4\" />
-    <Folder Include="Sprint3\" />
-  </ItemGroup>
+
 
   <!-- Thêm các file cần thiết vào project -->
   <ItemGroup>
@@ -59,7 +56,41 @@
 		  <DependentUpon>TimKiemHocSinhWindow.xaml</DependentUpon>
 	  </Compile>
 
+	  <!-- Sprint3 files -->
+	  <Page Include="Sprint3\Sprint3Control.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		  <SubType>Designer</SubType>
+	  </Page>
+	  <Compile Include="Sprint3\Sprint3Control.xaml.cs">
+		  <DependentUpon>Sprint3Control.xaml</DependentUpon>
+	  </Compile>
 
+	  <!-- Sprint4 files -->
+	  <Page Include="Sprint4\Sprint4Control.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		  <SubType>Designer</SubType>
+	  </Page>
+	  <Compile Include="Sprint4\Sprint4Control.xaml.cs">
+		  <DependentUpon>Sprint4Control.xaml</DependentUpon>
+	  </Compile>
+
+	  <!-- Sprint5 files -->
+	  <Page Include="Sprint5\Sprint5Control.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		  <SubType>Designer</SubType>
+	  </Page>
+	  <Compile Include="Sprint5\Sprint5Control.xaml.cs">
+		  <DependentUpon>Sprint5Control.xaml</DependentUpon>
+	  </Compile>
+
+	  <!-- Sprint6 files -->
+	  <Page Include="Sprint6\Sprint6Control.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		  <SubType>Designer</SubType>
+	  </Page>
+	  <Compile Include="Sprint6\Sprint6Control.xaml.cs">
+		  <DependentUpon>Sprint6Control.xaml</DependentUpon>
+	  </Compile>
 
 	  <!-- App and MainWindow XAML -->
     <ApplicationDefinition Include="App.xaml" />

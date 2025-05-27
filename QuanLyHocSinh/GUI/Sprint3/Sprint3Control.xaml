@@ -1,0 +1,239 @@
+<UserControl x:Class="GUI.Sprint3.Sprint3Control"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI.Sprint3"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Loaded="UserControl_Loaded">
+    <materialDesign:Card Margin="16" UniformCornerRadius="8">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <TextBlock Grid.Row="0"
+                       Text="Tra Cứu Học Sinh"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,0,16"/>
+
+            <!-- First Row: Basic Info -->
+            <Grid Grid.Row="1" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <TextBlock Text="Mã Học Sinh" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBox x:Name="txb_MaHocSinh" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="8,0,8,0">
+                    <TextBlock Text="Họ Tên" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBox x:Name="txb_HoTen" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="8,0,8,0">
+                    <TextBlock Text="Giới Tính" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBox x:Name="txb_GioiTinh" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="8,0,8,0">
+                    <TextBlock Text="Địa Chỉ" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBox x:Name="txb_DiaChi" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4" Margin="8,0,0,0">
+                    <TextBlock Text="Email" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBox x:Name="txb_Email" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Second Row: Scores and Date -->
+            <Grid Grid.Row="2" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <TextBlock Text="Điểm TBHK1" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txb_DiemTBHK1_Tu" Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,4,0"/>
+                        <TextBox x:Name="txb_DiemTBHK1_Den" Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="4,0,0,0"/>
+                    </Grid>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="8,0,8,0">
+                    <TextBlock Text="Điểm TBHK2" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txb_DiemTBHK2_Tu" Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,4,0"/>
+                        <TextBox x:Name="txb_DiemTBHK2_Den" Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="4,0,0,0"/>
+                    </Grid>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="8,0,0,0">
+                    <TextBlock Text="Ngày sinh" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <DatePicker x:Name="dp_NgaySinh_Tu" Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedDatePicker}" Margin="0,0,4,0"/>
+                        <DatePicker x:Name="dp_NgaySinh_Den" Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedDatePicker}" Margin="4,0,0,0"/>
+                    </Grid>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- Third Row: Class Info -->
+            <Grid Grid.Row="3" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <TextBlock Text="Tên Khối Lớp" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="cbx_TenKhoiLop" Style="{StaticResource MaterialDesignOutlinedComboBox}" SelectionChanged="cbx_TenKhoiLop_SelectionChanged"/>
+                    <TextBlock Text="Tất Cả (1)" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="8,0,8,0">
+                    <TextBlock Text="Tên Lớp" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="cbx_TenLop" Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+                    <TextBlock Text="(2)" Foreground="Red" FontSize="10" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="8,0,0,0">
+                    <TextBlock Text="Thuộc Lớp Có Sĩ Số" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txb_SiSo_Tu" Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,4,0"/>
+                        <TextBox x:Name="txb_SiSo_Den" Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="4,0,0,0"/>
+                    </Grid>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- Fourth Row: Buttons -->
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,16">
+                <Button x:Name="btn_TimKiem" Content="Tìm Kiếm (3)"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#2196F3"
+                        Foreground="White"
+                        Margin="8,0" Padding="16,8" Click="btn_TimKiem_Click"/>
+
+                <Button x:Name="btn_Reset" Content="Reset (4)"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#2196F3"
+                        Foreground="White"
+                        Margin="8,0" Padding="16,8" Click="btn_Reset_Click"/>
+            </StackPanel>
+
+            <!-- Results Table -->
+            <Border Grid.Row="5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Table Header -->
+                    <Border Grid.Row="0" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Background="#F5F5F5">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="130"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Mã Học Sinh" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Họ Tên" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Giới Tính" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="Địa Chỉ" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="Email" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="6" Text="Lớp" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="7" Text="Điểm TB Học Kỳ 1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="8" Text="Điểm TB Học Kỳ 2" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Table Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="sp_KetQuaTimKiem">
+                            <!-- Result rows will be populated here dynamically -->
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

@@ -187,7 +187,7 @@ namespace GUI.Sprint2
                     txb_Khoi.Text = lopDuocChon.MaKhoi ?? "";
 
                     // Tính sĩ số lớp
-                    List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocsinh(lopDuocChon.MaLop);
+                    List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocSinh(lopDuocChon.MaLop);
 
                     // Nếu danh sách học sinh trong lớp là null, khởi tạo một danh sách trống
                     if (danhSachHocSinhTrongLop == null)
@@ -451,7 +451,7 @@ namespace GUI.Sprint2
                     if (lopDuocChon != null)
                     {
                         // Kiểm tra xem lớp đã có học sinh chưa
-                        List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocsinh(lopDuocChon.MaLop);
+                        List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocSinh(lopDuocChon.MaLop);
 
                         if (danhSachHocSinhTrongLop != null && danhSachHocSinhTrongLop.Count > 0)
                         {
@@ -661,7 +661,7 @@ namespace GUI.Sprint2
                     Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
                     if (lopDuocChon != null)
                     {
-                        List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocsinh(lopDuocChon.MaLop);
+                        List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocSinh(lopDuocChon.MaLop);
 
                         // Xóa học sinh khỏi lớp trong cơ sở dữ liệu
                         foreach (var hocSinh in danhSachHocSinhTrongLop)
