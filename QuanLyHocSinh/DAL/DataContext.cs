@@ -6,10 +6,13 @@ namespace DAL;
 
 public class DataContext : DbContext
 {
+    public DbSet<BangDiemMon> BANGDIEMMON { get; set; }
     public DbSet<HocSinh> HOCSINH { get; set; }
     public DbSet<ThamSo> THAMSO { get; set; }
     public DbSet<Lop> LOP { get; set; }
     public DbSet<Khoi> KHOI { get; set; }
+    public DbSet<MonHoc> MONHOC { get; set; }
+    public DbSet<HocKy> HOCKY { get; set; }
 
     override protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -20,6 +23,24 @@ public class DataContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<BangDiemMon>()
+            .HasKey(b => new { b.MaHocSinh, b.MaMH, b.MaHK });
+
+        modelBuilder.Entity<BangDiemMon>()
+            .HasOne(b => b.HocSinh)
+            .WithMany()
+            .HasForeignKey(b => b.MaHocSinh);
+
+        modelBuilder.Entity<BangDiemMon>()
+            .HasOne(b => b.MonHoc)
+            .WithMany(m => m.BangDiemMons)
+            .HasForeignKey(b => b.MaMH);
+
+        modelBuilder.Entity<BangDiemMon>()
+            .HasOne(b => b.HocKy)
+            .WithMany(h => h.BangDiemMons)
+            .HasForeignKey(b => b.MaHK);
+
         modelBuilder.Entity<Khoi>()
             .HasMany(k => k.Lops)
             .WithOne(l => l.Khoi)
@@ -29,10 +50,14 @@ public class DataContext : DbContext
             .HasMany(l => l.HocSinhs)
             .WithOne(hs => hs.Lop)
             .HasForeignKey(hs => hs.MaLop);
+        modelBuilder.Entity<HocKy>().ToTable("HOCKY");
+        modelBuilder.Entity<MonHoc>().ToTable("MONHOC");
 
         SeedThamSoData(modelBuilder);
         SeedKhoiData(modelBuilder);
         SeedLopData(modelBuilder);
+        SeedHocKyData(modelBuilder);
+        SeedMonHocData(modelBuilder);
     }
 
     public DataContext()
@@ -66,7 +91,10 @@ public class DataContext : DbContext
             Trace.WriteLine(migration);
         }
 
-        Database.Migrate();
+        if (Database.GetPendingMigrations().Any())
+        {
+            Database.Migrate();
+        }
         Trace.WriteLine("Database migrated!");
     }
 
@@ -163,6 +191,55 @@ public class DataContext : DbContext
                     MaLop = "12A2",
                     TenLop = "12A2",
                     MaKhoi = "K012",
+                }
+            );
+    }
+
+    private void SeedHocKyData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<HocKy>()
+            .HasData(
+                new HocKy
+                {
+                    MaHK = "HK1",
+                    TenHK = "Học kỳ 1"
+                },
+                new HocKy
+                {
+                    MaHK = "HK2",
+                    TenHK = "Học kỳ 2"
+                }
+            );
+    }
+
+    private void SeedMonHocData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<MonHoc>()
+            .HasData(
+                new MonHoc
+                {
+                    MaMH = "TOAN",
+                    TenMH = "Toán học"
+                },
+                new MonHoc
+                {
+                    MaMH = "VAN",
+                    TenMH = "Ngữ văn"
+                },
+                new MonHoc
+                {
+                    MaMH = "LY",
+                    TenMH = "Vật lý"
+                },
+                new MonHoc
+                {
+                    MaMH = "HOA",
+                    TenMH = "Hóa học"
+                },
+                new MonHoc
+                {
+                    MaMH = "ANH",
+                    TenMH = "Tiếng Anh"
                 }
             );
     }

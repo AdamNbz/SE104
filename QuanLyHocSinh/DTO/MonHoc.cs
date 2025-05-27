@@ -12,5 +12,5 @@ public class MonHoc
     [Key]
     public required string MaMH { get; set; }
     public required string TenMH { get; set; }
-    public ICollection<BangDiemMon>? BangDiemMons { get; } = null!;
+    public ICollection<BangDiemMon> BangDiemMons { get; set; } = new List<BangDiemMon>();
 }

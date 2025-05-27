@@ -9,5 +9,5 @@ public class Khoi
     [StringLength(4)]
     public required string MaKhoi { get; set; }
     public required string TenKhoi { get; set; }
-    public ICollection<Lop> Lops { get; } = null!;
+    public ICollection<Lop> Lops { get; set; } = new List<Lop>();
 }

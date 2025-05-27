@@ -11,5 +11,5 @@ public class Lop
     public required string TenLop { get; set; }
     public required string MaKhoi { get; set; }
     public Khoi? Khoi { get; set; }
-    public ICollection<HocSinh>? HocSinhs { get; } = null!;
+    public ICollection<HocSinh> HocSinhs { get; set; } = new List<HocSinh>();
 }

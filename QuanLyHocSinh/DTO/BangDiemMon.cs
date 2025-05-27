@@ -9,11 +9,8 @@ namespace DTO;
 
 public class BangDiemMon
 {
-    [Key]
     public required string MaHocSinh { get; set; }
-    [Key]
     public required string MaMH { get; set; }
-    [Key]
     public required string MaHK { get; set; }
     public float? Diem15P { get; set; }
     public float? Diem1T { get; set; }
