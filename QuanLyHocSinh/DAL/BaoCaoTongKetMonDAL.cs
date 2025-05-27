@@ -38,18 +38,8 @@ namespace DAL
                 SoDat = soDat,
                 SoKhongDat = soKhongDat,
                 TyLeDat = tyLeDat,
-                ChiTiet = danhSach
+                ChiTietBangDiem = danhSach
             };
         }
-    }
-
-    public class BaoCaoMonResult
-    {
-        public int TongSo { get; set; }
-        public int SoDat { get; set; }
-        public int SoKhongDat { get; set; }
-        public double TyLeDat { get; set; }
-
-        public List<BangDiemMon> ChiTiet { get; set; } = new();
     }
 }

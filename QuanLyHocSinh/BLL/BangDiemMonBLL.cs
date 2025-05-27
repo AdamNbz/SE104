@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DAL;
+using DTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,33 +45,39 @@ namespace BLL
         }
         private void KiemTraCacDieuKien(float? Diem15P, float? Diem1T, float? DiemCuoiKy)
         {
-            if (MaHK != "HK01" && MaHK != "HK02")
-            {
-                throw new Exception("Khong Ton Tai Hoc Ky Nay");
-            }
+            var validHocKys = DataContext.Context.HOCKY
+                         .Select(h => h.MaHK)
+                         .ToList();
+            if (!validHocKys.Contains(MaHK))
+                throw new Exception($"Học kỳ {MaHK} không tồn tại");
             if (Diem15P < 0 || Diem15P > 10 || Diem1T < 0 || Diem1T > 10 || DiemCuoiKy > 10 || DiemCuoiKy < 0)
             {
                 throw new Exception("Mot Trong Cac Diem Thanh Phan Khong Hop Le");
             }
-            //if(MaMH khong ton tai trong danh sach)
-            //    {
-            //    throw new Exception("Khong Ton Tai Mon Hoc Nay");
-            //}
         }
 
         public void XoaBangDiem(string MaHS, string MaMonHoc, string MaHK)
         {
-            //BangDiemDAl.XoaBangDiem()
+            DAL.BangDiemMonDAL.XoaDiem(MaHS, MaMonHoc, MaHK);
         }
-        public void CapNhatBangDiem(string MaHS,string MaMonHoc,string MaHK,BangDiemMonBLL BangDiemMoi)
+        public static void CapNhatBangDiem(BangDiemMonBLL bangDiemMoi)
         {
-            //BangDiemDal.CapNhat...
+            var diem = new BangDiemMon
+            {
+                MaHocSinh = bangDiemMoi.MaHocSinh,
+                MaMH = bangDiemMoi.MaMH,
+                MaHK = bangDiemMoi.MaHK,
+                Diem15P = bangDiemMoi.Diem15P,
+                Diem1T = bangDiemMoi.Diem1T,
+                DiemCuoiKy = bangDiemMoi.DiemCuoiKy
+            };
+
+            BangDiemMonDAL.LuuDiem(diem); // Dùng chung hàm LuuDiem để cập nhật
         }
         public void TruyXuatBangDiem()
         {
             //LaybangDiem(string MaHS,string MaMonHoc,string MaHK);
         }
-
     }
    
 }

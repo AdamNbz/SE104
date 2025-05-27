@@ -489,36 +489,27 @@ namespace GUI.Sprint2
                         {
                             if (control is ComboBox comboBox)
                             {
-                                // Lưu lại item đã chọn
-                                var selectedItem = comboBox.SelectedItem;
+                                // Xóa selection và cả text hiển thị
+                                comboBox.SelectedItem = null;
+                                comboBox.Text = string.Empty;
 
-                                // Cập nhật lại danh sách
+                                // Thiết lập lại ItemsSource như cũ
                                 comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
                                 comboBox.DisplayMemberPath = "HoTen";
                                 comboBox.SelectedValuePath = "MaHS";
-                                comboBox.IsEditable = true; // Cho phép nhập text
-                                comboBox.IsTextSearchEnabled = true; // Cho phép tìm kiếm theo text
-                                TextSearch.SetTextPath(comboBox, "HoTen"); // Tìm kiếm theo thuộc tính HoTen
-                                comboBox.StaysOpenOnEdit = true; // Giữ dropdown mở khi đang nhập
-                                comboBox.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(ComboBox_TextChanged));
-
-                                // Khôi phục lại item đã chọn
-                                if (selectedItem != null)
-                                {
-                                    HocSinh hocSinh = selectedItem as HocSinh;
-                                    if (hocSinh != null)
-                                    {
-                                        // Tìm học sinh trong danh sách mới
-                                        var hocSinhMoi = danhSachHocSinh.FirstOrDefault(hs => hs.MaHS == hocSinh.MaHS);
-                                        if (hocSinhMoi != null)
-                                        {
-                                            comboBox.SelectedItem = hocSinhMoi;
-
-                                            // Cập nhật thông tin học sinh
-                                            UpdateHocSinhInfo(hocSinhGrid, hocSinhMoi);
-                                        }
-                                    }
-                                }
+                                comboBox.IsEditable = true;
+                                comboBox.IsTextSearchEnabled = true;
+                                TextSearch.SetTextPath(comboBox, "HoTen");
+                                comboBox.StaysOpenOnEdit = true;
+                                comboBox.AddHandler(TextBoxBase.TextChangedEvent,
+                                                   new TextChangedEventHandler(ComboBox_TextChanged));
+                            }
+                            else if (control is TextBox textBox && Grid.GetColumn(control) > 1)
+                            {
+                                // Xóa sạch các TextBox (Giới tính, Ngày sinh, Địa chỉ…)
+                                textBox.Text = string.Empty;
+                                // Nếu muốn reset cả màu nền:
+                                textBox.Background = Brushes.LightGray;
                             }
                         }
                     }

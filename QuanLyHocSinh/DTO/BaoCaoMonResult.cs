@@ -13,5 +13,5 @@ public class BaoCaoMonResult
     public int SoKhongDat { get; set; }
     public double TyLeDat { get; set; }
 
-    public ICollection<BangDiemMon>? ChiTietBangDiem { get; } = null!;
+    public ICollection<BangDiemMon>? ChiTietBangDiem { get; set; } = new List<BangDiemMon>();
 }
