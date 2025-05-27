@@ -33,41 +33,21 @@
 
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
                     <TextBlock Text="Lớp" FontWeight="Bold" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="cbx_Lop" 
+                    <ComboBox x:Name="cbx_Lop"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                              SelectionChanged="cbx_Lop_SelectionChanged">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="(" Foreground="Red"/>
-                                    <TextBlock Text="1" Foreground="Red"/>
-                                    <TextBlock Text=")" Foreground="Red"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              SelectionChanged="cbx_Lop_SelectionChanged"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="8,0,8,0">
                     <TextBlock Text="Môn Học" FontWeight="Bold" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="cbx_MonHoc" 
+                    <ComboBox x:Name="cbx_MonHoc"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                              SelectionChanged="cbx_MonHoc_SelectionChanged">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="(" Foreground="Red"/>
-                                    <TextBlock Text="2" Foreground="Red"/>
-                                    <TextBlock Text=")" Foreground="Red"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              SelectionChanged="cbx_MonHoc_SelectionChanged"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Margin="8,0,0,0">
                     <TextBlock Text="Học Kỳ" FontWeight="Bold" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="cbx_HocKy" 
+                    <ComboBox x:Name="cbx_HocKy"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
                               SelectionChanged="cbx_HocKy_SelectionChanged"/>
                 </StackPanel>

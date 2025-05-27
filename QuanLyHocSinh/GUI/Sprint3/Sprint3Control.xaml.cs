@@ -31,7 +31,7 @@ namespace GUI.Sprint3
         {
             LoadKhoiLop();
             LoadTenLop();
-            AddEmptyResultRows();
+            // Không hiển thị dòng trống mặc định - chỉ hiển thị khi có kết quả tìm kiếm
         }
 
         private void LoadKhoiLop()
@@ -78,12 +78,54 @@ namespace GUI.Sprint3
         {
             try
             {
-                // TODO: Lọc danh sách lớp theo khối được chọn
-                // Tạm thời để trống, sẽ implement sau
+                // Lọc danh sách lớp theo khối được chọn
+                LoadTenLopTheoKhoi();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi thay đổi khối lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadTenLopTheoKhoi()
+        {
+            try
+            {
+                cbx_TenLop.Items.Clear();
+                cbx_TenLop.Items.Add("Tất Cả");
+
+                var selectedKhoi = cbx_TenKhoiLop.SelectedItem?.ToString();
+                var danhSachLop = LopBLL.GetDanhSachLop();
+
+                if (selectedKhoi == "Tất Cả" || string.IsNullOrEmpty(selectedKhoi))
+                {
+                    // Hiển thị tất cả lớp
+                    foreach (var lop in danhSachLop)
+                    {
+                        cbx_TenLop.Items.Add(lop.TenLop);
+                    }
+                }
+                else
+                {
+                    // Lọc lớp theo khối được chọn
+                    var danhSachKhoi = LopBLL.GetDanhSachKhoiLop();
+                    var khoiDuocChon = danhSachKhoi.FirstOrDefault(k => k.TenKhoi == selectedKhoi);
+
+                    if (khoiDuocChon != null)
+                    {
+                        var lopTheoKhoi = danhSachLop.Where(l => l.MaKhoi == khoiDuocChon.MaKhoi);
+                        foreach (var lop in lopTheoKhoi)
+                        {
+                            cbx_TenLop.Items.Add(lop.TenLop);
+                        }
+                    }
+                }
+
+                cbx_TenLop.SelectedIndex = 0; // Mặc định chọn "Tất Cả"
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải danh sách lớp theo khối: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -190,43 +232,43 @@ namespace GUI.Sprint3
             Border border = new Border
             {
                 BorderBrush = new SolidColorBrush(Color.FromRgb(224, 224, 224)),
-                BorderThickness = new Thickness(0, 0, 1, 1)
+                BorderThickness = new Thickness(0, 0, 0, 1) // Chỉ có border dưới
             };
 
             Grid grid = new Grid
             {
                 Margin = new Thickness(8),
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)) // Light gray
+                Background = Brushes.White, // Nền trắng thay vì xám
+                MinHeight = 40
             };
 
-            // Define columns
-            for (int i = 0; i < 9; i++)
-            {
-                ColumnDefinition col = new ColumnDefinition();
-                switch (i)
-                {
-                    case 0: col.Width = new GridLength(50); break;
-                    case 1: col.Width = new GridLength(120); break;
-                    case 2: col.Width = new GridLength(200); break;
-                    case 3: col.Width = new GridLength(80); break;
-                    case 4: col.Width = new GridLength(150); break;
-                    case 5: col.Width = new GridLength(150); break;
-                    case 6: col.Width = new GridLength(80); break;
-                    case 7: col.Width = new GridLength(130); break;
-                    case 8: col.Width = new GridLength(130); break;
-                }
-                grid.ColumnDefinitions.Add(col);
-            }
+            // Define columns - phải khớp với header trong XAML
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(50) });   // STT
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });  // Mã Học Sinh
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Họ Tên
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(80) });   // Giới Tính
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(150) });  // Địa Chỉ
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(150) });  // Email
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(80) });   // Lớp
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(130) });  // Điểm TB HK1
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(130) });  // Điểm TB HK2
 
-            // Add text blocks
+            // Add text blocks - thứ tự phải khớp với header
+            // Header: STT | Mã Học Sinh | Họ Tên | Giới Tính | Địa Chỉ | Email | Lớp | Điểm TB HK1 | Điểm TB HK2
             string[] values = { stt, maHS, hoTen, gioiTinh, diaChi, email, lop, diemHK1, diemHK2 };
+
+            // Debug: In ra giá trị để kiểm tra
+            System.Diagnostics.Debug.WriteLine($"AddResultRow - STT: {stt}, MaHS: {maHS}, HoTen: {hoTen}, GioiTinh: {gioiTinh}");
             for (int i = 0; i < values.Length; i++)
             {
                 TextBlock textBlock = new TextBlock
                 {
                     Text = values[i],
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 12,
+                    Foreground = string.IsNullOrEmpty(values[i]) ? Brushes.LightGray : Brushes.Black,
+                    Padding = new Thickness(4)
                 };
                 Grid.SetColumn(textBlock, i);
                 grid.Children.Add(textBlock);
@@ -278,8 +320,7 @@ namespace GUI.Sprint3
             {
                 if (ketQuaTimKiem == null || ketQuaTimKiem.Count == 0)
                 {
-                    // Add empty rows if no results
-                    AddEmptyResultRows();
+                    // Không hiển thị gì khi không có kết quả - để trống
                     return;
                 }
 
@@ -297,16 +338,19 @@ namespace GUI.Sprint3
                     }
                     catch { }
 
+                    // Debug: Kiểm tra dữ liệu
+                    System.Diagnostics.Debug.WriteLine($"Debug - STT: {i + 1}, MaHS: {hocSinh.MaHS}, HoTen: {hocSinh.HoTen}, GioiTinh: {hocSinh.GioiTinh}");
+
                     AddResultRow(
-                        (i + 1).ToString(),
-                        hocSinh.MaHS ?? "",
-                        hocSinh.HoTen ?? "",
-                        hocSinh.GioiTinh ?? "",
-                        hocSinh.DiaChi ?? "",
-                        hocSinh.Email ?? "",
-                        tenLop,
-                        "", // Điểm HK1 - tạm thời để trống vì chưa có trong DTO
-                        ""  // Điểm HK2 - tạm thời để trống vì chưa có trong DTO
+                        (i + 1).ToString(),     // STT
+                        hocSinh.MaHS ?? "",     // Mã Học Sinh
+                        hocSinh.HoTen ?? "",    // Họ Tên
+                        hocSinh.GioiTinh ?? "", // Giới Tính
+                        hocSinh.DiaChi ?? "",   // Địa Chỉ
+                        hocSinh.Email ?? "",    // Email
+                        tenLop,                 // Lớp
+                        "",                     // Điểm TB Học Kỳ 1
+                        ""                      // Điểm TB Học Kỳ 2
                     );
                 }
             }

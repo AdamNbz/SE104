@@ -10,12 +10,12 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="Quản Lý Học Sinh" Height="600" Width="1200"
+        Title="Quản Lý Học Sinh" Height="650" Width="1400"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- Chia layout thành 2 cột -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/> <!-- Cột cho thanh điều hướng -->
+            <ColumnDefinition Width="180"/> <!-- Cột cho thanh điều hướng - thu nhỏ từ 250 xuống 180 -->
             <ColumnDefinition Width="*"/>   <!-- Cột cho nội dung -->
         </Grid.ColumnDefinitions>
 

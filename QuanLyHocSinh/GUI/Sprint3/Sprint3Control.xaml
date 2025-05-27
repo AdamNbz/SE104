@@ -38,31 +38,26 @@
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
                     <TextBlock Text="Mã Học Sinh" FontWeight="Bold" Margin="0,0,0,4"/>
                     <TextBox x:Name="txb_MaHocSinh" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="8,0,8,0">
                     <TextBlock Text="Họ Tên" FontWeight="Bold" Margin="0,0,0,4"/>
                     <TextBox x:Name="txb_HoTen" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Margin="8,0,8,0">
-                    <TextBlock Text="Giới Tính" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="Họ tên" FontWeight="Bold" Margin="0,0,0,4"/>
                     <TextBox x:Name="txb_GioiTinh" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="3" Margin="8,0,8,0">
                     <TextBlock Text="Địa Chỉ" FontWeight="Bold" Margin="0,0,0,4"/>
                     <TextBox x:Name="txb_DiaChi" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="4" Margin="8,0,0,0">
                     <TextBlock Text="Email" FontWeight="Bold" Margin="0,0,0,4"/>
                     <TextBox x:Name="txb_Email" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    <TextBlock Text="&lt;Có chọn&gt;" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
             </Grid>
 
@@ -89,8 +84,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="13" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="13" HorizontalAlignment="Center"/>
                     </Grid>
                 </StackPanel>
 
@@ -109,8 +104,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="13" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="13" HorizontalAlignment="Center"/>
                     </Grid>
                 </StackPanel>
 
@@ -129,8 +124,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="10" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="Từ" Foreground="Red" FontSize="13" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Đến" Foreground="Red" FontSize="13" HorizontalAlignment="Center"/>
                     </Grid>
                 </StackPanel>
             </Grid>
@@ -146,13 +141,11 @@
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
                     <TextBlock Text="Tên Khối Lớp" FontWeight="Bold" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_TenKhoiLop" Style="{StaticResource MaterialDesignOutlinedComboBox}" SelectionChanged="cbx_TenKhoiLop_SelectionChanged"/>
-                    <TextBlock Text="Tất Cả (1)" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="8,0,8,0">
                     <TextBlock Text="Tên Lớp" FontWeight="Bold" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_TenLop" Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
-                    <TextBlock Text="(2)" Foreground="Red" FontSize="10" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Margin="8,0,0,0">
@@ -178,13 +171,13 @@
 
             <!-- Fourth Row: Buttons -->
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,16">
-                <Button x:Name="btn_TimKiem" Content="Tìm Kiếm (3)"
+                <Button x:Name="btn_TimKiem" Content="Tìm Kiếm"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
                         Margin="8,0" Padding="16,8" Click="btn_TimKiem_Click"/>
 
-                <Button x:Name="btn_Reset" Content="Reset (4)"
+                <Button x:Name="btn_Reset" Content="Reset"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"

@@ -8,11 +8,11 @@
         mc:Ignorable="d"
         Loaded="UserControl_Loaded">
     <Grid HorizontalAlignment="Stretch">
-        <StackPanel HorizontalAlignment="Center">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
             <StackPanel x:Name="stPn_ThongTin">
             <StackPanel.Resources>
                 <Style x:Key="grid" TargetType="Grid">
-                    <Setter Property="Width" Value="700"/>
+                    <Setter Property="Width" Value="800"/>
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Top"/>
                     <Setter Property="Margin" Value="0,15,0,0"/>
@@ -107,7 +107,7 @@
 
         <StackPanel VerticalAlignment="Top"
                 HorizontalAlignment="Center"
-                Width="700"
+                Width="800"
                 Height="50"
                 Margin="0,20,0,0"
                 Orientation="Horizontal">

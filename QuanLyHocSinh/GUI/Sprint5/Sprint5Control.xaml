@@ -32,24 +32,14 @@
 
                 <StackPanel Grid.Column="0" Margin="0,0,16,0">
                     <TextBlock Text="Môn" FontWeight="Bold" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="cbx_Mon" 
+                    <ComboBox x:Name="cbx_Mon"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                              SelectionChanged="cbx_Mon_SelectionChanged">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="(" Foreground="Red"/>
-                                    <TextBlock Text="1" Foreground="Red"/>
-                                    <TextBlock Text=")" Foreground="Red"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              SelectionChanged="cbx_Mon_SelectionChanged"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="16,0,0,0">
                     <TextBlock Text="Học kỳ" FontWeight="Bold" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="cbx_HocKy" 
+                    <ComboBox x:Name="cbx_HocKy"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
                               SelectionChanged="cbx_HocKy_SelectionChanged"/>
                 </StackPanel>

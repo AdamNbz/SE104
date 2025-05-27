@@ -27,20 +27,10 @@
             <Grid Grid.Row="1" Margin="0,0,0,16">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock Text="Học kỳ" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
-                    <ComboBox x:Name="cbx_HocKy" 
+                    <ComboBox x:Name="cbx_HocKy"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
                               Width="300"
-                              SelectionChanged="cbx_HocKy_SelectionChanged">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="(" Foreground="Red"/>
-                                    <TextBlock Text="1" Foreground="Red"/>
-                                    <TextBlock Text=")" Foreground="Red"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              SelectionChanged="cbx_HocKy_SelectionChanged"/>
                 </StackPanel>
             </Grid>
 
@@ -55,9 +45,6 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Lập báo cáo"/>
-                                <TextBlock Text=" (" Foreground="Red"/>
-                                <TextBlock Text="2" Foreground="Red"/>
-                                <TextBlock Text=")" Foreground="Red"/>
                             </StackPanel>
                         </DataTemplate>
                     </Button.ContentTemplate>
@@ -72,9 +59,6 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Thoát"/>
-                                <TextBlock Text=" (" Foreground="Red"/>
-                                <TextBlock Text="3" Foreground="Red"/>
-                                <TextBlock Text=")" Foreground="Red"/>
                             </StackPanel>
                         </DataTemplate>
                     </Button.ContentTemplate>

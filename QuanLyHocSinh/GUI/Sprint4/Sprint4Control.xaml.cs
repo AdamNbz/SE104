@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DTO;
 using BLL;
+using DAL;
 
 namespace GUI.Sprint4
 {
@@ -64,15 +65,32 @@ namespace GUI.Sprint4
             {
                 cbx_MonHoc.Items.Clear();
 
-                // TODO: Load from database - tạm thời thêm dữ liệu mẫu
-                cbx_MonHoc.Items.Add("Toán");
-                cbx_MonHoc.Items.Add("Văn");
-                cbx_MonHoc.Items.Add("Anh");
-                cbx_MonHoc.Items.Add("Lý");
-                cbx_MonHoc.Items.Add("Hóa");
-                cbx_MonHoc.Items.Add("Sinh");
-                cbx_MonHoc.Items.Add("Sử");
-                cbx_MonHoc.Items.Add("Địa");
+                try
+                {
+                    // Load from database using DataContext
+                    var danhSachMonHoc = DAL.DataContext.Context.MONHOC.ToList();
+                    foreach (var monHoc in danhSachMonHoc)
+                    {
+                        cbx_MonHoc.Items.Add(monHoc.TenMH);
+                    }
+                }
+                catch
+                {
+                    // If database fails, use fallback data
+                }
+
+                // Fallback to sample data if no data in database
+                if (cbx_MonHoc.Items.Count == 0)
+                {
+                    cbx_MonHoc.Items.Add("Toán học");
+                    cbx_MonHoc.Items.Add("Ngữ văn");
+                    cbx_MonHoc.Items.Add("Tiếng Anh");
+                    cbx_MonHoc.Items.Add("Vật lý");
+                    cbx_MonHoc.Items.Add("Hóa học");
+                    cbx_MonHoc.Items.Add("Sinh học");
+                    cbx_MonHoc.Items.Add("Lịch sử");
+                    cbx_MonHoc.Items.Add("Địa lý");
+                }
 
                 if (cbx_MonHoc.Items.Count > 0)
                 {
@@ -91,9 +109,26 @@ namespace GUI.Sprint4
             {
                 cbx_HocKy.Items.Clear();
 
-                // TODO: Load from database - tạm thời thêm dữ liệu mẫu
-                cbx_HocKy.Items.Add("Học kỳ 1");
-                cbx_HocKy.Items.Add("Học kỳ 2");
+                try
+                {
+                    // Load from database using DataContext
+                    var danhSachHocKy = DAL.DataContext.Context.HOCKY.ToList();
+                    foreach (var hocKy in danhSachHocKy)
+                    {
+                        cbx_HocKy.Items.Add(hocKy.TenHK);
+                    }
+                }
+                catch
+                {
+                    // If database fails, use fallback data
+                }
+
+                // Fallback to sample data if no data in database
+                if (cbx_HocKy.Items.Count == 0)
+                {
+                    cbx_HocKy.Items.Add("Học kỳ 1");
+                    cbx_HocKy.Items.Add("Học kỳ 2");
+                }
 
                 if (cbx_HocKy.Items.Count > 0)
                 {
@@ -154,7 +189,7 @@ namespace GUI.Sprint4
 
                 if (cbx_Lop.SelectedItem == null)
                 {
-                    AddSampleStudentRows();
+                    // Không có lớp được chọn - để trống
                     return;
                 }
 
@@ -165,7 +200,7 @@ namespace GUI.Sprint4
 
                 if (lopDuocChon == null)
                 {
-                    AddSampleStudentRows();
+                    // Không tìm thấy lớp - để trống
                     return;
                 }
 
@@ -174,25 +209,22 @@ namespace GUI.Sprint4
 
                 if (danhSachHocSinh.Count == 0)
                 {
-                    // Nếu không có học sinh, thêm 3 dòng trống
-                    for (int i = 1; i <= 3; i++)
-                    {
-                        AddStudentRow(i, null, "", "", "");
-                    }
+                    // Lớp không có học sinh - để trống hoàn toàn
+                    return;
                 }
                 else
                 {
-                    // Hiển thị học sinh thực tế
-                    for (int i = 0; i < danhSachHocSinh.Count; i++)
+                    // Lớp có học sinh - hiển thị dropdown để chọn học sinh
+                    // Số dòng = số học sinh trong lớp
+                    for (int i = 1; i <= danhSachHocSinh.Count; i++)
                     {
-                        AddStudentRow(i + 1, danhSachHocSinh[i], "", "", "");
+                        AddStudentRowWithDropdown(i, danhSachHocSinh, "", "", "");
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi tải danh sách học sinh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                AddSampleStudentRows();
             }
         }
 
@@ -206,12 +238,152 @@ namespace GUI.Sprint4
             // TODO: Implement loading scores for selected semester
         }
 
-        private void AddSampleStudentRows()
+        private void AddStudentRowWithDropdown(int stt, List<DTO.HocSinh> danhSachHocSinh, string diem15Phut, string diem1Tiet, string diemCuoiHK)
         {
-            // Add 3 sample student rows as shown in the image
-            for (int i = 1; i <= 3; i++)
+            Border border = new Border
             {
-                AddStudentRow(i, null, "", "", "");
+                BorderBrush = new SolidColorBrush(Color.FromRgb(224, 224, 224)),
+                BorderThickness = new Thickness(0, 0, 0, 1)
+            };
+
+            Grid grid = new Grid
+            {
+                Margin = new Thickness(8),
+                MinHeight = 40
+            };
+
+            // Define columns
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
+
+            // STT
+            TextBlock sttTextBlock = new TextBlock
+            {
+                Text = stt.ToString(),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(sttTextBlock, 0);
+            grid.Children.Add(sttTextBlock);
+
+            // ComboBox để chọn học sinh với giao diện thẳng hàng
+            ComboBox cbxHocSinh = new ComboBox
+            {
+                Name = $"cbx_HocSinh_{stt}",
+                Margin = new Thickness(4),
+                VerticalAlignment = VerticalAlignment.Center,
+                Background = Brushes.White,
+                BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
+                BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
+                FontSize = 12,
+                Height = 32
+            };
+
+            // Load danh sách học sinh trong lớp vào dropdown
+            cbxHocSinh.Items.Add("-- Chọn học sinh --");
+            foreach (var hs in danhSachHocSinh)
+            {
+                cbxHocSinh.Items.Add($"{hs.MaHS} - {hs.HoTen}");
+            }
+            cbxHocSinh.SelectedIndex = 0;
+
+            // Thêm event handler để kiểm tra trùng lặp
+            cbxHocSinh.SelectionChanged += CbxHocSinh_SelectionChanged;
+
+            Grid.SetColumn(cbxHocSinh, 1);
+            grid.Children.Add(cbxHocSinh);
+
+            // Điểm 15 phút
+            TextBox txtDiem15Phut = new TextBox
+            {
+                Name = $"txt_Diem15Phut_{stt}",
+                Text = diem15Phut,
+                Margin = new Thickness(4),
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
+                BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
+                Background = Brushes.White,
+                Height = 32
+            };
+            Grid.SetColumn(txtDiem15Phut, 2);
+            grid.Children.Add(txtDiem15Phut);
+
+            // Điểm 1 tiết
+            TextBox txtDiem1Tiet = new TextBox
+            {
+                Name = $"txt_Diem1Tiet_{stt}",
+                Text = diem1Tiet,
+                Margin = new Thickness(4),
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
+                BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
+                Background = Brushes.White,
+                Height = 32
+            };
+            Grid.SetColumn(txtDiem1Tiet, 3);
+            grid.Children.Add(txtDiem1Tiet);
+
+            // Điểm cuối HK
+            TextBox txtDiemCuoiHK = new TextBox
+            {
+                Name = $"txt_DiemCuoiHK_{stt}",
+                Text = diemCuoiHK,
+                Margin = new Thickness(4),
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
+                BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
+                Background = Brushes.White,
+                Height = 32
+            };
+            Grid.SetColumn(txtDiemCuoiHK, 4);
+            grid.Children.Add(txtDiemCuoiHK);
+
+            border.Child = grid;
+            sp_DanhSachHocSinh.Children.Add(border);
+        }
+
+        private void CbxHocSinh_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox currentComboBox && currentComboBox.SelectedIndex > 0)
+            {
+                string selectedValue = currentComboBox.SelectedItem.ToString();
+                string selectedMaHS = selectedValue.Split('-')[0].Trim();
+
+                // Kiểm tra xem học sinh này đã được chọn ở hàng khác chưa
+                foreach (Border border in sp_DanhSachHocSinh.Children)
+                {
+                    if (border.Child is Grid grid)
+                    {
+                        foreach (UIElement child in grid.Children)
+                        {
+                            if (child is ComboBox otherComboBox &&
+                                otherComboBox != currentComboBox &&
+                                otherComboBox.SelectedIndex > 0)
+                            {
+                                string otherSelectedValue = otherComboBox.SelectedItem.ToString();
+                                string otherMaHS = otherSelectedValue.Split('-')[0].Trim();
+
+                                if (selectedMaHS == otherMaHS)
+                                {
+                                    MessageBox.Show($"Học sinh {selectedValue} đã được chọn ở hàng khác!\nVui lòng chọn học sinh khác.",
+                                                  "Trùng lặp học sinh",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Warning);
+
+                                    // Reset về "-- Chọn học sinh --"
+                                    currentComboBox.SelectedIndex = 0;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -335,8 +507,16 @@ namespace GUI.Sprint4
                     return;
                 }
 
-                string monHoc = cbx_MonHoc.SelectedItem.ToString();
-                string hocKy = cbx_HocKy.SelectedItem.ToString();
+                // Lấy mã môn học và học kỳ từ tên được chọn
+                string tenMonHoc = cbx_MonHoc.SelectedItem.ToString();
+                string tenHocKy = cbx_HocKy.SelectedItem.ToString();
+
+                // Tìm mã môn học từ tên
+                var monHocObj = DAL.DataContext.Context.MONHOC.FirstOrDefault(m => m.TenMH == tenMonHoc);
+                var hocKyObj = DAL.DataContext.Context.HOCKY.FirstOrDefault(h => h.TenHK == tenHocKy);
+
+                string maMonHoc = monHocObj?.MaMH ?? tenMonHoc; // Fallback to name if not found
+                string maHocKy = hocKyObj?.MaHK ?? tenHocKy; // Fallback to name if not found
 
                 int soLuongDiemDaNhap = 0;
                 List<string> errors = new List<string>();
@@ -392,11 +572,11 @@ namespace GUI.Sprint4
                                 var bangDiem = new BLL.BangDiemMonBLL
                                 {
                                     MaHocSinh = maHocSinh,
-                                    MaMH = monHoc,
-                                    MaHK = hocKy
+                                    MaMH = maMonHoc,
+                                    MaHK = maHocKy
                                 };
 
-                                var result = bangDiem.TaoBangDiem(maHocSinh, monHoc, hocKy, diem15P, diem1T, diemCuoiKy);
+                                var result = bangDiem.TaoBangDiem(maHocSinh, maMonHoc, maHocKy, diem15P, diem1T, diemCuoiKy);
                                 if (result != null)
                                 {
                                     soLuongDiemDaNhap++;

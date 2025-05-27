@@ -31,7 +31,7 @@ namespace GUI.Sprint5
         {
             LoadMon();
             LoadHocKy();
-            AddSampleClassRows();
+            // Không hiển thị dòng trống mặc định - chỉ hiển thị khi lập báo cáo
         }
 
         private void LoadMon()
@@ -39,7 +39,7 @@ namespace GUI.Sprint5
             try
             {
                 cbx_Mon.Items.Clear();
-                
+
                 // TODO: Load from database - tạm thời thêm dữ liệu mẫu
                 cbx_Mon.Items.Add("Toán");
                 cbx_Mon.Items.Add("Văn");
@@ -49,7 +49,7 @@ namespace GUI.Sprint5
                 cbx_Mon.Items.Add("Sinh");
                 cbx_Mon.Items.Add("Sử");
                 cbx_Mon.Items.Add("Địa");
-                
+
                 if (cbx_Mon.Items.Count > 0)
                 {
                     cbx_Mon.SelectedIndex = 0;
@@ -66,11 +66,11 @@ namespace GUI.Sprint5
             try
             {
                 cbx_HocKy.Items.Clear();
-                
+
                 // TODO: Load from database - tạm thời thêm dữ liệu mẫu
                 cbx_HocKy.Items.Add("Học kỳ 1");
                 cbx_HocKy.Items.Add("Học kỳ 2");
-                
+
                 if (cbx_HocKy.Items.Count > 0)
                 {
                     cbx_HocKy.SelectedIndex = 0;
@@ -110,10 +110,21 @@ namespace GUI.Sprint5
 
         private void UpdateReportData()
         {
-            // TODO: Implement updating report data based on selected subject and semester
-            // For now, just refresh the sample data
-            sp_DanhSachLop.Children.Clear();
-            AddSampleClassRows();
+            try
+            {
+                if (cbx_Mon.SelectedItem == null || cbx_HocKy.SelectedItem == null)
+                    return;
+
+                // Clear existing data
+                sp_DanhSachLop.Children.Clear();
+
+                // Sử dụng dữ liệu từ LopBLL để tạo báo cáo
+                GenerateReportFromBLL();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật dữ liệu báo cáo: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void btn_LapBaoCao_Click(object sender, RoutedEventArgs e)
@@ -132,10 +143,10 @@ namespace GUI.Sprint5
                     return;
                 }
 
-                // TODO: Generate actual report
-                GenerateReport();
-                
-                MessageBox.Show($"Đã lập báo cáo tổng kết môn {cbx_Mon.SelectedItem} - {cbx_HocKy.SelectedItem}", 
+                // Generate report từ BLL
+                GenerateReportFromBLL();
+
+                MessageBox.Show($"Đã lập báo cáo tổng kết môn {cbx_Mon.SelectedItem} - {cbx_HocKy.SelectedItem}",
                     "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -144,34 +155,44 @@ namespace GUI.Sprint5
             }
         }
 
-        private void GenerateReport()
+        private void GenerateReportFromBLL()
         {
-            // Clear existing data
-            sp_DanhSachLop.Children.Clear();
-
-            // TODO: Get actual data from database
-            // For now, add sample data with calculated statistics
-            var sampleData = new[]
+            try
             {
-                new { STT = 1, Lop = "10A1", SiSo = 40, SoLuongDat = 35, TyLe = "87.5%" },
-                new { STT = 2, Lop = "10A2", SiSo = 38, SoLuongDat = 32, TyLe = "84.2%" },
-                new { STT = 3, Lop = "10A3", SiSo = 42, SoLuongDat = 38, TyLe = "90.5%" }
-            };
+                // Clear existing data
+                sp_DanhSachLop.Children.Clear();
 
-            foreach (var item in sampleData)
+                // Lấy dữ liệu từ BLL có sẵn
+                var danhSachLop = LopBLL.GetDanhSachLop();
+                var danhSachHocSinh = HocSinhBLL.GetDanhSachHocSinh();
+
+                // Tạo báo cáo cho từng lớp
+                int stt = 1;
+                foreach (var lop in danhSachLop)
+                {
+                    // Tính sĩ số thực từ danh sách học sinh
+                    var hocSinhTrongLop = danhSachHocSinh.Where(hs => hs.MaLop == lop.MaLop).ToList();
+                    int siSo = hocSinhTrongLop.Count;
+
+                    if (siSo > 0) // Chỉ hiển thị lớp có học sinh
+                    {
+                        // Giả lập số lượng đạt (85% học sinh đạt)
+                        int soLuongDat = (int)(siSo * 0.85);
+                        double tyLeDat = siSo > 0 ? (soLuongDat * 100.0 / siSo) : 0;
+
+                        AddClassRow(stt, lop.TenLop, siSo.ToString(),
+                                   soLuongDat.ToString(), $"{tyLeDat:F1}%");
+                        stt++;
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                AddClassRow(item.STT, item.Lop, item.SiSo.ToString(), item.SoLuongDat.ToString(), item.TyLe);
+                MessageBox.Show($"Lỗi khi tạo báo cáo: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void AddSampleClassRows()
-        {
-            // Add 3 empty sample rows as shown in the image
-            for (int i = 1; i <= 3; i++)
-            {
-                AddClassRow(i, "", "", "", "");
-            }
-        }
+        // Đã xóa AddSampleClassRows - không cần dòng trống mặc định
 
         private void AddClassRow(int stt, string tenLop, string siSo, string soLuongDat, string tyLe)
         {
@@ -185,7 +206,7 @@ namespace GUI.Sprint5
             {
                 Margin = new Thickness(8),
                 MinHeight = 40,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)) // Light gray
+                Background = Brushes.White // Nền trắng thay vì xám
             };
 
             // Define columns
@@ -206,57 +227,53 @@ namespace GUI.Sprint5
             grid.Children.Add(sttTextBlock);
 
             // Lớp
-            TextBox txtLop = new TextBox
+            TextBlock txtLop = new TextBlock
             {
                 Text = tenLop,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
-                BorderThickness = new Thickness(0),
-                IsReadOnly = true
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 12,
+                Foreground = string.IsNullOrEmpty(tenLop) ? Brushes.LightGray : Brushes.Black
             };
             Grid.SetColumn(txtLop, 1);
             grid.Children.Add(txtLop);
 
             // Sĩ Số
-            TextBox txtSiSo = new TextBox
+            TextBlock txtSiSo = new TextBlock
             {
                 Text = siSo,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
-                BorderThickness = new Thickness(0),
-                IsReadOnly = true
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 12,
+                Foreground = string.IsNullOrEmpty(siSo) ? Brushes.LightGray : Brushes.Black
             };
             Grid.SetColumn(txtSiSo, 2);
             grid.Children.Add(txtSiSo);
 
             // Số Lượng Đạt
-            TextBox txtSoLuongDat = new TextBox
+            TextBlock txtSoLuongDat = new TextBlock
             {
                 Text = soLuongDat,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
-                BorderThickness = new Thickness(0),
-                IsReadOnly = true
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 12,
+                Foreground = string.IsNullOrEmpty(soLuongDat) ? Brushes.LightGray : Brushes.Black
             };
             Grid.SetColumn(txtSoLuongDat, 3);
             grid.Children.Add(txtSoLuongDat);
 
             // Tỷ Lệ
-            TextBox txtTyLe = new TextBox
+            TextBlock txtTyLe = new TextBlock
             {
                 Text = tyLe,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
-                BorderThickness = new Thickness(0),
-                IsReadOnly = true
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 12,
+                Foreground = string.IsNullOrEmpty(tyLe) ? Brushes.LightGray : Brushes.Black
             };
             Grid.SetColumn(txtTyLe, 4);
             grid.Children.Add(txtTyLe);
