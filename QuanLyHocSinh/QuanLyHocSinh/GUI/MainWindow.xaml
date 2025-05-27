@@ -65,18 +65,6 @@
                             <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 4</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem x:Name="Sprint5Item">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileChart" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 5</TextBlock>
-                        </StackPanel>
-                    </ListBoxItem>
-                    <ListBoxItem x:Name="Sprint6Item">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileDocumentOutline" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 6</TextBlock>
-                        </StackPanel>
-                    </ListBoxItem>
                 </ListBox>
             </Grid>
         </materialDesign:Card>
