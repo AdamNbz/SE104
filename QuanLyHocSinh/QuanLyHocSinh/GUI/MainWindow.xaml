@@ -10,12 +10,12 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="Quản Lý Học Sinh" Height="650" Width="1400"
+        Title="Quản Lý Học Sinh" Height="600" Width="1200"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- Chia layout thành 2 cột -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180"/> <!-- Cột cho thanh điều hướng - thu nhỏ từ 250 xuống 180 -->
+            <ColumnDefinition Width="250"/> <!-- Cột cho thanh điều hướng -->
             <ColumnDefinition Width="*"/>   <!-- Cột cho nội dung -->
         </Grid.ColumnDefinitions>
 
@@ -63,18 +63,6 @@
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ChartBox" Width="24" Height="24" VerticalAlignment="Center"/>
                             <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 4</TextBlock>
-                        </StackPanel>
-                    </ListBoxItem>
-                    <ListBoxItem x:Name="Sprint5Item">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileChart" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 5</TextBlock>
-                        </StackPanel>
-                    </ListBoxItem>
-                    <ListBoxItem x:Name="Sprint6Item">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileDocumentOutline" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 6</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>
