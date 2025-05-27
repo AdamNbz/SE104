@@ -11,14 +11,69 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250324051427_AddKhoiLop")]
-    partial class AddKhoiLop
+    [Migration("20250527112811_InitCreate")]
+    partial class InitCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
+
+            modelBuilder.Entity("DTO.BangDiemMon", b =>
+                {
+                    b.Property<string>("MaHocSinh")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MaMH")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MaHK")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float?>("Diem15P")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("Diem1T")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("DiemCuoiKy")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("MaHocSinh", "MaMH", "MaHK");
+
+                    b.HasIndex("MaHK");
+
+                    b.HasIndex("MaMH");
+
+                    b.ToTable("BANGDIEMMON");
+                });
+
+            modelBuilder.Entity("DTO.HocKy", b =>
+                {
+                    b.Property<string>("MaHK")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenHK")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MaHK");
+
+                    b.ToTable("HOCKY", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            MaHK = "HK1",
+                            TenHK = "Học kỳ 1"
+                        },
+                        new
+                        {
+                            MaHK = "HK2",
+                            TenHK = "Học kỳ 2"
+                        });
+                });
 
             modelBuilder.Entity("DTO.HocSinh", b =>
                 {
@@ -163,6 +218,47 @@ namespace DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DTO.MonHoc", b =>
+                {
+                    b.Property<string>("MaMH")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenMH")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MaMH");
+
+                    b.ToTable("MONHOC", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            MaMH = "TOAN",
+                            TenMH = "Toán học"
+                        },
+                        new
+                        {
+                            MaMH = "VAN",
+                            TenMH = "Ngữ văn"
+                        },
+                        new
+                        {
+                            MaMH = "LY",
+                            TenMH = "Vật lý"
+                        },
+                        new
+                        {
+                            MaMH = "HOA",
+                            TenMH = "Hóa học"
+                        },
+                        new
+                        {
+                            MaMH = "ANH",
+                            TenMH = "Tiếng Anh"
+                        });
+                });
+
             modelBuilder.Entity("DTO.ThamSo", b =>
                 {
                     b.Property<int>("Id")
@@ -192,6 +288,33 @@ namespace DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DTO.BangDiemMon", b =>
+                {
+                    b.HasOne("DTO.HocKy", "HocKy")
+                        .WithMany("BangDiemMons")
+                        .HasForeignKey("MaHK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DTO.HocSinh", "HocSinh")
+                        .WithMany()
+                        .HasForeignKey("MaHocSinh")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DTO.MonHoc", "MonHoc")
+                        .WithMany("BangDiemMons")
+                        .HasForeignKey("MaMH")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HocKy");
+
+                    b.Navigation("HocSinh");
+
+                    b.Navigation("MonHoc");
+                });
+
             modelBuilder.Entity("DTO.HocSinh", b =>
                 {
                     b.HasOne("DTO.Lop", "Lop")
@@ -212,6 +335,11 @@ namespace DAL.Migrations
                     b.Navigation("Khoi");
                 });
 
+            modelBuilder.Entity("DTO.HocKy", b =>
+                {
+                    b.Navigation("BangDiemMons");
+                });
+
             modelBuilder.Entity("DTO.Khoi", b =>
                 {
                     b.Navigation("Lops");
@@ -220,6 +348,11 @@ namespace DAL.Migrations
             modelBuilder.Entity("DTO.Lop", b =>
                 {
                     b.Navigation("HocSinhs");
+                });
+
+            modelBuilder.Entity("DTO.MonHoc", b =>
+                {
+                    b.Navigation("BangDiemMons");
                 });
 #pragma warning restore 612, 618
         }
