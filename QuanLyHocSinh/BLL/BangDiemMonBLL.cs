@@ -58,8 +58,9 @@ namespace BLL
 
         public void XoaBangDiem(string MaHS, string MaMonHoc, string MaHK)
         {
-            DAL.BangDiemMonDAL.XoaDiem(MaHS, MaMonHoc, MaHK);
+            BangDiemMonDAL.XoaDiem(MaHS, MaMonHoc, MaHK);
         }
+
         public static void CapNhatBangDiem(BangDiemMonBLL bangDiemMoi)
         {
             var diem = new BangDiemMon
@@ -72,11 +73,44 @@ namespace BLL
                 DiemCuoiKy = bangDiemMoi.DiemCuoiKy
             };
 
-            BangDiemMonDAL.LuuDiem(diem); // Dùng chung hàm LuuDiem để cập nhật
+            BangDiemMonDAL.LuuDiem(diem);
         }
+
+        public static BangDiemMonBLL LayBangDiem(string maHocSinh, string maMonHoc, string maHocKy)
+        {
+            var bangDiemDTO = BangDiemMonDAL.LayBangDiem(maHocSinh, maMonHoc, maHocKy);
+
+            if (bangDiemDTO == null) { return null; }
+
+            BangDiemMonBLL bangDiemBLL = new BangDiemMonBLL
+            {
+                MaHocSinh = maHocSinh,
+                MaMH = maMonHoc,
+                MaHK = maHocKy
+            };
+
+            bangDiemBLL.Diem15P = bangDiemDTO.Diem15P;
+            bangDiemBLL.Diem1T = bangDiemDTO.Diem1T;
+            bangDiemBLL.DiemCuoiKy = bangDiemDTO.DiemCuoiKy;
+
+            return bangDiemBLL;
+        }
+
         public void TruyXuatBangDiem()
         {
-            //LaybangDiem(string MaHS,string MaMonHoc,string MaHK);
+            var bangDiemData = LayBangDiem(MaHocSinh, MaMH, MaHK);
+            if (bangDiemData != null)
+            {
+                Diem15P = bangDiemData.Diem15P;
+                Diem1T = bangDiemData.Diem1T;
+                DiemCuoiKy = bangDiemData.DiemCuoiKy;
+            }
+            else
+            {
+                Diem15P = null;
+                Diem1T = null;
+                DiemCuoiKy = null;
+            }
         }
     }
    
