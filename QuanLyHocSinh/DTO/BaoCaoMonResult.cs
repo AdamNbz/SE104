@@ -9,7 +9,9 @@ namespace DTO;
 public class BaoCaoMonResult
 {
     public int TongSo { get; set; }
-    public int SoDat { get; set; }
-    public List<BaoCaoMonChiTietLopResult> ChiTietTheoLop { get; set; } = new List<BaoCaoMonChiTietLopResult>();
-    public ICollection<BangDiemMon>? ChiTietBangDiem { get; set; } = new List<BangDiemMon>();
+    public int SoLuongDat { get; set; }
+    public int SoLuongKhongDat { get; set; }
+    public double TyLeDat { get; set; }
+
+    public ICollection<BangDiemMon>? ChiTietBangDiem { get; set; } = null!;
 }

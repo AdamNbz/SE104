@@ -10,8 +10,6 @@ public class BaoCaoMonResult
 {
     public int TongSo { get; set; }
     public int SoDat { get; set; }
-    public int SoKhongDat { get; set; }
-    public double TyLeDat { get; set; }
-
-    public ICollection<BangDiemMon>? ChiTietBangDiem { get; } = null!;
+    public List<BaoCaoMonChiTietLopResult> ChiTietTheoLop { get; set; } = new List<BaoCaoMonChiTietLopResult>();
+    public ICollection<BangDiemMon>? ChiTietBangDiem { get; set; } = new List<BangDiemMon>();
 }

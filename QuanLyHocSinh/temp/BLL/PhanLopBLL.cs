@@ -22,7 +22,7 @@ namespace BLL
 
                 if (LopBLL.TinhSiSo(HocSinhBLL.GetDanhSachHocSinh(),MaLop) >= 40)
                 {
-                    throw new Exception("SoLuongHocSinhVuotGioiHan");
+                    throw new Exception("Số lượng học sinh vượt giới hạn!");
                 }
                 HocSinhCanPhanLop = HocSinhDAL.LayHocSinh(MaHS);
                 LopDuocPhanVao = DanhSachLop.Find(x => x.MaLop == MaLop);
@@ -31,7 +31,7 @@ namespace BLL
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message,"Loi Lap Danh Sach Lop",MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show(e.Message,"Đã xảy ra lỗi khi lập danh sách lớp!",MessageBoxButton.OK,MessageBoxImage.Error);
             }
         }
         public static void PhanLopChoMotDanhSachHocSinh(string MaLop,List<string> DanhSachMaHS)
@@ -40,7 +40,7 @@ namespace BLL
             {
                 if (DanhSachLop.Find(x => x.MaLop == MaLop) == null)
                 {
-                    throw new Exception("LopKhongNamTrongDanhSachLop");
+                    throw new Exception("Lớp không nằm trong danh sách lớp!");
                 }
                 for (int i = 0; i < DanhSachMaHS.Count; i++)
                 {
@@ -49,7 +49,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.Message, "Loi Lap Danh Sach Lop", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(e.Message, "Đã xảy ra lỗi khi lập danh sách lớp!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -8,21 +8,16 @@ using System.Threading.Tasks;
 
 namespace BLL;
 
-public class BaoCaoTongKetMonBLL
+public class BaoCaoTongKetHocKyBLL
 {
-    public static List<MonHoc> LayDanhSachMonHoc()
-    {
-        return BaoCaoTongKetMonDAL.LayDanhSachMonHoc();
-    }
-
     public static List<HocKy> LayDanhSachHocKy()
     {
         return BaoCaoTongKetMonDAL.LayDanhSachHocKy();
     }
 
-    public static BaoCaoMonResult LapBaoCaoTongKetMon(string maMH, string maHK)
+    public static BaoCaoHocKyResult LapBaoCaoTongKetHocKy(string maHK)
     {
         int mocDiemDat = ThamSoDAL.LayMocDiemDat();
-        return BaoCaoTongKetMonDAL.LapBaoCaoTongKetMon(maMH, maHK, mocDiemDat);
+        return BaoCaoTongKetHocKyDAL.LapBaoCaoTongKetHocKy(maHK, mocDiemDat);
     }
 }

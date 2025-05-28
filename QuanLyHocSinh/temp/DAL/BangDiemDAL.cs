@@ -60,4 +60,25 @@ public static class BangDiemMonDAL
         }
         return false;
     }
+
+    public static BangDiemMon LayBangDiem(string maHS, string maMH, string maHK)
+    {
+        var context = DataContext.Context;
+        var bangDiem = context.BANGDIEMMON
+            .Include(b => b.MonHoc)
+            .Include(b => b.HocKy)
+            .Include(b => b.HocSinh)
+            .FirstOrDefault(b => b.MaHocSinh == maHS && b.MaMH == maMH && b.MaHK == maHK);
+        return bangDiem;    
+    }
+
+    public static List<BangDiemMon> TruyXuatBangDiem()
+    {
+        var context = DataContext.Context;
+        return context.BANGDIEMMON
+            .Include(b => b.MonHoc)
+            .Include(b => b.HocKy)
+            .Include(b => b.HocSinh)
+            .ToList();
+    }
 }

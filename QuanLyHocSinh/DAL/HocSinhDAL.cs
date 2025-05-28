@@ -18,6 +18,7 @@ public static class HocSinhDAL
     {
         return DataContext.Context.HOCSINH.Count();
     }
+
     public static int TiepNhanHocSinh(HocSinh hs)
     {
         try
@@ -73,10 +74,12 @@ public static class HocSinhDAL
             return 0;
         }
     }
+
     public static List<HocSinh> LayTatCaHocSinh()
     {
         return DataContext.Context.HOCSINH.Include(hs => hs.Lop).ToList();
     }
+
     public static HocSinh? LayHocSinh(string MaHS)
     {
         return DataContext.Context.HOCSINH.Include(hs => hs.Lop).FirstOrDefault(hs => hs.MaHS == MaHS);

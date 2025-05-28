@@ -32,6 +32,7 @@ namespace GUI.Sprint5
             LoadMon();
             LoadHocKy();
             // Không hiển thị dòng trống mặc định - chỉ hiển thị khi lập báo cáo
+            sp_DanhSachLop.Children.Clear();
         }
 
         private void LoadMon()
@@ -41,14 +42,17 @@ namespace GUI.Sprint5
                 cbx_Mon.Items.Clear();
 
                 // TODO: Load from database - tạm thời thêm dữ liệu mẫu
-                cbx_Mon.Items.Add("Toán");
-                cbx_Mon.Items.Add("Văn");
-                cbx_Mon.Items.Add("Anh");
-                cbx_Mon.Items.Add("Lý");
-                cbx_Mon.Items.Add("Hóa");
-                cbx_Mon.Items.Add("Sinh");
-                cbx_Mon.Items.Add("Sử");
-                cbx_Mon.Items.Add("Địa");
+                //cbx_Mon.Items.Add("Toán");
+                //cbx_Mon.Items.Add("Văn");
+                //cbx_Mon.Items.Add("Anh");
+                //cbx_Mon.Items.Add("Lý");
+                //cbx_Mon.Items.Add("Hóa");
+                //cbx_Mon.Items.Add("Sinh");
+                //cbx_Mon.Items.Add("Sử");
+                //cbx_Mon.Items.Add("Địa");
+                cbx_Mon.ItemsSource = BaoCaoTongKetMonBLL.LayDanhSachMonHoc();
+                cbx_Mon.DisplayMemberPath = "TenMH";
+                cbx_Mon.SelectedValuePath = "MaMH";
 
                 if (cbx_Mon.Items.Count > 0)
                 {
@@ -65,12 +69,14 @@ namespace GUI.Sprint5
         {
             try
             {
-                cbx_HocKy.Items.Clear();
+                //cbx_HocKy.Items.Clear();
 
-                // TODO: Load from database - tạm thời thêm dữ liệu mẫu
-                cbx_HocKy.Items.Add("Học kỳ 1");
-                cbx_HocKy.Items.Add("Học kỳ 2");
-
+                //// TODO: Load from database - tạm thời thêm dữ liệu mẫu
+                //cbx_HocKy.Items.Add("Học kỳ 1");
+                //cbx_HocKy.Items.Add("Học kỳ 2");
+                cbx_HocKy.ItemsSource = BaoCaoTongKetMonBLL.LayDanhSachHocKy();
+                cbx_HocKy.DisplayMemberPath = "TenHK";
+                cbx_HocKy.SelectedValuePath = "MaHK";
                 if (cbx_HocKy.Items.Count > 0)
                 {
                     cbx_HocKy.SelectedIndex = 0;
