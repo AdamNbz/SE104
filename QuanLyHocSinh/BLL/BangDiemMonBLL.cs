@@ -26,7 +26,7 @@ namespace BLL
             if (MaMH == null) { return null; }
             float? Diem15PChuyenDoi = float.TryParse(Diem15P, out float output) ? output : null;
             float? Diem1TChuyenDoi = float.TryParse(Diem1T, out float output1) ? output1 : null;
-            float? DiemCuoiKyChuyenDoi = float.TryParse(Diem1T, out float output2) ? output2 : null;
+            float? DiemCuoiKyChuyenDoi = float.TryParse(DiemCuoiKy, out float output2) ? output2 : null;
             KiemTraCacDieuKien(Diem15PChuyenDoi, Diem1TChuyenDoi, DiemCuoiKyChuyenDoi);
             BangDiemMonBLL result = new BangDiemMonBLL { MaHocSinh = MaHocSinh, MaMH = MaMH, MaHK = MaHk };
             if (Diem1T != null)
