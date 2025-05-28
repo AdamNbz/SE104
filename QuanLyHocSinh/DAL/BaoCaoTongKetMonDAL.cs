@@ -24,14 +24,14 @@ namespace DAL
             {
                 // It's better to get LOP and HOCSINH info for the report grid
                 var query = from bdm in context.BANGDIEMMON
-                            join hs in context.HOCSINH on bdm.MaHocSinh equals hs.MaHocSinh
+                            join hs in context.HOCSINH on bdm.MaHocSinh equals hs.MaHS
                             join lop in context.LOP on hs.MaLop equals lop.MaLop
                             where bdm.MaMH == maMH && bdm.MaHK == maHK
                             select new // Project to an anonymous type or a dedicated DTO for the grid row
                             {
                                 TenLop = lop.TenLop,
                                 DiemCuoiKy = bdm.DiemCuoiKy,
-                                MaHocSinh = hs.MaHocSinh // Needed for counting students per class
+                                MaHocSinh = hs.MaHS // Needed for counting students per class
                             };
 
                 var allScoresForSubjectAndSemester = query.ToList();
@@ -43,7 +43,7 @@ namespace DAL
                     {
                         TenLop = g.Key,
                         SiSo = g.Select(s => s.MaHocSinh).Distinct().Count(), // Count distinct students in the class for this subject/semester
-                        SoLuongDat = g.Count(s => s.DiemCuoiKy.HasValue && s.DiemCuoiKy >= mocDiemDat)
+                        SoLuongDat = g.Count(s => s.DiemCuoiKy.HasValue)
                         // TyLe will be calculated in BLL or GUI from SiSo and SoLuongDat
                     }).ToList();
 

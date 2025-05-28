@@ -20,9 +20,9 @@ namespace BLL
             return BaoCaoTongKetMonDAL.LayDanhSachHocKy();
         }
 
-        public static BaoCaoMonResult LapBaoCaoTongKetMon(string maMH, string maHK)
-        {
-            // BaoCaoDTO...
-        }
+        //public static BaoCaoMonResult LapBaoCaoTongKetMon(string maMH, string maHK)
+        //{
+        //    // BaoCaoDTO...
+        //}
     }
 }
