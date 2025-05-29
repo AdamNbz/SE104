@@ -10,6 +10,8 @@ namespace BLL;
 
 public class BaoCaoTongKetMonBLL
 {
+    private static BaoCaoMonResult? _currentBaoCaoMon;
+
     public static List<MonHoc> LayDanhSachMonHoc()
     {
         return BaoCaoTongKetMonDAL.LayDanhSachMonHoc();
@@ -20,9 +22,14 @@ public class BaoCaoTongKetMonBLL
         return BaoCaoTongKetMonDAL.LayDanhSachHocKy();
     }
 
-    public static BaoCaoMonResult LapBaoCaoTongKetMon(string maMH, string maHK)
+    public static void LapBaoCaoTongKetMon(string maMH, string maHK)
     {
         int mocDiemDat = ThamSoDAL.LayMocDiemDat();
-        return BaoCaoTongKetMonDAL.LapBaoCaoTongKetMon(maMH, maHK, mocDiemDat);
+        _currentBaoCaoMon = BaoCaoTongKetMonDAL.LapBaoCaoTongKetMon(maMH, maHK, mocDiemDat);
+    }
+
+    public static BaoCaoMonResult? LayBaoCaoTongKetMon()
+    {
+        return _currentBaoCaoMon;
     }
 }

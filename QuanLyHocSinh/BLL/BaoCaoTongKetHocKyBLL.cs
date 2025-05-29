@@ -10,14 +10,21 @@ namespace BLL;
 
 public class BaoCaoTongKetHocKyBLL
 {
+    private static BaoCaoHocKyResult? _currentBaoCaoHocKy;
+
     public static List<HocKy> LayDanhSachHocKy()
     {
         return BaoCaoTongKetMonDAL.LayDanhSachHocKy();
     }
 
-    public static BaoCaoHocKyResult LapBaoCaoTongKetHocKy(string maHK)
+    public static void LapBaoCaoTongKetHocKy(string maHK)
     {
         int mocDiemDat = ThamSoDAL.LayMocDiemDat();
-        return BaoCaoTongKetHocKyDAL.LapBaoCaoTongKetHocKy(maHK, mocDiemDat);
+        _currentBaoCaoHocKy = BaoCaoTongKetHocKyDAL.LapBaoCaoTongKetHocKy(maHK, mocDiemDat);
+    }
+
+    public static BaoCaoHocKyResult? LayBaoCaoTongKetHocKy()
+    {
+        return _currentBaoCaoHocKy;
     }
 }
