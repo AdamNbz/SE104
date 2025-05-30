@@ -60,4 +60,20 @@ public static class BangDiemMonDAL
         }
         return false;
     }
+
+    public static bool CapNhatBangDiem(string maHocSinh, string maHK, string maMonHoc, BangDiemMon bangDiem)
+    {
+        var context = DataContext.Context;
+        var diem = context.BANGDIEMMON
+            .FirstOrDefault(b => b.MaHocSinh == maHocSinh && b.MaMH == maMonHoc && b.MaHK == maHK);
+        if (diem != null)
+        {
+            diem.Diem15P = bangDiem.Diem15P;
+            diem.Diem1T = bangDiem.Diem1T;
+            diem.DiemCuoiKy = bangDiem.DiemCuoiKy;
+            context.SaveChanges();
+            return true;
+        }
+        return false;
+    }
 }
