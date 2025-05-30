@@ -45,6 +45,16 @@ public static class BangDiemMonDAL
             .ToList();
     }
 
+    public static List<BangDiemMon> LayDiem(string maHS, string maMH, string maHK)
+    {
+        var context = DataContext.Context;
+        return context.BANGDIEMMON
+            .Where(b => b.MaHocSinh == maHS && b.MaMH == maMH && b.MaHK == maHK)
+            .Include(b => b.MonHoc)
+            .Include(b => b.HocKy)
+            .ToList();
+    }
+
     // Xóa điểm
     public static bool XoaDiem(string maHS, string maMH, string maHK)
     {
