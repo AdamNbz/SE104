@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DAL;
+using DTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BLL;
 
@@ -61,13 +64,19 @@ public class BangDiemMonBLL
     {
         // BangDiemDAL.XoaBangDiem()
     }
-    public void CapNhatBangDiem(string MaHS,string MaMonHoc,string MaHK,BangDiemMonBLL BangDiemMoi)
+    public void CapNhatBangDiem(string MaHS,string MaMonHoc,string MaHK, BangDiemMon BangDiemMoi)
     {
-        // BangDiemDAL.CapNhat...
+        BangDiemMonDAL.CapNhatBangDiem(MaHS, MaHK, MaMonHoc, BangDiemMoi);
     }
     public void TruyXuatBangDiem()
     {
-        // LaybangDiem(string MaHS,string MaMonHoc,string MaHK);
+        //LaybangDiem(string MaHS, string MaMonHoc, string MaHK);
+    }
+    public void LayBangDiem(string MaHS, string MaMonHoc, string MaHK)
+    {
+        BangDiemMonDAL.LayDiemTheoHocSinh(MaHS)
+            .Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK)
+            .ToList();
     }
 
 }
