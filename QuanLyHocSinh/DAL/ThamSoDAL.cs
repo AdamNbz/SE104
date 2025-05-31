@@ -15,11 +15,12 @@ public static class ThamSoDAL
     public static int LayMocDiemDat()
     {
         var thamSo = DataContext.Context.Set<ThamSo>().FirstOrDefault();
-        thamSo.MocDiemDat = 5;
-        if (thamSo != null)
+
+        if (thamSo.MocDiemDat == 0)
         {
-            return thamSo.MocDiemDat;
+            thamSo.MocDiemDat = 5;
+            DataContext.Context.SaveChanges();
         }
-        throw new InvalidOperationException("MocDiemDat not found in THAMSO table.");
+        return thamSo.MocDiemDat;
     }
 }
