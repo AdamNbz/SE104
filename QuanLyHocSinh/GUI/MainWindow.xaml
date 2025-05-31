@@ -77,6 +77,12 @@
                             <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 6</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
+                    <ListBoxItem x:Name="Sprint7Item">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="BookEdit" Width="24" Height="24" VerticalAlignment="Center"/>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 7</TextBlock>
+                        </StackPanel>
+                    </ListBoxItem>
                 </ListBox>
             </Grid>
         </materialDesign:Card>

@@ -96,6 +96,8 @@
 		  <DependentUpon>Sprint6Control.xaml</DependentUpon>
 	  </Compile>
 
+	  <!-- Sprint7 files -->
+
 	  <!-- App and MainWindow XAML -->
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="MainWindow.xaml" />

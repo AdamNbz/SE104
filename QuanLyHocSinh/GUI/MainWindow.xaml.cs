@@ -7,6 +7,7 @@ using GUI.Sprint3;
 using GUI.Sprint4;
 using GUI.Sprint5;
 using GUI.Sprint6;
+using GUI.Sprint7;
 
 namespace GUI
 {
@@ -99,6 +100,16 @@ namespace GUI
                         catch (Exception ex)
                         {
                             MessageBox.Show($"Lỗi khi tạo Sprint6Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                    case "Sprint 7":
+                        try
+                        {
+                            selectedControl = new Sprint7Control();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Lỗi khi tạo Sprint7Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
                 }
