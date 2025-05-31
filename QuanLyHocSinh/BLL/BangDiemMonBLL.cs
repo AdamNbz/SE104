@@ -36,6 +36,18 @@ public class BangDiemMonBLL
         if (Diem15P != null) result.Diem15P = Diem15PChuyenDoi;
         if (DiemCuoiKy != null) result.DiemCuoiKy = DiemCuoiKyChuyenDoi;
 
+        BangDiemMon bangDiem = new BangDiemMon
+        {
+            MaHocSinh = MaHocSinh,
+            MaMH = MaMH,
+            MaHK = MaHk,
+            Diem15P = result.Diem15P,
+            Diem1T = result.Diem1T,
+            DiemCuoiKy = result.DiemCuoiKy
+        };
+
+        BangDiemMonDAL.ThemBangDiem(bangDiem);
+
         return result;
     }
 
@@ -53,12 +65,15 @@ public class BangDiemMonBLL
 
     public void XoaBangDiem(string MaHS, string MaMonHoc, string MaHK)
     {
-        // BangDiemDAL.XoaBangDiem()
+        // BangDiemMonDAL.XoaBangDiem(MaHS, MaMonHoc, MaHK);
     }
 
     public void CapNhatBangDiem(string MaHS,string MaMonHoc,string MaHK, BangDiemMon BangDiemMoi)
     {
-        BangDiemMonDAL.CapNhatBangDiem(MaHS, MaHK, MaMonHoc, BangDiemMoi);
+        var existingBangDiem = BangDiemMonDAL.LayDiemTheoHocSinh(MaHS).Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK).FirstOrDefault();
+
+        if (existingBangDiem == null) BangDiemMonDAL.ThemBangDiem(BangDiemMoi);
+        else BangDiemMonDAL.CapNhatBangDiem(MaHS, MaHK, MaMonHoc, BangDiemMoi);
     }
 
     public void TruyXuatBangDiem()
@@ -68,9 +83,7 @@ public class BangDiemMonBLL
 
     public void LayBangDiem(string MaHS, string MaMonHoc, string MaHK)
     {
-        BangDiemMonDAL.LayDiemTheoHocSinh(MaHS)
-            .Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK)
-            .ToList();
+        BangDiemMonDAL.LayDiemTheoHocSinh(MaHS).Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK).ToList();
     }
 
 }

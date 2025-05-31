@@ -14,6 +14,15 @@ namespace DAL;
 
 public static class BangDiemMonDAL
 {
+    public static void ThemBangDiem(BangDiemMon bangDiem)
+    {
+        using (var context = new DataContext())
+        {
+            context.BANGDIEMMON.Add(bangDiem);
+            context.SaveChanges();
+        }
+    }
+
     // Thêm hoặc cập nhật điểm
     public static void LuuDiem(BangDiemMon diem)
     {
