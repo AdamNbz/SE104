@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DTO;
 using BLL;
+using DAL;
 
 namespace GUI.Sprint6
 {
@@ -30,7 +31,8 @@ namespace GUI.Sprint6
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             LoadHocKy();
-            AddSampleClassRows();
+            // Không hiển thị dòng trống mặc định - chỉ hiển thị khi lập báo cáo
+            sp_DanhSachLop.Children.Clear();
         }
 
         private void LoadHocKy()
@@ -38,11 +40,12 @@ namespace GUI.Sprint6
             try
             {
                 cbx_HocKy.Items.Clear();
-                
-                // TODO: Load from database - tạm thời thêm dữ liệu mẫu
-                cbx_HocKy.Items.Add("Học kỳ 1");
-                cbx_HocKy.Items.Add("Học kỳ 2");
-                
+
+                // Load from database using BLL
+                cbx_HocKy.ItemsSource = BaoCaoTongKetHocKyBLL.LayDanhSachHocKy();
+                cbx_HocKy.DisplayMemberPath = "TenHK";
+                cbx_HocKy.SelectedValuePath = "MaHK";
+
                 if (cbx_HocKy.Items.Count > 0)
                 {
                     cbx_HocKy.SelectedIndex = 0;
@@ -69,10 +72,21 @@ namespace GUI.Sprint6
 
         private void UpdateReportData()
         {
-            // TODO: Implement updating report data based on selected semester
-            // For now, just refresh the sample data
-            sp_DanhSachLop.Children.Clear();
-            AddSampleClassRows();
+            try
+            {
+                if (cbx_HocKy.SelectedItem == null)
+                    return;
+
+                // Clear existing data
+                sp_DanhSachLop.Children.Clear();
+
+                // Generate report automatically when semester changes
+                GenerateReport();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật dữ liệu báo cáo: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void btn_LapBaoCao_Click(object sender, RoutedEventArgs e)
@@ -87,8 +101,8 @@ namespace GUI.Sprint6
 
                 // TODO: Generate actual report
                 GenerateReport();
-                
-                MessageBox.Show($"Đã lập báo cáo tổng kết {cbx_HocKy.SelectedItem}", 
+
+                MessageBox.Show($"Đã lập báo cáo tổng kết {cbx_HocKy.SelectedItem}",
                     "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -99,36 +113,53 @@ namespace GUI.Sprint6
 
         private void GenerateReport()
         {
-            // Clear existing data
-            sp_DanhSachLop.Children.Clear();
-
-            // TODO: Get actual data from database
-            // For now, add sample data with calculated statistics for semester report
-            var sampleData = new[]
+            try
             {
-                new { STT = 1, Lop = "10A1", SiSo = 40, SoLuongDat = 36, TyLe = "90.0%" },
-                new { STT = 2, Lop = "10A2", SiSo = 38, SoLuongDat = 34, TyLe = "89.5%" },
-                new { STT = 3, Lop = "10A3", SiSo = 42, SoLuongDat = 39, TyLe = "92.9%" },
-                new { STT = 4, Lop = "11A1", SiSo = 39, SoLuongDat = 35, TyLe = "89.7%" },
-                new { STT = 5, Lop = "11A2", SiSo = 41, SoLuongDat = 37, TyLe = "90.2%" },
-                new { STT = 6, Lop = "12A1", SiSo = 37, SoLuongDat = 35, TyLe = "94.6%" },
-                new { STT = 7, Lop = "12A2", SiSo = 40, SoLuongDat = 38, TyLe = "95.0%" }
-            };
+                // Clear existing data
+                sp_DanhSachLop.Children.Clear();
 
-            foreach (var item in sampleData)
+                if (cbx_HocKy.SelectedItem == null)
+                {
+                    MessageBox.Show("Vui lòng chọn học kỳ", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Lấy mã học kỳ
+                var hocKy = cbx_HocKy.SelectedItem as HocKy;
+                if (hocKy == null)
+                {
+                    MessageBox.Show("Không thể lấy thông tin học kỳ", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Lập báo cáo tổng kết học kỳ
+                BaoCaoTongKetHocKyBLL.LapBaoCaoTongKetHocKy(hocKy.MaHK);
+                var baoCao = BaoCaoTongKetHocKyBLL.LayBaoCaoTongKetHocKy();
+
+                if (baoCao == null || baoCao.DanhSachThongKeLop.Count == 0)
+                {
+                    MessageBox.Show("Không có dữ liệu báo cáo cho học kỳ đã chọn", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // Hiển thị báo cáo theo từng lớp
+                int stt = 1;
+                foreach (var lopThongKe in baoCao.DanhSachThongKeLop)
+                {
+                    AddClassRow(stt, lopThongKe.TenLop ?? "",
+                               lopThongKe.SiSo.ToString(),
+                               lopThongKe.SoLuongDat.ToString(),
+                               $"{lopThongKe.TyLeDat:F1}%");
+                    stt++;
+                }
+            }
+            catch (Exception ex)
             {
-                AddClassRow(item.STT, item.Lop, item.SiSo.ToString(), item.SoLuongDat.ToString(), item.TyLe);
+                MessageBox.Show($"Lỗi khi tạo báo cáo: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void AddSampleClassRows()
-        {
-            // Add 3 empty sample rows as shown in the image
-            for (int i = 1; i <= 3; i++)
-            {
-                AddClassRow(i, "", "", "", "");
-            }
-        }
+
 
         private void AddClassRow(int stt, string tenLop, string siSo, string soLuongDat, string tyLe)
         {

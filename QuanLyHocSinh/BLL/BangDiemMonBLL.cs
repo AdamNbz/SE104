@@ -12,13 +12,23 @@ namespace BLL;
 
 public class BangDiemMonBLL
 {
-    public required string MaHocSinh { get; set; }
-    public required string MaMH { get; set; }
-    public required string MaHK { get; set; }
-    private float? Diem15P;
-    private float? Diem1T;
-    private float? DiemCuoiKy;
+    public string MaHocSinh { get; set; } = "";
+    public string MaMH { get; set; } = "";
+    public string MaHK { get; set; } = "";
+    public float? Diem15P { get; set; }
+    public float? Diem1T { get; set; }
+    public float? DiemCuoiKy { get; set; }
 
+    // Constructor mặc định
+    public BangDiemMonBLL() { }
+
+    // Constructor với tham số
+    public BangDiemMonBLL(string maHocSinh, string maMH, string maHK)
+    {
+        MaHocSinh = maHocSinh;
+        MaMH = maMH;
+        MaHK = maHK;
+    }
 
     public BangDiemMonBLL TaoBangDiem(string MaHocSinh, string MaMH, string MaHk, string? Diem15P, string? Diem1T, string? DiemCuoiKy)
     {
@@ -30,11 +40,15 @@ public class BangDiemMonBLL
 
         KiemTraCacDieuKien(Diem15PChuyenDoi, Diem1TChuyenDoi, DiemCuoiKyChuyenDoi);
 
-        BangDiemMonBLL result = new BangDiemMonBLL { MaHocSinh = MaHocSinh, MaMH = MaMH, MaHK = MaHk };
-
-        if (Diem1T != null) result.Diem1T = Diem1TChuyenDoi;
-        if (Diem15P != null) result.Diem15P = Diem15PChuyenDoi;
-        if (DiemCuoiKy != null) result.DiemCuoiKy = DiemCuoiKyChuyenDoi;
+        BangDiemMonBLL result = new BangDiemMonBLL
+        {
+            MaHocSinh = MaHocSinh,
+            MaMH = MaMH,
+            MaHK = MaHk,
+            Diem15P = Diem15PChuyenDoi,
+            Diem1T = Diem1TChuyenDoi,
+            DiemCuoiKy = DiemCuoiKyChuyenDoi
+        };
 
         BangDiemMon bangDiem = new BangDiemMon
         {
@@ -53,13 +67,11 @@ public class BangDiemMonBLL
 
     private void KiemTraCacDieuKien(float? Diem15P, float? Diem1T, float? DiemCuoiKy)
     {
-        if (MaHK != "HK01" && MaHK != "HK02")
+        if ((Diem15P.HasValue && (Diem15P < 0 || Diem15P > 10)) ||
+            (Diem1T.HasValue && (Diem1T < 0 || Diem1T > 10)) ||
+            (DiemCuoiKy.HasValue && (DiemCuoiKy < 0 || DiemCuoiKy > 10)))
         {
-            throw new Exception("Không tồn tại học kỳ này.");
-        }
-        if (Diem15P < 0 || Diem15P > 10 || Diem1T < 0 || Diem1T > 10 || DiemCuoiKy > 10 || DiemCuoiKy < 0)
-        {
-            throw new Exception("Mot Trong Cac Diem Thanh Phan Khong Hop Le");
+            throw new Exception("Một trong các điểm thành phần không hợp lệ (phải từ 0-10)");
         }
     }
 
@@ -68,7 +80,7 @@ public class BangDiemMonBLL
         // BangDiemMonDAL.XoaBangDiem(MaHS, MaMonHoc, MaHK);
     }
 
-    public void CapNhatBangDiem(string MaHS,string MaMonHoc,string MaHK, BangDiemMon BangDiemMoi)
+    public void CapNhatBangDiem(string MaHS, string MaMonHoc, string MaHK, BangDiemMon BangDiemMoi)
     {
         var existingBangDiem = BangDiemMonDAL.LayDiemTheoHocSinh(MaHS).Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK).FirstOrDefault();
 
@@ -81,10 +93,9 @@ public class BangDiemMonBLL
         //LaybangDiem(string MaHS, string MaMonHoc, string MaHK);
     }
 
-    public void LayBangDiem(string MaHS, string MaMonHoc, string MaHK)
+    public List<BangDiemMon> LayBangDiem(string MaHS, string MaMonHoc, string MaHK)
     {
-        BangDiemMonDAL.LayDiemTheoHocSinh(MaHS).Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK).ToList();
+        return BangDiemMonDAL.LayDiemTheoHocSinh(MaHS).Where(b => b.MaMH == MaMonHoc && b.MaHK == MaHK).ToList();
     }
 
 }
-

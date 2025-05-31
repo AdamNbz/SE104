@@ -41,15 +41,7 @@ namespace GUI.Sprint5
             {
                 cbx_Mon.Items.Clear();
 
-                // TODO: Load from database - tạm thời thêm dữ liệu mẫu
-                //cbx_Mon.Items.Add("Toán");
-                //cbx_Mon.Items.Add("Văn");
-                //cbx_Mon.Items.Add("Anh");
-                //cbx_Mon.Items.Add("Lý");
-                //cbx_Mon.Items.Add("Hóa");
-                //cbx_Mon.Items.Add("Sinh");
-                //cbx_Mon.Items.Add("Sử");
-                //cbx_Mon.Items.Add("Địa");
+                // Load from database
                 cbx_Mon.ItemsSource = BaoCaoTongKetMonBLL.LayDanhSachMonHoc();
                 cbx_Mon.DisplayMemberPath = "TenMH";
                 cbx_Mon.SelectedValuePath = "MaMH";
@@ -168,28 +160,75 @@ namespace GUI.Sprint5
                 // Clear existing data
                 sp_DanhSachLop.Children.Clear();
 
-                // Lấy dữ liệu từ BLL có sẵn
-                var danhSachLop = LopBLL.GetDanhSachLop();
-                var danhSachHocSinh = HocSinhBLL.GetDanhSachHocSinh();
+                if (cbx_Mon.SelectedItem == null || cbx_HocKy.SelectedItem == null)
+                {
+                    MessageBox.Show("Vui lòng chọn môn học và học kỳ", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                // Tạo báo cáo cho từng lớp
+                // Lấy mã môn học và mã học kỳ
+                var monHoc = cbx_Mon.SelectedItem as MonHoc;
+                var hocKy = cbx_HocKy.SelectedItem as HocKy;
+
+                if (monHoc == null || hocKy == null)
+                {
+                    MessageBox.Show("Không thể lấy thông tin môn học hoặc học kỳ", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Lập báo cáo tổng kết môn học
+                BaoCaoTongKetMonBLL.LapBaoCaoTongKetMon(monHoc.MaMH, hocKy.MaHK);
+                var baoCao = BaoCaoTongKetMonBLL.LayBaoCaoTongKetMon();
+
+                if (baoCao == null)
+                {
+                    MessageBox.Show("Không có dữ liệu báo cáo", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // Hiển thị báo cáo tổng kết - sử dụng dữ liệu đã được tính toán từ BLL
+                // BLL đã tính toán sẵn tổng số và số lượng đạt, chỉ cần hiển thị theo từng lớp
+                var danhSachLop = LopBLL.GetDanhSachLop();
                 int stt = 1;
+
                 foreach (var lop in danhSachLop)
                 {
-                    // Tính sĩ số thực từ danh sách học sinh
-                    var hocSinhTrongLop = danhSachHocSinh.Where(hs => hs.MaLop == lop.MaLop).ToList();
+                    // Lấy học sinh có điểm môn này trong lớp
+                    var hocSinhTrongLop = baoCao.ChiTietBangDiem?
+                        .Where(bd => bd.HocSinh?.MaLop == lop.MaLop)
+                        .ToList() ?? new List<BangDiemMon>();
+
                     int siSo = hocSinhTrongLop.Count;
 
-                    if (siSo > 0) // Chỉ hiển thị lớp có học sinh
+                    if (siSo > 0) // Chỉ hiển thị lớp có học sinh có điểm
                     {
-                        // Giả lập số lượng đạt (85% học sinh đạt)
-                        int soLuongDat = (int)(siSo * 0.85);
+                        // Tính số lượng đạt thực tế trong lớp này
+                        // Lấy mốc điểm đạt từ ThamSo (giống như BLL đã làm)
+                        int mocDiemDat = BaoCaoTongKetMonBLL.LayMocDiemDat();
+
+                        // Đếm số học sinh đạt trong lớp dựa trên điểm thực tế
+                        int soLuongDat = 0;
+                        foreach (var bangDiem in hocSinhTrongLop)
+                        {
+                            // Kiểm tra điểm có đạt không (sử dụng cùng logic như BLL)
+                            // Sử dụng mốc điểm đạt thật từ ThamSo thay vì hardcode
+                            if (bangDiem.DiemCuoiKy.HasValue && bangDiem.DiemCuoiKy >= mocDiemDat)
+                            {
+                                soLuongDat++;
+                            }
+                        }
+
                         double tyLeDat = siSo > 0 ? (soLuongDat * 100.0 / siSo) : 0;
 
                         AddClassRow(stt, lop.TenLop, siSo.ToString(),
                                    soLuongDat.ToString(), $"{tyLeDat:F1}%");
                         stt++;
                     }
+                }
+
+                if (stt == 1) // Không có lớp nào có dữ liệu
+                {
+                    MessageBox.Show("Không có dữ liệu điểm cho môn học và học kỳ đã chọn", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)

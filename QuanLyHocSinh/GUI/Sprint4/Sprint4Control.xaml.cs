@@ -34,6 +34,8 @@ namespace GUI.Sprint4
             LoadMonHoc();
             LoadHocKy();
             LoadStudentsForClass();
+            // Tự động tải điểm khi có đủ thông tin
+            LoadExistingScores();
         }
 
         private void LoadLop()
@@ -65,31 +67,11 @@ namespace GUI.Sprint4
             {
                 cbx_MonHoc.Items.Clear();
 
-                try
+                // Load from database using DataContext
+                var danhSachMonHoc = DAL.DataContext.Context.MONHOC.ToList();
+                foreach (var monHoc in danhSachMonHoc)
                 {
-                    // Load from database using DataContext
-                    var danhSachMonHoc = DAL.DataContext.Context.MONHOC.ToList();
-                    foreach (var monHoc in danhSachMonHoc)
-                    {
-                        cbx_MonHoc.Items.Add(monHoc.TenMH);
-                    }
-                }
-                catch
-                {
-                    // If database fails, use fallback data
-                }
-
-                // Fallback to sample data if no data in database
-                if (cbx_MonHoc.Items.Count == 0)
-                {
-                    cbx_MonHoc.Items.Add("Toán học");
-                    cbx_MonHoc.Items.Add("Ngữ văn");
-                    cbx_MonHoc.Items.Add("Tiếng Anh");
-                    cbx_MonHoc.Items.Add("Vật lý");
-                    cbx_MonHoc.Items.Add("Hóa học");
-                    cbx_MonHoc.Items.Add("Sinh học");
-                    cbx_MonHoc.Items.Add("Lịch sử");
-                    cbx_MonHoc.Items.Add("Địa lý");
+                    cbx_MonHoc.Items.Add(monHoc.TenMH);
                 }
 
                 if (cbx_MonHoc.Items.Count > 0)
@@ -109,25 +91,11 @@ namespace GUI.Sprint4
             {
                 cbx_HocKy.Items.Clear();
 
-                try
+                // Load from database using DataContext
+                var danhSachHocKy = DAL.DataContext.Context.HOCKY.ToList();
+                foreach (var hocKy in danhSachHocKy)
                 {
-                    // Load from database using DataContext
-                    var danhSachHocKy = DAL.DataContext.Context.HOCKY.ToList();
-                    foreach (var hocKy in danhSachHocKy)
-                    {
-                        cbx_HocKy.Items.Add(hocKy.TenHK);
-                    }
-                }
-                catch
-                {
-                    // If database fails, use fallback data
-                }
-
-                // Fallback to sample data if no data in database
-                if (cbx_HocKy.Items.Count == 0)
-                {
-                    cbx_HocKy.Items.Add("Học kỳ 1");
-                    cbx_HocKy.Items.Add("Học kỳ 2");
+                    cbx_HocKy.Items.Add(hocKy.TenHK);
                 }
 
                 if (cbx_HocKy.Items.Count > 0)
@@ -230,12 +198,112 @@ namespace GUI.Sprint4
 
         private void LoadScoresForSubject()
         {
-            // TODO: Implement loading scores for selected subject
+            try
+            {
+                LoadExistingScores();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải điểm theo môn học: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void LoadScoresForSemester()
         {
-            // TODO: Implement loading scores for selected semester
+            try
+            {
+                LoadExistingScores();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải điểm theo học kỳ: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadExistingScores()
+        {
+            if (cbx_Lop.SelectedItem == null || cbx_MonHoc.SelectedItem == null || cbx_HocKy.SelectedItem == null)
+            {
+                return; // Không đủ thông tin để tải điểm
+            }
+
+            try
+            {
+                // Lấy thông tin môn học và học kỳ
+                string tenMonHoc = cbx_MonHoc.SelectedItem.ToString();
+                string tenHocKy = cbx_HocKy.SelectedItem.ToString();
+
+                var monHocObj = DAL.DataContext.Context.MONHOC.FirstOrDefault(m => m.TenMH == tenMonHoc);
+                var hocKyObj = DAL.DataContext.Context.HOCKY.FirstOrDefault(h => h.TenHK == tenHocKy);
+
+                string maMonHoc = monHocObj?.MaMH ?? tenMonHoc;
+                string maHocKy = hocKyObj?.MaHK ?? tenHocKy;
+
+                // Lấy danh sách học sinh trong lớp
+                string tenLop = cbx_Lop.SelectedItem.ToString();
+                var danhSachLop = BLL.LopBLL.GetDanhSachLop();
+                var lopDuocChon = danhSachLop.FirstOrDefault(l => l.TenLop == tenLop);
+
+                if (lopDuocChon == null) return;
+
+                var danhSachHocSinh = BLL.LopBLL.LayDanhSachHocSinh(lopDuocChon.MaLop);
+
+                // Xóa danh sách hiện tại
+                sp_DanhSachHocSinh.Children.Clear();
+
+                // Tạo instance BangDiemMonBLL để sử dụng LayBangDiem
+                var bangDiemBLL = new BLL.BangDiemMonBLL();
+
+                // Load điểm cho từng học sinh
+                for (int i = 1; i <= danhSachHocSinh.Count; i++)
+                {
+                    var hocSinh = danhSachHocSinh[i - 1];
+
+                    // Sử dụng LayBangDiem để lấy điểm của học sinh
+                    var danhSachDiem = bangDiemBLL.LayBangDiem(hocSinh.MaHS, maMonHoc, maHocKy);
+
+                    string diem15P = "";
+                    string diem1T = "";
+                    string diemCuoiKy = "";
+
+                    // Nếu có điểm, lấy điểm đầu tiên (vì LayBangDiem trả về List)
+                    if (danhSachDiem != null && danhSachDiem.Count > 0)
+                    {
+                        var diem = danhSachDiem.First();
+                        diem15P = diem.Diem15P?.ToString() ?? "";
+                        diem1T = diem.Diem1T?.ToString() ?? "";
+                        diemCuoiKy = diem.DiemCuoiKy?.ToString() ?? "";
+                    }
+
+                    AddStudentRowWithDropdown(i, danhSachHocSinh, diem15P, diem1T, diemCuoiKy);
+
+                    // Set học sinh đã được chọn trong dropdown
+                    if (sp_DanhSachHocSinh.Children[i - 1] is Border border && border.Child is Grid grid)
+                    {
+                        foreach (UIElement child in grid.Children)
+                        {
+                            if (child is ComboBox cbx && Grid.GetColumn(child) == 1)
+                            {
+                                // Tìm và chọn học sinh trong dropdown
+                                for (int j = 1; j < cbx.Items.Count; j++)
+                                {
+                                    string item = cbx.Items[j].ToString();
+                                    if (item.StartsWith(hocSinh.MaHS))
+                                    {
+                                        cbx.SelectedIndex = j;
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải điểm hiện có: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void AddStudentRowWithDropdown(int stt, List<DTO.HocSinh> danhSachHocSinh, string diem15Phut, string diem1Tiet, string diemCuoiHK)
@@ -568,18 +636,37 @@ namespace GUI.Sprint4
                         {
                             try
                             {
-                                // Tạo bảng điểm mới
-                                var bangDiem = new BLL.BangDiemMonBLL
-                                {
-                                    MaHocSinh = maHocSinh,
-                                    MaMH = maMonHoc,
-                                    MaHK = maHocKy
-                                };
+                                var bangDiemBLL = new BLL.BangDiemMonBLL();
 
-                                var result = bangDiem.TaoBangDiem(maHocSinh, maMonHoc, maHocKy, diem15P, diem1T, diemCuoiKy);
-                                if (result != null)
+                                // Kiểm tra xem điểm đã tồn tại chưa bằng LayBangDiem
+                                var diemHienTai = bangDiemBLL.LayBangDiem(maHocSinh, maMonHoc, maHocKy);
+
+                                if (diemHienTai != null && diemHienTai.Count > 0)
                                 {
+                                    // Điểm đã tồn tại - sử dụng CapnhatBangDiem
+                                    var bangDiemMoi = new DTO.BangDiemMon
+                                    {
+                                        MaHocSinh = maHocSinh,
+                                        MaMH = maMonHoc,
+                                        MaHK = maHocKy,
+                                        Diem15P = string.IsNullOrEmpty(diem15P) ? null : float.Parse(diem15P),
+                                        Diem1T = string.IsNullOrEmpty(diem1T) ? null : float.Parse(diem1T),
+                                        DiemCuoiKy = string.IsNullOrEmpty(diemCuoiKy) ? null : float.Parse(diemCuoiKy)
+                                    };
+
+                                    bangDiemBLL.CapNhatBangDiem(maHocSinh, maMonHoc, maHocKy, bangDiemMoi);
                                     soLuongDiemDaNhap++;
+                                }
+                                else
+                                {
+                                    // Điểm chưa tồn tại - sử dụng TaoBangDiem
+                                    var bangDiem = new BLL.BangDiemMonBLL(maHocSinh, maMonHoc, maHocKy);
+
+                                    var result = bangDiem.TaoBangDiem(maHocSinh, maMonHoc, maHocKy, diem15P, diem1T, diemCuoiKy);
+                                    if (result != null)
+                                    {
+                                        soLuongDiemDaNhap++;
+                                    }
                                 }
                             }
                             catch (Exception ex)

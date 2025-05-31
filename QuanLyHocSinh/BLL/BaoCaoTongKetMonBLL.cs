@@ -32,4 +32,9 @@ public class BaoCaoTongKetMonBLL
     {
         return _currentBaoCaoMon;
     }
+
+    public static int LayMocDiemDat()
+    {
+        return ThamSoDAL.LayMocDiemDat();
+    }
 }

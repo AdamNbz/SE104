@@ -107,7 +107,8 @@ public class DataContext : DbContext
                     Id = 1,
                     TuoiToiDa = 20,
                     TuoiToiThieu = 15,
-                    SiSoToiDa = 40
+                    SiSoToiDa = 40,
+                    MocDiemDat = 0 // Giữ nguyên 0 để test
                 }
             );
     }
