@@ -15,6 +15,7 @@ public static class ThamSoDAL
     public static int LayMocDiemDat()
     {
         var thamSo = DataContext.Context.Set<ThamSo>().FirstOrDefault();
+        thamSo.MocDiemDat = 5;
         if (thamSo != null)
         {
             return thamSo.MocDiemDat;

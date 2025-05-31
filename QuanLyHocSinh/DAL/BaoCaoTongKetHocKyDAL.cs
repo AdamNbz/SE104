@@ -14,15 +14,9 @@ public class BaoCaoTongKetHocKyDAL
     {
         var context = DataContext.Context;
 
-        var semesterScores = context.BANGDIEMMON
-           .Include(b => b.HocSinh)
-           .ThenInclude(hs => hs.Lop)
-           .Where(b => b.MaHK == maHK && b.HocSinh != null && b.HocSinh.Lop != null)
-           .ToList();
+        var semesterScores = context.BANGDIEMMON.Include(b => b.HocSinh).ThenInclude(hs => hs.Lop).Where(b => b.MaHK == maHK && b.HocSinh != null && b.HocSinh.Lop != null).ToList();
 
-        var reportByClass = semesterScores
-            .GroupBy(b => b.HocSinh.Lop)
-            .Select(classGroup => {
+        var reportByClass = semesterScores.GroupBy(b => b.HocSinh.Lop).Select(classGroup => {
                 var lop = classGroup.Key;
                 var studentsInClass = classGroup.Select(b => b.HocSinh).Distinct().ToList();
                 int siSo = studentsInClass.Count;
@@ -30,11 +24,7 @@ public class BaoCaoTongKetHocKyDAL
 
                 foreach (var student in studentsInClass)
                 {
-                    var studentSubjects = classGroup
-                        .Where(b => b.MaHocSinh == student.MaHS)
-                        .Select(b => b.MaMH)
-                        .Distinct()
-                        .ToList();
+                    var studentSubjects = classGroup.Where(b => b.MaHocSinh == student.MaHS).Select(b => b.MaMH).Distinct().ToList();
 
                     if (!studentSubjects.Any())
                     {
@@ -73,9 +63,7 @@ public class BaoCaoTongKetHocKyDAL
                     SoLuongDat = soLuongDat,
                     TyLeDat = Math.Round(tyLe, 2)
                 };
-            })
-            .OrderBy(r => r.TenLop)
-            .ToList();
+            }).OrderBy(r => r.TenLop).ToList();
 
         return new BaoCaoHocKyResult
         {
