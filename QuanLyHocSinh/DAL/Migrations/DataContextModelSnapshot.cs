@@ -282,7 +282,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            MocDiemDat = 0,
+                            MocDiemDat = 5,
                             SiSoToiDa = 40,
                             TuoiToiDa = 20,
                             TuoiToiThieu = 15

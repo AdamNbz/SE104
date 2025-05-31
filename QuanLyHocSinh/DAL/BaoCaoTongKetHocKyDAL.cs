@@ -14,27 +14,51 @@ public class BaoCaoTongKetHocKyDAL
     {
         var context = DataContext.Context;
 
-        var semesterScores = context.BANGDIEMMON.Include(b => b.HocSinh).ThenInclude(hs => hs.Lop).Where(b => b.MaHK == maHK && b.HocSinh != null && b.HocSinh.Lop != null).ToList();
+        var semesterScores = context.BANGDIEMMON
+           .Include(b => b.HocSinh)
+           .ThenInclude(hs => hs.Lop)
+           .Where(b => b.MaHK == maHK && b.HocSinh != null && b.HocSinh.Lop != null)
+           .ToList();
 
-        var reportByClass = semesterScores.GroupBy(b => b.HocSinh.Lop).Select(classGroup => {
+        var reportByClass = semesterScores
+            .GroupBy(b => b.HocSinh.Lop)
+            .Select(classGroup => {
                 var lop = classGroup.Key;
-                var studentsInClassWithScores = classGroup.Select(b => b.HocSinh).Distinct().ToList();
-                int siSo = studentsInClassWithScores.Count;
+                var studentsInClass = classGroup.Select(b => b.HocSinh).Distinct().ToList();
+                int siSo = studentsInClass.Count;
                 int soLuongDat = 0;
 
-                foreach (var student in studentsInClassWithScores)
+                foreach (var student in studentsInClass)
                 {
-                    var studentScoresInSemester = classGroup
+                    var studentSubjects = classGroup
                         .Where(b => b.MaHocSinh == student.MaHS)
+                        .Select(b => b.MaMH)
+                        .Distinct()
                         .ToList();
-                    if (!studentScoresInSemester.Any())
+
+                    if (!studentSubjects.Any())
                     {
                         continue;
                     }
-                    bool studentPassedSemester = studentScoresInSemester
-                        .All(b => b.DiemCuoiKy.HasValue && b.DiemCuoiKy >= mocDiemDat);
 
-                    if (studentPassedSemester)
+                    double totalSubjectAverage = 0;
+                    double validSubjectCount = 0;
+
+                    foreach (var subject in studentSubjects)
+                    {
+                        double? subjectAverage = BaoCaoTongKetMonDAL.TinhDiemTrungBinhMon(student.MaHS, subject, maHK);
+
+                        if (subjectAverage.HasValue)
+                        {
+                            totalSubjectAverage += subjectAverage.Value;
+                            validSubjectCount++;
+                        }
+                    }
+
+                    double overallAverage = (validSubjectCount > 0) ?
+                        totalSubjectAverage / validSubjectCount : 0;
+
+                    if (overallAverage >= mocDiemDat)
                     {
                         soLuongDat++;
                     }
@@ -49,7 +73,9 @@ public class BaoCaoTongKetHocKyDAL
                     SoLuongDat = soLuongDat,
                     TyLeDat = Math.Round(tyLe, 2)
                 };
-            }).OrderBy(r => r.TenLop).ToList();
+            })
+            .OrderBy(r => r.TenLop)
+            .ToList();
 
         return new BaoCaoHocKyResult
         {
