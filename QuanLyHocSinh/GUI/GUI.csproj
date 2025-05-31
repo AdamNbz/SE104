@@ -51,6 +51,7 @@
 	  <Compile Include="Sprint2\Sprint2Control.xaml.cs">
 		  <DependentUpon>Sprint2Control.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Include="Sprint7\Sprint7Control.xaml.cs" />
 
 	  <Page Include="Sprint2\TimKiemHocSinhWindow.xaml">
 		  <Generator>MSBuild:Compile</Generator>
@@ -101,6 +102,9 @@
 	  <!-- App and MainWindow XAML -->
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="MainWindow.xaml" />
+    <Page Include="Sprint7\Sprint7Control.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
 
     <!-- Other resources -->
     <EmbeddedResource Include="**\*.resx" Exclude="obj\**" />
