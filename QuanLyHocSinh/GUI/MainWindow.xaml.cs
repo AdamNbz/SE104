@@ -16,6 +16,14 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string SPRINT1 = "Tiếp nhận học sinh";
+        const string SPRINT2 = "Lập danh sách lớp";
+        const string SPRINT3 = "Tra cứu học sinh";
+        const string SPRINT4 = "Nhập bảng điểm môn";
+        const string SPRINT5 = "Báo cáo tổng kết môn";
+        const string SPRINT6 = "Báo cáo tổng kết học kì";
+        const string SPRINT7 = "Thay đổi các quy định";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,10 +57,10 @@ namespace GUI
 
                 switch (selectedItem)
                 {
-                    case "Sprint 1":
+                    case SPRINT1:
                         selectedControl = new Sprint1Control();
                         break;
-                    case "Sprint 2":
+                    case SPRINT2:
                         try
                         {
                             selectedControl = new Sprint2Control();
@@ -62,7 +70,7 @@ namespace GUI
                             MessageBox.Show($"Lỗi khi tạo SimpleSprint2Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
-                    case "Sprint 3":
+                    case SPRINT3:
                         try
                         {
                             selectedControl = new Sprint3Control();
@@ -72,7 +80,7 @@ namespace GUI
                             MessageBox.Show($"Lỗi khi tạo Sprint3Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
-                    case "Sprint 4":
+                    case SPRINT4:
                         try
                         {
                             selectedControl = new Sprint4Control();
@@ -82,7 +90,7 @@ namespace GUI
                             MessageBox.Show($"Lỗi khi tạo Sprint4Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
-                    case "Sprint 5":
+                    case SPRINT5:
                         try
                         {
                             selectedControl = new Sprint5Control();
@@ -92,7 +100,7 @@ namespace GUI
                             MessageBox.Show($"Lỗi khi tạo Sprint5Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
-                    case "Sprint 6":
+                    case SPRINT6:
                         try
                         {
                             selectedControl = new Sprint6Control();
@@ -102,7 +110,7 @@ namespace GUI
                             MessageBox.Show($"Lỗi khi tạo Sprint6Control: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
-                    case "Sprint 7":
+                    case SPRINT7:
                         try
                         {
                             selectedControl = new Sprint7Control();

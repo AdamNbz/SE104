@@ -11,7 +11,7 @@ public class QuyDinhDAL
 {
     public static ThamSo LayQuyDinh()
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         var thamSo = context.THAMSO.FirstOrDefault();
 
         if (thamSo == null)
@@ -34,7 +34,7 @@ public class QuyDinhDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var thamSo = context.THAMSO.FirstOrDefault();
 
             if (thamSo == null)
@@ -58,7 +58,7 @@ public class QuyDinhDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var thamSo = context.THAMSO.FirstOrDefault();
 
             if (thamSo == null)
@@ -81,7 +81,7 @@ public class QuyDinhDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var thamSo = context.THAMSO.FirstOrDefault();
 
             if (thamSo == null)
@@ -104,7 +104,7 @@ public class QuyDinhDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var existingMonHoc = context.Set<MonHoc>()
                 .FirstOrDefault(m => m.MaMH == monHoc.MaMH);
 
@@ -127,7 +127,7 @@ public class QuyDinhDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             context.Set<MonHoc>().Add(monHoc);
             return context.SaveChanges() > 0;
         }
@@ -141,7 +141,7 @@ public class QuyDinhDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var monHoc = context.Set<MonHoc>()
                 .FirstOrDefault(m => m.MaMH == maMH);
 

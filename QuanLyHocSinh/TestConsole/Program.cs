@@ -2,20 +2,16 @@
 using DTO;
 using DAL;
 
-var list = LopDAL.LayDanhSachLop();
-foreach (var lop in list)
-{
-    Console.WriteLine($"Lop: {lop.MaLop}");
-}
+var danhSachMonHoc = BaoCaoTongKetMonBLL.LayDanhSachMonHoc();
+var danhSachHocKy = BaoCaoTongKetMonBLL.LayDanhSachHocKy();
 
-var list1 = KhoiDAL.LayDanhSachKhoi();
-foreach (var khoi in list1)
+Console.WriteLine("Danh sách môn học:");
+foreach (var monHoc in danhSachMonHoc)
 {
-    Console.WriteLine($"Khoi: {khoi.MaKhoi}");
+    Console.WriteLine($"- {monHoc.TenMH} (Mã: {monHoc.MaMH})");
 }
-var ThongTinTimKiem = new TimKiemBLL.ThongTinTimKiem("1", "Nguyen", "", "", "", "", "", "", "", null, null, "", "", "", "");
-var result = TimKiemBLL.TimKiem(ThongTinTimKiem);
-if (result.Count != 0)
+Console.WriteLine("\nDanh sách học kỳ:");
+foreach (var hocKy in danhSachHocKy)
 {
-    Console.WriteLine("Tim Thay Ket Qua");
+    Console.WriteLine($"- {hocKy.TenHK} (Mã: {hocKy.MaHK})");
 }

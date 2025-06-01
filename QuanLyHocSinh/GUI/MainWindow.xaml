@@ -44,43 +44,43 @@
                     <ListBoxItem x:Name="Sprint1Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="AccountStudent" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 1</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Tiếp nhận học sinh</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem x:Name="Sprint2Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 2</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Lập danh sách lớp</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem x:Name="Sprint3Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Certificate" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 3</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Tra cứu học sinh</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem x:Name="Sprint4Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ChartBox" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 4</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Nhập bảng điểm môn</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem x:Name="Sprint5Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FileChart" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 5</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Báo cáo tổng kết môn</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem x:Name="Sprint6Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FileDocumentOutline" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 6</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Báo cáo tổng kết học kì</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem x:Name="Sprint7Item">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="BookEdit" Width="24" Height="24" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Sprint 7</TextBlock>
+                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center">Thay đổi các quy định</TextBlock>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>

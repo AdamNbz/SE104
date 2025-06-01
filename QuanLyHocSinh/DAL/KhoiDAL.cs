@@ -12,13 +12,13 @@ public static class KhoiDAL
 {
     public static List<Khoi> LayDanhSachKhoi()
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         return context.Set<Khoi>().Include(k => k.Lops).ToList();
     }
 
     public static Khoi LayKhoiTheoMa(string maKhoi)
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         return context.Set<Khoi>().Include(k => k.Lops).FirstOrDefault(k => k.MaKhoi == maKhoi);
     }
 
@@ -26,7 +26,7 @@ public static class KhoiDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             context.Set<Khoi>().Add(khoi);
             return context.SaveChanges() > 0;
         }
@@ -40,7 +40,7 @@ public static class KhoiDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var existingKhoi = context.Set<Khoi>().Find(khoi.MaKhoi);
             if (existingKhoi == null) return false;
 
@@ -57,7 +57,7 @@ public static class KhoiDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var khoi = context.Set<Khoi>().Find(maKhoi);
             if (khoi == null) return false;
 
