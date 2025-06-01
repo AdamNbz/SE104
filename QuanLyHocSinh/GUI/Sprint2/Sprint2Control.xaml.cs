@@ -282,45 +282,28 @@ namespace GUI.Sprint2
 
                     txb_SiSo.Text = danhSachHocSinhTrongLop.Count.ToString();
 
-                    // Lấy danh sách học sinh chưa có lớp
+                    // Lấy danh sách học sinh chưa có lớp hoặc thuộc lớp hiện tại
                     List<HocSinh> danhSachHocSinhChuaCoLop = danhSachHocSinh
                         .Where(hs => string.IsNullOrEmpty(hs.MaLop) || hs.MaLop == lopDuocChon.MaLop)
                         .ToList();
 
-                    // Xóa tất cả các lựa chọn hiện tại
-                    foreach (UIElement element in sp_DanhSachHocSinh.Children)
+                    // Reset toàn bộ danh sách học sinh - xóa và tạo lại tất cả các hàng
+                    sp_DanhSachHocSinh.Children.Clear();
+
+                    // Tạo lại danh sách với sĩ số tối đa từ tham số
+                    int siSoToiDa = 40;
+                    try
                     {
-                        if (element is Grid hocSinhGrid)
+                        var thamSo = DAL.DataContext.Context.THAMSO.FirstOrDefault();
+                        if (thamSo != null)
                         {
-                            foreach (UIElement control in hocSinhGrid.Children)
-                            {
-                                if (control is ComboBox comboBox)
-                                {
-                                    comboBox.SelectedItem = null;
-
-                                    // Reset trạng thái enabled và màu sắc cho ComboBox trống
-                                    comboBox.IsReadOnly = false;
-                                    comboBox.IsEnabled = true;
-                                    comboBox.Background = Brushes.White;
-                                    comboBox.Foreground = Brushes.Black;
-                                    comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border mặc định
-
-                                    comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
-                                    comboBox.DisplayMemberPath = "HoTen";
-                                    comboBox.SelectedValuePath = "MaHS";
-                                    comboBox.IsEditable = true; // Cho phép nhập text
-                                    comboBox.IsTextSearchEnabled = true; // Cho phép tìm kiếm theo text
-                                    TextSearch.SetTextPath(comboBox, "HoTen"); // Tìm kiếm theo thuộc tính HoTen
-                                    comboBox.StaysOpenOnEdit = true; // Giữ dropdown mở khi đang nhập
-                                    comboBox.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(ComboBox_TextChanged));
-                                }
-                                else if (control is TextBox textBox && Grid.GetColumn(control) > 1)
-                                {
-                                    textBox.Text = string.Empty;
-                                }
-                            }
+                            siSoToiDa = thamSo.SiSoToiDa;
                         }
                     }
+                    catch { }
+
+                    // Tạo lại toàn bộ danh sách học sinh
+                    TaoDanhSachHocSinh(siSoToiDa);
 
                     // Nếu có học sinh trong lớp, hiển thị theo thứ tự
                     if (danhSachHocSinhTrongLop.Count > 0)
@@ -332,7 +315,7 @@ namespace GUI.Sprint2
                             {
                                 foreach (UIElement control in hocSinhGrid.Children)
                                 {
-                                    if (control is ComboBox comboBox)
+                                    if (control is ComboBox comboBox && Grid.GetColumn(control) == 1)
                                     {
                                         // Tìm học sinh trong danh sách tổng
                                         HocSinh hocSinh = danhSachHocSinhTrongLop[index];
@@ -340,11 +323,10 @@ namespace GUI.Sprint2
 
                                         if (hocSinhTrongDS != null)
                                         {
-                                            // Thay thế ComboBox bằng TextBox readonly cho học sinh đã có trong lớp
+                                            // Thay thế ComboBox bằng TextBox readonly
                                             ReplaceComboBoxWithTextBox(hocSinhGrid, hocSinhTrongDS.HoTen);
                                             UpdateHocSinhInfo(hocSinhGrid, hocSinhTrongDS);
                                         }
-
                                         break;
                                     }
                                 }
@@ -352,31 +334,21 @@ namespace GUI.Sprint2
                             }
                         }
                     }
+
+                    // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox
+                    UpdateAvailableStudentsForAllComboBoxes();
                 }
                 else
                 {
                     // Xóa tất cả các lựa chọn nếu không có lớp được chọn
-                    foreach (UIElement element in sp_DanhSachHocSinh.Children)
-                    {
-                        if (element is Grid hocSinhGrid)
-                        {
-                            foreach (UIElement control in hocSinhGrid.Children)
-                            {
-                                if (control is ComboBox comboBox)
-                                {
-                                    comboBox.SelectedItem = null;
-                                }
-                                else if (control is TextBox textBox && Grid.GetColumn(control) > 1)
-                                {
-                                    textBox.Text = string.Empty;
-                                }
-                            }
-                        }
-                    }
-                }
+                    txb_Khoi.Text = "";
+                    txb_SiSo.Text = "0";
+                    sp_DanhSachHocSinh.Children.Clear();
 
-                // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox
-                UpdateAvailableStudentsForAllComboBoxes();
+                    // Tạo lại danh sách trống
+                    int siSoToiDa = int.TryParse(txb_SiSoToiDa.Text, out int result) ? result : 40;
+                    TaoDanhSachHocSinh(siSoToiDa);
+                }
             }
             catch (Exception ex)
             {
