@@ -63,23 +63,23 @@ namespace GUI.Sprint2
 
         private void dgv_KetQuaTimKiem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Kích hoạt nút Chọn nếu có học sinh được chọn
-            btn_Chon.IsEnabled = dgv_KetQuaTimKiem.SelectedItem != null;
+            // Không cần xử lý gì đặc biệt khi selection thay đổi
         }
 
-        private void btn_Chon_Click(object sender, RoutedEventArgs e)
+        private void dgv_KetQuaTimKiem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // Lấy học sinh được chọn
-            HocSinhDuocChon = dgv_KetQuaTimKiem.SelectedItem as HocSinh;
-            
-            // Đóng cửa sổ với kết quả thành công
-            DialogResult = true;
+            // Chọn học sinh khi double-click
+            if (dgv_KetQuaTimKiem.SelectedItem != null)
+            {
+                HocSinhDuocChon = dgv_KetQuaTimKiem.SelectedItem as HocSinh;
+                DialogResult = true;
+            }
         }
 
-        private void btn_Huy_Click(object sender, RoutedEventArgs e)
+        private void btn_Thoat_Click(object sender, RoutedEventArgs e)
         {
-            // Đóng cửa sổ với kết quả hủy
-            DialogResult = false;
+            // Đóng cửa sổ
+            this.Close();
         }
     }
 }

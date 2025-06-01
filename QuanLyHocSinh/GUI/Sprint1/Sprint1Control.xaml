@@ -75,8 +75,12 @@
             <Grid Style="{StaticResource grid}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
@@ -93,7 +97,26 @@
                             FontSize="{Binding ElementName=txBx_Email, Path=FontSize}"
                             Height="53"
                             Focusable="False"
-                            IsTabStop="True"/>
+                            IsTabStop="True"
+                            SelectedDateChanged="dtPk_NgaySinh_SelectedDateChanged"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <Label Style="{StaticResource lb}" Content="Tuổi học sinh"/>
+                    <TextBox x:Name="txBx_TuoiHocSinh"
+                         Style="{StaticResource CustomTextBox2}"
+                         IsReadOnly="True"
+                         Background="#CCCCCC"
+                         Cursor="Arrow"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="6">
+                    <Label Style="{StaticResource lb}" Content="Tuổi tối đa"/>
+                    <TextBox x:Name="txBx_TuoiToiDa"
+                         Style="{StaticResource CustomTextBox2}"
+                         IsReadOnly="True"
+                         Background="#CCCCCC"
+                         Cursor="Arrow"/>
                 </StackPanel>
             </Grid>
 

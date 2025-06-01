@@ -27,6 +27,12 @@ namespace GUI.Sprint1
             txBx_GioiTinh.Clear();
             txBx_HoTen.Clear();
             dtPk_NgaySinh.SelectedDate = null;
+
+            // Load tuổi tối đa từ quy định
+            LoadTuoiToiDa();
+
+            // Clear tuổi học sinh
+            txBx_TuoiHocSinh.Clear();
         }
 
         private void btn_TiepNhan_Click(object sender, RoutedEventArgs e)
@@ -65,6 +71,51 @@ namespace GUI.Sprint1
             TimKiemWindow timKiemWindow = new TimKiemWindow();
             timKiemWindow.Owner = Window.GetWindow(this); // Get the parent window
             timKiemWindow.ShowDialog();
+        }
+
+        private void dtPk_NgaySinh_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CapNhatTuoiHocSinh();
+        }
+
+        private void LoadTuoiToiDa()
+        {
+            try
+            {
+                int tuoiToiDa = DAL.ThamSoDAL.LayTuoiToiDa();
+                txBx_TuoiToiDa.Text = tuoiToiDa.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải tuổi tối đa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                txBx_TuoiToiDa.Text = "20"; // Giá trị mặc định
+            }
+        }
+
+        private void CapNhatTuoiHocSinh()
+        {
+            if (dtPk_NgaySinh.SelectedDate.HasValue)
+            {
+                DateTime ngaySinh = dtPk_NgaySinh.SelectedDate.Value;
+                int tuoi = TinhTuoi(ngaySinh);
+                txBx_TuoiHocSinh.Text = tuoi.ToString();
+            }
+            else
+            {
+                txBx_TuoiHocSinh.Clear();
+            }
+        }
+
+        private int TinhTuoi(DateTime ngaySinh)
+        {
+            DateTime today = DateTime.Today;
+            int tuoi = today.Year - ngaySinh.Year;
+
+            // Nếu chưa đến sinh nhật trong năm nay thì trừ 1
+            if (ngaySinh.Date > today.AddYears(-tuoi))
+                tuoi--;
+
+            return tuoi;
         }
     }
 }

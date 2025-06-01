@@ -54,7 +54,8 @@
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   SelectionMode="Single"
-                  SelectionChanged="dgv_KetQuaTimKiem_SelectionChanged">
+                  SelectionChanged="dgv_KetQuaTimKiem_SelectionChanged"
+                  MouseDoubleClick="dgv_KetQuaTimKiem_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Mã HS" Binding="{Binding MaHS}" Width="80"/>
                 <DataGridTextColumn Header="Họ tên" Binding="{Binding HoTen}" Width="200"/>
@@ -66,22 +67,15 @@
         </DataGrid>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="3" 
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Center" 
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
                     Margin="0,0,0,16">
-            <Button x:Name="btn_Chon"
-                    Content="Chọn"
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Margin="8,0"
-                    IsEnabled="False"
-                    Click="btn_Chon_Click"/>
-
-            <Button x:Name="btn_Huy"
-                    Content="Hủy"
+            <Button x:Name="btn_Thoat"
+                    Content="Thoát"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="8,0"
-                    Click="btn_Huy_Click"/>
+                    Click="btn_Thoat_Click"/>
         </StackPanel>
     </Grid>
 </Window>
