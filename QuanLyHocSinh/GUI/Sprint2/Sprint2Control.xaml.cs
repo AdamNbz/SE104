@@ -134,6 +134,9 @@ namespace GUI.Sprint2
                         {
                             // Cập nhật thông tin học sinh
                             UpdateHocSinhInfo(grid, hocSinh);
+
+                            // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox khác
+                            UpdateAvailableStudentsForAllComboBoxes();
                         }
                     }
                 }
@@ -162,6 +165,9 @@ namespace GUI.Sprint2
                         {
                             // Cập nhật thông tin học sinh
                             UpdateHocSinhInfo(grid, hocSinhTimThay);
+
+                            // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox khác
+                            UpdateAvailableStudentsForAllComboBoxes();
                         }
                     }
                 }
@@ -172,7 +178,86 @@ namespace GUI.Sprint2
             }
         }
 
+        // Phương thức cập nhật danh sách học sinh có sẵn cho tất cả ComboBox
+        private void UpdateAvailableStudentsForAllComboBoxes()
+        {
+            try
+            {
+                // Lấy danh sách học sinh đã được chọn (từ cả ComboBox và TextBox)
+                HashSet<string> selectedStudentIds = new HashSet<string>();
 
+                foreach (UIElement element in sp_DanhSachHocSinh.Children)
+                {
+                    if (element is Grid hocSinhGrid)
+                    {
+                        foreach (UIElement control in hocSinhGrid.Children)
+                        {
+                            if (control is ComboBox comboBox && comboBox.SelectedItem is HocSinh selectedStudent)
+                            {
+                                selectedStudentIds.Add(selectedStudent.MaHS);
+                            }
+                            else if (control is TextBox textBox && Grid.GetColumn(textBox) == 1 && !string.IsNullOrEmpty(textBox.Text))
+                            {
+                                // Tìm học sinh từ tên trong TextBox (đã được tiếp nhận)
+                                HocSinh hocSinhFromTextBox = danhSachHocSinh.FirstOrDefault(hs => hs.HoTen == textBox.Text);
+                                if (hocSinhFromTextBox != null)
+                                {
+                                    selectedStudentIds.Add(hocSinhFromTextBox.MaHS);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Lấy danh sách học sinh gốc (chưa có lớp hoặc thuộc lớp hiện tại)
+                List<HocSinh> baseStudentList;
+                if (cbx_Lop.SelectedItem is Lop selectedClass)
+                {
+                    baseStudentList = danhSachHocSinh
+                        .Where(hs => string.IsNullOrEmpty(hs.MaLop) || hs.MaLop == selectedClass.MaLop)
+                        .ToList();
+                }
+                else
+                {
+                    baseStudentList = danhSachHocSinh.Where(hs => string.IsNullOrEmpty(hs.MaLop)).ToList();
+                }
+
+                // Cập nhật ItemsSource cho từng ComboBox (chỉ những ô chưa thành TextBox)
+                foreach (UIElement element in sp_DanhSachHocSinh.Children)
+                {
+                    if (element is Grid hocSinhGrid)
+                    {
+                        foreach (UIElement control in hocSinhGrid.Children)
+                        {
+                            if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1)
+                            {
+                                // Lưu lại học sinh hiện tại được chọn
+                                HocSinh currentSelected = comboBox.SelectedItem as HocSinh;
+
+                                // Tạo danh sách học sinh có sẵn cho ComboBox này
+                                List<HocSinh> availableStudents = baseStudentList
+                                    .Where(hs => !selectedStudentIds.Contains(hs.MaHS) ||
+                                                (currentSelected != null && hs.MaHS == currentSelected.MaHS))
+                                    .ToList();
+
+                                // Cập nhật ItemsSource
+                                comboBox.ItemsSource = availableStudents;
+
+                                // Giữ lại selection hiện tại nếu có
+                                if (currentSelected != null)
+                                {
+                                    comboBox.SelectedItem = availableStudents.FirstOrDefault(hs => hs.MaHS == currentSelected.MaHS);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật danh sách học sinh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void cbx_Lop_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -212,6 +297,14 @@ namespace GUI.Sprint2
                                 if (control is ComboBox comboBox)
                                 {
                                     comboBox.SelectedItem = null;
+
+                                    // Reset trạng thái enabled và màu sắc cho ComboBox trống
+                                    comboBox.IsReadOnly = false;
+                                    comboBox.IsEnabled = true;
+                                    comboBox.Background = Brushes.White;
+                                    comboBox.Foreground = Brushes.Black;
+                                    comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border mặc định
+
                                     comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
                                     comboBox.DisplayMemberPath = "HoTen";
                                     comboBox.SelectedValuePath = "MaHS";
@@ -247,7 +340,8 @@ namespace GUI.Sprint2
 
                                         if (hocSinhTrongDS != null)
                                         {
-                                            comboBox.SelectedItem = hocSinhTrongDS;
+                                            // Thay thế ComboBox bằng TextBox readonly cho học sinh đã có trong lớp
+                                            ReplaceComboBoxWithTextBox(hocSinhGrid, hocSinhTrongDS.HoTen);
                                             UpdateHocSinhInfo(hocSinhGrid, hocSinhTrongDS);
                                         }
 
@@ -280,6 +374,9 @@ namespace GUI.Sprint2
                         }
                     }
                 }
+
+                // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox
+                UpdateAvailableStudentsForAllComboBoxes();
             }
             catch (Exception ex)
             {
@@ -366,68 +463,18 @@ namespace GUI.Sprint2
                     // Cập nhật lại danh sách học sinh tổng
                     danhSachHocSinh = BLL.HocSinhBLL.GetDanhSachHocSinh();
 
+                    // Lấy danh sách học sinh trong lớp sau khi lập (bao gồm cả học sinh mới và cũ)
+                    List<HocSinh> danhSachHocSinhTrongLopMoi = BLL.LopBLL.LayDanhSachHocSinh(lopDuocChon.MaLop);
+                    if (danhSachHocSinhTrongLopMoi == null)
+                    {
+                        danhSachHocSinhTrongLopMoi = new List<HocSinh>();
+                    }
+
                     // Cập nhật sĩ số lớp
-                    txb_SiSo.Text = danhSachHocSinhDaChon.Count.ToString();
+                    txb_SiSo.Text = danhSachHocSinhTrongLopMoi.Count.ToString();
 
-                    // Lấy danh sách học sinh chưa có lớp
-                    List<HocSinh> danhSachHocSinhChuaCoLop = danhSachHocSinh
-                        .Where(hs => string.IsNullOrEmpty(hs.MaLop) || hs.MaLop == lopDuocChon.MaLop)
-                        .ToList();
-
-                    // Hiển thị học sinh đã chọn trong danh sách
-                    foreach (UIElement element in sp_DanhSachHocSinh.Children)
-                    {
-                        if (element is Grid hocSinhGrid)
-                        {
-                            // Xóa lựa chọn hiện tại
-                            foreach (UIElement control in hocSinhGrid.Children)
-                            {
-                                if (control is ComboBox comboBox)
-                                {
-                                    comboBox.SelectedItem = null;
-                                    comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
-                                    comboBox.DisplayMemberPath = "HoTen";
-                                    comboBox.SelectedValuePath = "MaHS";
-                                    comboBox.IsEditable = true; // Cho phép nhập text
-                                    comboBox.IsTextSearchEnabled = true; // Cho phép tìm kiếm theo text
-                                    TextSearch.SetTextPath(comboBox, "HoTen"); // Tìm kiếm theo thuộc tính HoTen
-                                    comboBox.StaysOpenOnEdit = true; // Giữ dropdown mở khi đang nhập
-                                    comboBox.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(ComboBox_TextChanged));
-                                }
-                                else if (control is TextBox textBox && Grid.GetColumn(control) > 1)
-                                {
-                                    textBox.Text = string.Empty;
-                                }
-                            }
-                        }
-                    }
-
-                    // Hiển thị học sinh đã chọn
-                    int index = 0;
-                    foreach (UIElement element in sp_DanhSachHocSinh.Children)
-                    {
-                        if (element is Grid hocSinhGrid && index < danhSachHocSinhDaChon.Count)
-                        {
-                            foreach (UIElement control in hocSinhGrid.Children)
-                            {
-                                if (control is ComboBox comboBox)
-                                {
-                                    // Tìm học sinh trong danh sách tổng
-                                    HocSinh hocSinh = danhSachHocSinhDaChon[index];
-                                    HocSinh hocSinhTrongDS = danhSachHocSinh.FirstOrDefault(hs => hs.MaHS == hocSinh.MaHS);
-
-                                    if (hocSinhTrongDS != null)
-                                    {
-                                        comboBox.SelectedItem = hocSinhTrongDS;
-                                        UpdateHocSinhInfo(hocSinhGrid, hocSinhTrongDS);
-                                    }
-
-                                    break;
-                                }
-                            }
-                            index++;
-                        }
-                    }
+                    // Cập nhật giao diện sau khi lập danh sách
+                    UpdateUIAfterCreatingClassList(lopDuocChon, danhSachHocSinhTrongLopMoi);
 
                     MessageBox.Show($"Đã lập danh sách {danhSachHocSinhDaChon.Count} học sinh cho lớp {lopDuocChon.TenLop}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -493,6 +540,13 @@ namespace GUI.Sprint2
                                 comboBox.SelectedItem = null;
                                 comboBox.Text = string.Empty;
 
+                                // Reset trạng thái enabled và màu sắc
+                                comboBox.IsReadOnly = false;
+                                comboBox.IsEnabled = true;
+                                comboBox.Background = Brushes.White;
+                                comboBox.Foreground = Brushes.Black;
+                                comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border mặc định
+
                                 // Thiết lập lại ItemsSource như cũ
                                 comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
                                 comboBox.DisplayMemberPath = "HoTen";
@@ -504,12 +558,21 @@ namespace GUI.Sprint2
                                 comboBox.AddHandler(TextBoxBase.TextChangedEvent,
                                                    new TextChangedEventHandler(ComboBox_TextChanged));
                             }
-                            else if (control is TextBox textBox && Grid.GetColumn(control) > 1)
+                            else if (control is TextBox textBox)
                             {
-                                // Xóa sạch các TextBox (Giới tính, Ngày sinh, Địa chỉ…)
-                                textBox.Text = string.Empty;
-                                // Nếu muốn reset cả màu nền:
-                                textBox.Background = Brushes.LightGray;
+                                int column = Grid.GetColumn(textBox);
+                                if (column == 1) // TextBox họ tên (đã thay thế ComboBox)
+                                {
+                                    // Thay thế TextBox trở lại thành ComboBox
+                                    ReplaceTextBoxWithComboBox(hocSinhGrid);
+                                }
+                                else if (column > 1) // Các TextBox khác (Giới tính, Ngày sinh, Địa chỉ)
+                                {
+                                    // Xóa sạch các TextBox (Giới tính, Ngày sinh, Địa chỉ…)
+                                    textBox.Text = string.Empty;
+                                    // Nếu muốn reset cả màu nền:
+                                    textBox.Background = Brushes.LightGray;
+                                }
                             }
                         }
                     }
@@ -580,6 +643,9 @@ namespace GUI.Sprint2
                                 // Cập nhật các TextBox thông tin học sinh
                                 UpdateHocSinhInfo(hocSinhGrid, timKiemWindow.HocSinhDuocChon);
 
+                                // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox khác
+                                UpdateAvailableStudentsForAllComboBoxes();
+
                                 daThemHocSinh = true;
                                 break;
                             }
@@ -602,6 +668,153 @@ namespace GUI.Sprint2
             }
         }
 
+        // Phương thức thay thế ComboBox bằng TextBox readonly
+        private void ReplaceComboBoxWithTextBox(Grid hocSinhGrid, string hoTen)
+        {
+            // Tìm ComboBox trong grid
+            ComboBox comboBoxToRemove = null;
+            foreach (UIElement control in hocSinhGrid.Children)
+            {
+                if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1)
+                {
+                    comboBoxToRemove = comboBox;
+                    break;
+                }
+            }
+
+            if (comboBoxToRemove != null)
+            {
+                // Xóa ComboBox khỏi grid
+                hocSinhGrid.Children.Remove(comboBoxToRemove);
+
+                // Tạo TextBox readonly thay thế
+                TextBox txtHoTen = new TextBox();
+                txtHoTen.Text = hoTen;
+                txtHoTen.Margin = new Thickness(4, 4, 4, 4);
+                txtHoTen.IsReadOnly = true;
+                txtHoTen.Background = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)); // Màu nền #CCCCCC giống các TextBox khác
+                txtHoTen.Style = Application.Current.Resources["MaterialDesignOutlinedTextBox"] as Style;
+                Grid.SetColumn(txtHoTen, 1);
+                hocSinhGrid.Children.Add(txtHoTen);
+            }
+        }
+
+        // Phương thức thay thế TextBox trở lại thành ComboBox
+        private void ReplaceTextBoxWithComboBox(Grid hocSinhGrid)
+        {
+            // Tìm TextBox họ tên trong grid
+            TextBox textBoxToRemove = null;
+            foreach (UIElement control in hocSinhGrid.Children)
+            {
+                if (control is TextBox textBox && Grid.GetColumn(textBox) == 1)
+                {
+                    textBoxToRemove = textBox;
+                    break;
+                }
+            }
+
+            if (textBoxToRemove != null)
+            {
+                // Xóa TextBox khỏi grid
+                hocSinhGrid.Children.Remove(textBoxToRemove);
+
+                // Lấy danh sách học sinh chưa có lớp
+                List<HocSinh> danhSachHocSinhChuaCoLop = danhSachHocSinh;
+                if (cbx_Lop.SelectedItem != null)
+                {
+                    Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
+                    if (lopDuocChon != null)
+                    {
+                        danhSachHocSinhChuaCoLop = danhSachHocSinh
+                            .Where(hs => string.IsNullOrEmpty(hs.MaLop) || hs.MaLop == lopDuocChon.MaLop)
+                            .ToList();
+                    }
+                }
+
+                // Tạo ComboBox thay thế
+                ComboBox cbxHoTen = new ComboBox();
+                cbxHoTen.Margin = new Thickness(4, 4, 4, 4);
+                cbxHoTen.Style = Application.Current.Resources["MaterialDesignOutlinedComboBox"] as Style;
+                cbxHoTen.ItemsSource = danhSachHocSinhChuaCoLop;
+                cbxHoTen.DisplayMemberPath = "HoTen";
+                cbxHoTen.SelectedValuePath = "MaHS";
+                cbxHoTen.IsEditable = true;
+                cbxHoTen.IsTextSearchEnabled = true;
+                TextSearch.SetTextPath(cbxHoTen, "HoTen");
+                cbxHoTen.StaysOpenOnEdit = true;
+                cbxHoTen.SelectionChanged += HocSinh_ComboBox_SelectionChanged;
+                cbxHoTen.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(ComboBox_TextChanged));
+                Grid.SetColumn(cbxHoTen, 1);
+                hocSinhGrid.Children.Add(cbxHoTen);
+            }
+        }
+
+        // Phương thức cập nhật giao diện sau khi lập danh sách lớp
+        private void UpdateUIAfterCreatingClassList(Lop lopDuocChon, List<HocSinh> danhSachHocSinhTrongLop)
+        {
+            // Lấy danh sách học sinh chưa có lớp để cập nhật cho ComboBox còn lại
+            List<HocSinh> danhSachHocSinhChuaCoLop = danhSachHocSinh
+                .Where(hs => string.IsNullOrEmpty(hs.MaLop) || hs.MaLop == lopDuocChon.MaLop)
+                .ToList();
+
+            // Cập nhật ItemsSource cho các ComboBox còn lại
+            foreach (UIElement element in sp_DanhSachHocSinh.Children)
+            {
+                if (element is Grid hocSinhGrid)
+                {
+                    foreach (UIElement control in hocSinhGrid.Children)
+                    {
+                        if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1)
+                        {
+                            comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
+                        }
+                    }
+                }
+            }
+
+            // Hiển thị tất cả học sinh trong lớp và chuyển thành TextBox readonly
+            int index = 0;
+            foreach (UIElement element in sp_DanhSachHocSinh.Children)
+            {
+                if (element is Grid hocSinhGrid && index < danhSachHocSinhTrongLop.Count)
+                {
+                    // Tìm học sinh trong danh sách tổng
+                    HocSinh hocSinh = danhSachHocSinhTrongLop[index];
+                    HocSinh hocSinhTrongDS = danhSachHocSinh.FirstOrDefault(hs => hs.MaHS == hocSinh.MaHS);
+
+                    if (hocSinhTrongDS != null)
+                    {
+                        // Kiểm tra xem đã là TextBox chưa
+                        bool isAlreadyTextBox = false;
+                        foreach (UIElement control in hocSinhGrid.Children)
+                        {
+                            if (control is TextBox textBox && Grid.GetColumn(textBox) == 1)
+                            {
+                                isAlreadyTextBox = true;
+                                // Cập nhật lại thông tin nếu cần
+                                textBox.Text = hocSinhTrongDS.HoTen;
+                                break;
+                            }
+                        }
+
+                        if (!isAlreadyTextBox)
+                        {
+                            // Thay thế ComboBox bằng TextBox readonly
+                            ReplaceComboBoxWithTextBox(hocSinhGrid, hocSinhTrongDS.HoTen);
+                        }
+
+                        // Cập nhật thông tin học sinh vào các ô bên phải
+                        UpdateHocSinhInfo(hocSinhGrid, hocSinhTrongDS);
+                    }
+
+                    index++;
+                }
+            }
+
+            // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox còn lại
+            UpdateAvailableStudentsForAllComboBoxes();
+        }
+
         // Phương thức cập nhật thông tin học sinh vào các TextBox
         private void UpdateHocSinhInfo(Grid hocSinhGrid, HocSinh hocSinh)
         {
@@ -612,20 +825,24 @@ namespace GUI.Sprint2
                     // Xác định vị trí cột của TextBox
                     int column = Grid.GetColumn(textBox);
 
-                    // Đặt màu nền cho TextBox
-                    textBox.Background = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)); // Màu nền #CCCCCC
-
                     // Cập nhật thông tin tương ứng
                     switch (column)
                     {
+                        case 1: // Họ tên (khi đã thay thế ComboBox bằng TextBox)
+                            textBox.Text = hocSinh.HoTen;
+                            // Không cần set màu nền vì đã được set trong ReplaceComboBoxWithTextBox
+                            break;
                         case 2: // Giới tính
                             textBox.Text = hocSinh.GioiTinh;
+                            textBox.Background = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)); // Màu nền #CCCCCC
                             break;
                         case 3: // Ngày sinh
                             textBox.Text = hocSinh.NgaySinh.ToShortDateString();
+                            textBox.Background = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)); // Màu nền #CCCCCC
                             break;
                         case 4: // Địa chỉ
                             textBox.Text = hocSinh.DiaChi;
+                            textBox.Background = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)); // Màu nền #CCCCCC
                             break;
                     }
                 }
@@ -677,6 +894,9 @@ namespace GUI.Sprint2
                         txb_SiSo.Text = "0";
                     }
 
+                    // Cập nhật lại danh sách học sinh tổng
+                    danhSachHocSinh = BLL.HocSinhBLL.GetDanhSachHocSinh();
+
                     // Xóa danh sách học sinh trên giao diện
                     foreach (UIElement element in sp_DanhSachHocSinh.Children)
                     {
@@ -687,13 +907,31 @@ namespace GUI.Sprint2
                             {
                                 if (control is ComboBox comboBox)
                                 {
-                                    // Xóa lựa chọn
+                                    // Xóa lựa chọn và text hiển thị
                                     comboBox.SelectedItem = null;
+                                    comboBox.Text = string.Empty;
+
+                                    // Reset màu nền và enable lại ComboBox
+                                    comboBox.IsReadOnly = false;
+                                    comboBox.IsEnabled = true;
+                                    comboBox.Background = Brushes.White;
+                                    comboBox.Foreground = Brushes.Black;
+                                    comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border mặc định
                                 }
-                                else if (control is TextBox textBox && Grid.GetColumn(control) > 1) // Bỏ qua TextBlock STT
+                                else if (control is TextBox textBox)
                                 {
-                                    // Xóa nội dung
-                                    textBox.Text = string.Empty;
+                                    int column = Grid.GetColumn(textBox);
+                                    if (column == 1) // TextBox họ tên (đã thay thế ComboBox)
+                                    {
+                                        // Thay thế TextBox trở lại thành ComboBox
+                                        ReplaceTextBoxWithComboBox(hocSinhGrid);
+                                    }
+                                    else if (column > 1) // Các TextBox khác (Giới tính, Ngày sinh, Địa chỉ)
+                                    {
+                                        // Xóa nội dung và reset màu nền
+                                        textBox.Text = string.Empty;
+                                        textBox.Background = Brushes.LightGray;
+                                    }
                                 }
                             }
                         }
@@ -701,6 +939,9 @@ namespace GUI.Sprint2
 
                     // Cập nhật lại danh sách học sinh
                     cbx_Lop_SelectionChanged(null, null);
+
+                    // Cập nhật danh sách học sinh có sẵn cho tất cả ComboBox
+                    UpdateAvailableStudentsForAllComboBoxes();
 
                     MessageBox.Show("Đã xóa danh sách học sinh của lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }

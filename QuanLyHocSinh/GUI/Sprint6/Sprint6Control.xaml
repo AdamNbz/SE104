@@ -26,9 +26,10 @@
             <!-- Selection Controls -->
             <Grid Grid.Row="1" Margin="0,0,0,16">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="Học kỳ" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Học kỳ" FontWeight="Bold" FontSize="16" Margin="0,0,0,4" HorizontalAlignment="Center"/>
                     <ComboBox x:Name="cbx_HocKy"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="15"
                               Width="300"
                               SelectionChanged="cbx_HocKy_SelectionChanged"/>
                 </StackPanel>
@@ -40,11 +41,13 @@
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
+                        Height="40"
                         Margin="8,0" Padding="16,8" Click="btn_LapBaoCao_Click">
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Lập báo cáo"/>
+                                <TextBlock Text="Lập báo cáo" FontSize="16"/>
                             </StackPanel>
                         </DataTemplate>
                     </Button.ContentTemplate>
@@ -54,11 +57,13 @@
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
+                        Height="40"
                         Margin="8,0" Padding="16,8" Click="btn_Thoat_Click">
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Thoát"/>
+                                <TextBlock Text="Thoát" FontSize="16"/>
                             </StackPanel>
                         </DataTemplate>
                     </Button.ContentTemplate>
@@ -84,11 +89,11 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Lớp" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Sĩ Số" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Số Lượng Đạt" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="Tỷ Lệ" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Lớp" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Sĩ Số" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Số Lượng Đạt" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="Tỷ Lệ" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 

@@ -189,10 +189,6 @@ namespace GUI.Sprint5
                 // Hiển thị báo cáo tổng kết - sử dụng dữ liệu đã được tính toán từ BLL
                 // BLL đã tính toán sẵn tổng số và số lượng đạt, chỉ cần hiển thị theo từng lớp
 
-                // Log mốc điểm đạt để debug
-                int mocDiemDatCheck = BaoCaoTongKetMonBLL.LayMocDiemDat();
-                MessageBox.Show($"Mốc điểm đạt hiện tại: {mocDiemDatCheck}", "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
-
                 var danhSachLop = LopBLL.GetDanhSachLop();
                 int stt = 1;
 
@@ -210,9 +206,6 @@ namespace GUI.Sprint5
                         // Tính số lượng đạt thực tế trong lớp này
                         // Lấy mốc điểm đạt từ ThamSo (giống như BLL đã làm)
                         int mocDiemDat = BaoCaoTongKetMonBLL.LayMocDiemDat();
-
-                        // Log để debug
-                        System.Diagnostics.Debug.WriteLine($"[Sprint5] MocDiemDat từ ThamSo: {mocDiemDat}");
 
                         // Đếm số học sinh đạt trong lớp dựa trên điểm thực tế
                         int soLuongDat = 0;

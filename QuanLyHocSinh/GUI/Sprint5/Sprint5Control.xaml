@@ -31,16 +31,18 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                    <TextBlock Text="Môn" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="Môn" FontWeight="Bold" FontSize="16" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_Mon"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="15"
                               SelectionChanged="cbx_Mon_SelectionChanged"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="16,0,0,0">
-                    <TextBlock Text="Học kỳ" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="Học kỳ" FontWeight="Bold" FontSize="16" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_HocKy"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="15"
                               SelectionChanged="cbx_HocKy_SelectionChanged"/>
                 </StackPanel>
             </Grid>
@@ -51,12 +53,16 @@
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
+                        Height="40"
                         Margin="8,0" Padding="16,8" Click="btn_LapBaoCao_Click"/>
 
                 <Button x:Name="btn_Thoat" Content="Thoát"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
+                        Height="40"
                         Margin="8,0" Padding="16,8" Click="btn_Thoat_Click"/>
             </StackPanel>
 
@@ -79,11 +85,11 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Lớp" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Sĩ Số" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Số Lượng Đạt" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="Tỷ Lệ" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Lớp" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Sĩ Số" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Số Lượng Đạt" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="Tỷ Lệ" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 

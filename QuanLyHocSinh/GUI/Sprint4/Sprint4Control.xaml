@@ -32,23 +32,26 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                    <TextBlock Text="Lớp" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="Lớp" FontWeight="Bold" FontSize="16" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_Lop"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="15"
                               SelectionChanged="cbx_Lop_SelectionChanged"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="8,0,8,0">
-                    <TextBlock Text="Môn Học" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="Môn Học" FontWeight="Bold" FontSize="16" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_MonHoc"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="15"
                               SelectionChanged="cbx_MonHoc_SelectionChanged"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Margin="8,0,0,0">
-                    <TextBlock Text="Học Kỳ" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="Học Kỳ" FontWeight="Bold" FontSize="16" Margin="0,0,0,4"/>
                     <ComboBox x:Name="cbx_HocKy"
                               Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="15"
                               SelectionChanged="cbx_HocKy_SelectionChanged"/>
                 </StackPanel>
             </Grid>
@@ -72,11 +75,11 @@
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Học Sinh" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Điểm 15 phút" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Điểm 1 tiết" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="Điểm cuối HK" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Học Sinh" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Điểm 15 phút" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-3,0,0,0"/>
+                            <TextBlock Grid.Column="3" Text="Điểm 1 tiết" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-2,0,0,0"/>
+                            <TextBlock Grid.Column="4" Text="Điểm cuối HK" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-4,0,0,0"/>
                         </Grid>
                     </Border>
 
@@ -95,18 +98,21 @@
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
                         Margin="8,0" Padding="16,8" Click="btn_NhapDiem_Click"/>
 
                 <Button x:Name="btn_TimHocSinh" Content="Tìm học sinh"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
                         Margin="8,0" Padding="16,8" Click="btn_TimHocSinh_Click"/>
 
                 <Button x:Name="btn_Thoat" Content="Thoát"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
+                        FontSize="16"
                         Margin="8,0" Padding="16,8" Click="btn_Thoat_Click"/>
             </StackPanel>
         </Grid>

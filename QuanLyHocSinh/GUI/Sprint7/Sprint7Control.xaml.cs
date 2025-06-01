@@ -13,8 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DTO;
-// using BLL;
-// using DAL;
+using BLL;
 
 namespace GUI.Sprint7
 {
@@ -23,55 +22,37 @@ namespace GUI.Sprint7
     /// </summary>
     public partial class Sprint7Control : UserControl
     {
-        // Mock data for testing GUI
-        private List<MonHoc> mockMonHocList;
-
         public Sprint7Control()
         {
             InitializeComponent();
-            InitializeMockData();
-        }
-
-        private void InitializeMockData()
-        {
-            // Create mock data for testing
-            mockMonHocList = new List<MonHoc>
-            {
-                new MonHoc { MaMH = "TOAN", TenMH = "Toán học" },
-                new MonHoc { MaMH = "VAN", TenMH = "Ngữ văn" },
-                new MonHoc { MaMH = "LY", TenMH = "Vật lý" },
-                new MonHoc { MaMH = "HOA", TenMH = "Hóa học" },
-                new MonHoc { MaMH = "ANH", TenMH = "Tiếng Anh" },
-                new MonHoc { MaMH = "SINH", TenMH = "Sinh học" },
-                new MonHoc { MaMH = "SU", TenMH = "Lịch sử" },
-                new MonHoc { MaMH = "DIA", TenMH = "Địa lý" }
-            };
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadMonHoc();
+            LoadLop();
         }
 
-        private void LoadMonHoc()
+        private void LoadLop()
         {
             try
             {
-                cbx_MonHoc.Items.Clear();
+                // Clear ItemsSource instead of Items to avoid binding conflict
+                cbx_MonHoc.ItemsSource = null;
 
-                // Use mock data instead of BLL
-                cbx_MonHoc.ItemsSource = mockMonHocList;
-                cbx_MonHoc.DisplayMemberPath = "TenMH";
-                cbx_MonHoc.SelectedValuePath = "MaMH";
+                // Use BLL to get real data from database
+                var danhSachLop = LopBLL.GetDanhSachLop();
+                cbx_MonHoc.ItemsSource = danhSachLop;
+                cbx_MonHoc.DisplayMemberPath = "TenLop";
+                cbx_MonHoc.SelectedValuePath = "MaLop";
 
-                if (cbx_MonHoc.Items.Count > 0)
+                if (danhSachLop != null && danhSachLop.Count > 0)
                 {
                     cbx_MonHoc.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải danh sách môn học: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi khi tải danh sách lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -79,10 +60,12 @@ namespace GUI.Sprint7
         {
             try
             {
-                if (cbx_MonHoc.SelectedItem is MonHoc selectedMonHoc)
+                if (cbx_MonHoc.SelectedItem is Lop selectedLop)
                 {
-                    txb_MaMonHoc.Text = selectedMonHoc.MaMH;
-                    txb_TenMoi.Text = selectedMonHoc.TenMH;
+                    // Sử dụng hàm BLL mới để lấy mã lớp theo tên lớp
+                    string maLop = LopBLL.LayMaTheoLop(selectedLop.TenLop);
+                    txb_MaMonHoc.Text = maLop ?? selectedLop.MaLop; // Fallback nếu không tìm thấy
+                    txb_TenMoi.Text = selectedLop.TenLop;
                 }
                 else
                 {
@@ -92,7 +75,7 @@ namespace GUI.Sprint7
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi chọn môn học: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi khi chọn lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -102,65 +85,67 @@ namespace GUI.Sprint7
             {
                 if (cbx_MonHoc.SelectedItem == null)
                 {
-                    MessageBox.Show("Vui lòng chọn môn học", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Vui lòng chọn lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(txb_TenMoi.Text))
                 {
-                    MessageBox.Show("Vui lòng nhập tên mới cho môn học", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Vui lòng nhập tên mới cho lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                var selectedMonHoc = cbx_MonHoc.SelectedItem as MonHoc;
-                string maMH = selectedMonHoc.MaMH;
+                var selectedLop = cbx_MonHoc.SelectedItem as Lop;
+                string maLop = selectedLop.MaLop;
                 string tenMoi = txb_TenMoi.Text.Trim();
 
                 // Kiểm tra tên mới có khác tên cũ không
-                if (tenMoi == selectedMonHoc.TenMH)
+                if (tenMoi == selectedLop.TenLop)
                 {
                     MessageBox.Show("Tên mới phải khác tên hiện tại", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 // Xác nhận thay đổi
-                var result = MessageBox.Show($"Bạn có chắc chắn muốn thay đổi tên môn học '{selectedMonHoc.TenMH}' thành '{tenMoi}'?",
+                var result = MessageBox.Show($"Bạn có chắc chắn muốn thay đổi tên lớp '{selectedLop.TenLop}' thành '{tenMoi}'?",
                     "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Mock update - simulate successful update
+                    // Use BLL to update the class name
                     try
                     {
-                        // Find and update the mock data
-                        var monHocToUpdate = mockMonHocList.FirstOrDefault(m => m.MaMH == maMH);
-                        if (monHocToUpdate != null)
+                        // Call BLL to update in database using the new method
+                        bool ketQua = LopBLL.CapNhatTenLop(maLop, tenMoi);
+
+                        if (ketQua)
                         {
-                            monHocToUpdate.TenMH = tenMoi;
+                            MessageBox.Show("Thay đổi tên lớp thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                            MessageBox.Show("Thay đổi tên môn học thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                            // Reload danh sách lớp để cập nhật giao diện
+                            LoadLop();
 
-                            // Reload danh sách môn học để cập nhật giao diện
-                            LoadMonHoc();
-
-                            // Tìm và chọn lại môn học vừa cập nhật
-                            for (int i = 0; i < cbx_MonHoc.Items.Count; i++)
+                            // Tìm và chọn lại lớp vừa cập nhật bằng cách sử dụng ItemsSource
+                            if (cbx_MonHoc.ItemsSource is List<Lop> danhSachLop)
                             {
-                                if (cbx_MonHoc.Items[i] is MonHoc monHoc && monHoc.MaMH == maMH)
+                                for (int i = 0; i < danhSachLop.Count; i++)
                                 {
-                                    cbx_MonHoc.SelectedIndex = i;
-                                    break;
+                                    if (danhSachLop[i].MaLop == maLop)
+                                    {
+                                        cbx_MonHoc.SelectedIndex = i;
+                                        break;
+                                    }
                                 }
                             }
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy môn học để cập nhật", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Không thể cập nhật tên lớp. Tên lớp có thể đã tồn tại.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     catch (Exception updateEx)
                     {
-                        MessageBox.Show($"Lỗi khi cập nhật mock data: {updateEx.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"Lỗi khi cập nhật lớp: {updateEx.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }

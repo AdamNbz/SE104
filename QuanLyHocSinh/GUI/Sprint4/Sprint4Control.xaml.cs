@@ -276,28 +276,6 @@ namespace GUI.Sprint4
                     }
 
                     AddStudentRowWithDropdown(i, danhSachHocSinh, diem15P, diem1T, diemCuoiKy);
-
-                    // Set học sinh đã được chọn trong dropdown
-                    if (sp_DanhSachHocSinh.Children[i - 1] is Border border && border.Child is Grid grid)
-                    {
-                        foreach (UIElement child in grid.Children)
-                        {
-                            if (child is ComboBox cbx && Grid.GetColumn(child) == 1)
-                            {
-                                // Tìm và chọn học sinh trong dropdown
-                                for (int j = 1; j < cbx.Items.Count; j++)
-                                {
-                                    string item = cbx.Items[j].ToString();
-                                    if (item.StartsWith(hocSinh.MaHS))
-                                    {
-                                        cbx.SelectedIndex = j;
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
                 }
             }
             catch (Exception ex)
@@ -332,37 +310,31 @@ namespace GUI.Sprint4
             {
                 Text = stt.ToString(),
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(sttTextBlock, 0);
             grid.Children.Add(sttTextBlock);
 
-            // ComboBox để chọn học sinh với giao diện thẳng hàng
-            ComboBox cbxHocSinh = new ComboBox
+            // TextBox readonly để hiển thị tên học sinh
+            TextBox txtHocSinh = new TextBox
             {
-                Name = $"cbx_HocSinh_{stt}",
+                Name = $"txt_HocSinh_{stt}",
+                Text = stt <= danhSachHocSinh.Count ? $"{danhSachHocSinh[stt - 1].MaHS} - {danhSachHocSinh[stt - 1].HoTen}" : "",
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                Background = Brushes.White,
-                BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
-                BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
-                FontSize = 12,
-                Height = 32
+                Background = Brushes.White, // Màu nền trắng
+                BorderThickness = new Thickness(0), // Bỏ border
+                BorderBrush = Brushes.Transparent, // Bỏ border brush
+                FontSize = 14, // Tăng font size
+                Height = 32,
+                IsReadOnly = true,
+                Focusable = false, // Không cho focus để tránh border xanh
+                Tag = stt <= danhSachHocSinh.Count ? danhSachHocSinh[stt - 1].MaHS : null // Lưu mã học sinh để dùng sau
             };
 
-            // Load danh sách học sinh trong lớp vào dropdown
-            cbxHocSinh.Items.Add("-- Chọn học sinh --");
-            foreach (var hs in danhSachHocSinh)
-            {
-                cbxHocSinh.Items.Add($"{hs.MaHS} - {hs.HoTen}");
-            }
-            cbxHocSinh.SelectedIndex = 0;
-
-            // Thêm event handler để kiểm tra trùng lặp
-            cbxHocSinh.SelectionChanged += CbxHocSinh_SelectionChanged;
-
-            Grid.SetColumn(cbxHocSinh, 1);
-            grid.Children.Add(cbxHocSinh);
+            Grid.SetColumn(txtHocSinh, 1);
+            grid.Children.Add(txtHocSinh);
 
             // Điểm 15 phút
             TextBox txtDiem15Phut = new TextBox
@@ -375,7 +347,8 @@ namespace GUI.Sprint4
                 BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
                 BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
                 Background = Brushes.White,
-                Height = 32
+                Height = 32,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(txtDiem15Phut, 2);
             grid.Children.Add(txtDiem15Phut);
@@ -391,7 +364,8 @@ namespace GUI.Sprint4
                 BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
                 BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
                 Background = Brushes.White,
-                Height = 32
+                Height = 32,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(txtDiem1Tiet, 3);
             grid.Children.Add(txtDiem1Tiet);
@@ -407,7 +381,8 @@ namespace GUI.Sprint4
                 BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
                 BorderThickness = new Thickness(0, 0, 0, 1), // Chỉ có border dưới
                 Background = Brushes.White,
-                Height = 32
+                Height = 32,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(txtDiemCuoiHK, 4);
             grid.Children.Add(txtDiemCuoiHK);
@@ -416,44 +391,7 @@ namespace GUI.Sprint4
             sp_DanhSachHocSinh.Children.Add(border);
         }
 
-        private void CbxHocSinh_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox currentComboBox && currentComboBox.SelectedIndex > 0)
-            {
-                string selectedValue = currentComboBox.SelectedItem.ToString();
-                string selectedMaHS = selectedValue.Split('-')[0].Trim();
 
-                // Kiểm tra xem học sinh này đã được chọn ở hàng khác chưa
-                foreach (Border border in sp_DanhSachHocSinh.Children)
-                {
-                    if (border.Child is Grid grid)
-                    {
-                        foreach (UIElement child in grid.Children)
-                        {
-                            if (child is ComboBox otherComboBox &&
-                                otherComboBox != currentComboBox &&
-                                otherComboBox.SelectedIndex > 0)
-                            {
-                                string otherSelectedValue = otherComboBox.SelectedItem.ToString();
-                                string otherMaHS = otherSelectedValue.Split('-')[0].Trim();
-
-                                if (selectedMaHS == otherMaHS)
-                                {
-                                    MessageBox.Show($"Học sinh {selectedValue} đã được chọn ở hàng khác!\nVui lòng chọn học sinh khác.",
-                                                  "Trùng lặp học sinh",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Warning);
-
-                                    // Reset về "-- Chọn học sinh --"
-                                    currentComboBox.SelectedIndex = 0;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         private void AddStudentRow(int stt, DTO.HocSinh hocSinh, string diem15Phut, string diem1Tiet, string diemCuoiHK)
         {
@@ -481,48 +419,30 @@ namespace GUI.Sprint4
             {
                 Text = stt.ToString(),
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(sttTextBlock, 0);
             grid.Children.Add(sttTextBlock);
 
-            // Học Sinh (TextBlock hoặc ComboBox)
-            if (hocSinh != null)
+            // Học Sinh - luôn dùng TextBox readonly
+            TextBox txtHocSinh = new TextBox
             {
-                // Hiển thị học sinh cố định
-                TextBlock tbHocSinh = new TextBlock
-                {
-                    Text = $"{hocSinh.MaHS} - {hocSinh.HoTen}",
-                    Margin = new Thickness(4),
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Tag = hocSinh.MaHS // Lưu mã học sinh để dùng sau
-                };
-                Grid.SetColumn(tbHocSinh, 1);
-                grid.Children.Add(tbHocSinh);
-            }
-            else
-            {
-                // ComboBox để chọn học sinh (cho dòng trống)
-                ComboBox cbxHocSinh = new ComboBox
-                {
-                    Name = $"cbx_HocSinh_{stt}",
-                    Margin = new Thickness(4),
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)) // Light gray
-                };
-
-                // Load tất cả học sinh để chọn
-                var tatCaHocSinh = BLL.HocSinhBLL.GetDanhSachHocSinh();
-                cbxHocSinh.Items.Add("-- Chọn học sinh --");
-                foreach (var hs in tatCaHocSinh)
-                {
-                    cbxHocSinh.Items.Add($"{hs.MaHS} - {hs.HoTen}");
-                }
-                cbxHocSinh.SelectedIndex = 0;
-
-                Grid.SetColumn(cbxHocSinh, 1);
-                grid.Children.Add(cbxHocSinh);
-            }
+                Name = $"txt_HocSinh_{stt}",
+                Text = hocSinh != null ? $"{hocSinh.MaHS} - {hocSinh.HoTen}" : "",
+                Margin = new Thickness(4),
+                VerticalAlignment = VerticalAlignment.Center,
+                Background = Brushes.White, // Màu nền trắng
+                BorderThickness = new Thickness(0), // Bỏ border
+                BorderBrush = Brushes.Transparent, // Bỏ border brush
+                FontSize = 14, // Tăng font size
+                Height = 32,
+                IsReadOnly = true,
+                Focusable = false, // Không cho focus để tránh border xanh
+                Tag = hocSinh?.MaHS // Lưu mã học sinh để dùng sau
+            };
+            Grid.SetColumn(txtHocSinh, 1);
+            grid.Children.Add(txtHocSinh);
 
             // Điểm 15 phút
             TextBox txtDiem15Phut = new TextBox
@@ -531,7 +451,8 @@ namespace GUI.Sprint4
                 Text = diem15Phut,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(txtDiem15Phut, 2);
             grid.Children.Add(txtDiem15Phut);
@@ -543,7 +464,8 @@ namespace GUI.Sprint4
                 Text = diem1Tiet,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(txtDiem1Tiet, 3);
             grid.Children.Add(txtDiem1Tiet);
@@ -555,7 +477,8 @@ namespace GUI.Sprint4
                 Text = diemCuoiHK,
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                FontSize = 14 // Tăng font size
             };
             Grid.SetColumn(txtDiemCuoiHK, 4);
             grid.Children.Add(txtDiemCuoiHK);
@@ -606,14 +529,13 @@ namespace GUI.Sprint4
 
                             if (column == 1) // Cột học sinh
                             {
-                                if (child is TextBlock tb && tb.Tag != null)
+                                if (child is TextBox txtHocSinh && txtHocSinh.Tag != null)
+                                {
+                                    maHocSinh = txtHocSinh.Tag.ToString();
+                                }
+                                else if (child is TextBlock tb && tb.Tag != null)
                                 {
                                     maHocSinh = tb.Tag.ToString();
-                                }
-                                else if (child is ComboBox cbx && cbx.SelectedIndex > 0)
-                                {
-                                    string selected = cbx.SelectedItem.ToString();
-                                    maHocSinh = selected.Split('-')[0].Trim();
                                 }
                             }
                             else if (column == 2 && child is TextBox txt15P) // Điểm 15 phút

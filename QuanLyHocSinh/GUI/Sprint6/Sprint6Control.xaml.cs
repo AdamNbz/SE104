@@ -172,8 +172,8 @@ namespace GUI.Sprint6
             Grid grid = new Grid
             {
                 Margin = new Thickness(8),
-                MinHeight = 40,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)) // Light gray
+                MinHeight = 40
+                // Background removed - no gray background
             };
 
             // Define columns
@@ -200,7 +200,6 @@ namespace GUI.Sprint6
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
                 BorderThickness = new Thickness(0),
                 IsReadOnly = true
             };
@@ -214,7 +213,6 @@ namespace GUI.Sprint6
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
                 BorderThickness = new Thickness(0),
                 IsReadOnly = true
             };
@@ -228,7 +226,6 @@ namespace GUI.Sprint6
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
                 BorderThickness = new Thickness(0),
                 IsReadOnly = true
             };
@@ -242,7 +239,6 @@ namespace GUI.Sprint6
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(211, 211, 211)),
                 BorderThickness = new Thickness(0),
                 IsReadOnly = true
             };

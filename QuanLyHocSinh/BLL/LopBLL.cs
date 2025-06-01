@@ -47,6 +47,17 @@ public static class LopBLL
         return LopDAL.LayLopTheoMa(maLop);
     }
 
+    public static string LayMaTheoLop(string tenLop)
+    {
+        if (string.IsNullOrWhiteSpace(tenLop))
+        {
+            throw new ArgumentException("Tên lớp không được để trống");
+        }
+
+        var lop = DanhSachLop.FirstOrDefault(l => l.TenLop.Equals(tenLop, StringComparison.OrdinalIgnoreCase));
+        return lop?.MaLop;
+    }
+
     public static string PhatSinhMaLop()
     {
         return LopDAL.PhatSinhMaLop();

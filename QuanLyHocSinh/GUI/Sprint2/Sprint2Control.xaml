@@ -90,7 +90,7 @@
                         </Grid>
 
                         <!-- Student list with ScrollViewer -->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="270">
                             <StackPanel x:Name="sp_DanhSachHocSinh" Margin="0,8,0,0">
                                 <!-- Danh sách học sinh sẽ được tạo động trong code-behind -->
                             </StackPanel>

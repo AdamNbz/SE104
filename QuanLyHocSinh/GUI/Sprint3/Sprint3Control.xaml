@@ -22,7 +22,7 @@
             <TextBlock Grid.Row="0"
                        Text="Tra Cứu Học Sinh"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                       HorizontalAlignment="Left"
+                       HorizontalAlignment="Center"
                        Margin="0,0,0,16"/>
 
             <!-- First Row: Basic Info -->
