@@ -236,8 +236,9 @@ public static class TimKiemBLL
         List<HocSinh> KetQua = new List<HocSinh>();
         for (int i = 0; i < hocSinhs.Count; i++)
         {
-            string MaLop = hocSinhs[i].MaLop;
-            if (LopBLL.GetDanhSachLop().Find(x=>x.MaLop==MaLop).MaKhoi == MaKhoi)
+            string MaLop = hocSinhs[i].MaLop ?? "";
+            Lop? lop = LopBLL.GetDanhSachLop().Find(x => x.MaLop == MaLop);
+            if (lop != null && lop.MaKhoi == MaKhoi)
             {
                 KetQua.Add(hocSinhs[i]);
             }
