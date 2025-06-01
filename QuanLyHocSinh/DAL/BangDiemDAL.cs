@@ -21,12 +21,10 @@ public static class BangDiemMonDAL
         context.SaveChanges();
     }
 
-    // Thêm hoặc cập nhật điểm
     public static void LuuDiem(BangDiemMon diem)
     {
         var context = DataContext.Context;
-        var diemCu = context.BANGDIEMMON
-            .FirstOrDefault(b => b.MaHocSinh == diem.MaHocSinh && b.MaMH == diem.MaMH && b.MaHK == diem.MaHK);
+        var diemCu = context.BANGDIEMMON.FirstOrDefault(b => b.MaHocSinh == diem.MaHocSinh && b.MaMH == diem.MaMH && b.MaHK == diem.MaHK);
 
         if (diemCu != null)
         {
@@ -42,32 +40,21 @@ public static class BangDiemMonDAL
         context.SaveChanges();
     }
 
-    // Lấy danh sách điểm theo học sinh
     public static List<BangDiemMon> LayDiemTheoHocSinh(string maHocSinh)
     {
-        return DataContext.Context.BANGDIEMMON
-            .Where(b => b.MaHocSinh == maHocSinh)
-            .Include(b => b.MonHoc)
-            .Include(b => b.HocKy)
-            .ToList();
+        return DataContext.Context.BANGDIEMMON.Where(b => b.MaHocSinh == maHocSinh).Include(b => b.MonHoc).Include(b => b.HocKy).ToList();
     }
 
     public static List<BangDiemMon> LayDiem(string maHS, string maMH, string maHK)
     {
         var context = DataContext.Context;
-        return context.BANGDIEMMON
-            .Where(b => b.MaHocSinh == maHS && b.MaMH == maMH && b.MaHK == maHK)
-            .Include(b => b.MonHoc)
-            .Include(b => b.HocKy)
-            .ToList();
+        return context.BANGDIEMMON.Where(b => b.MaHocSinh == maHS && b.MaMH == maMH && b.MaHK == maHK).Include(b => b.MonHoc).Include(b => b.HocKy).ToList();
     }
 
-    // Xóa điểm
     public static bool XoaDiem(string maHS, string maMH, string maHK)
     {
         var context = DataContext.Context;
-        var diem = context.BANGDIEMMON
-            .FirstOrDefault(b => b.MaHocSinh == maHS && b.MaMH == maMH && b.MaHK == maHK);
+        var diem = context.BANGDIEMMON.FirstOrDefault(b => b.MaHocSinh == maHS && b.MaMH == maMH && b.MaHK == maHK);
 
         if (diem != null)
         {
@@ -81,8 +68,7 @@ public static class BangDiemMonDAL
     public static bool CapNhatBangDiem(string maHocSinh, string maHK, string maMonHoc, BangDiemMon bangDiem)
     {
         var context = DataContext.Context;
-        var diem = context.BANGDIEMMON
-            .FirstOrDefault(b => b.MaHocSinh == maHocSinh && b.MaMH == maMonHoc && b.MaHK == maHK);
+        var diem = context.BANGDIEMMON.FirstOrDefault(b => b.MaHocSinh == maHocSinh && b.MaMH == maMonHoc && b.MaHK == maHK);
         if (diem != null)
         {
             diem.Diem15P = bangDiem.Diem15P;

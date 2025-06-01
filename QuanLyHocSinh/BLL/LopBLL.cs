@@ -47,8 +47,6 @@ public static class LopBLL
         return LopDAL.LayLopTheoMa(maLop);
     }
 
-
-
     public static string PhatSinhMaLop()
     {
         return LopDAL.PhatSinhMaLop();

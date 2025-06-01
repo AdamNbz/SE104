@@ -105,8 +105,7 @@ public class QuyDinhDAL
         try
         {
             var context = DataContext.Context;
-            var existingMonHoc = context.Set<MonHoc>()
-                .FirstOrDefault(m => m.MaMH == monHoc.MaMH);
+            var existingMonHoc = context.Set<MonHoc>().FirstOrDefault(m => m.MaMH == monHoc.MaMH);
 
             if (existingMonHoc == null)
             {
@@ -142,8 +141,7 @@ public class QuyDinhDAL
         try
         {
             var context = DataContext.Context;
-            var monHoc = context.Set<MonHoc>()
-                .FirstOrDefault(m => m.MaMH == maMH);
+            var monHoc = context.Set<MonHoc>().FirstOrDefault(m => m.MaMH == maMH);
 
             if (monHoc == null)
             {

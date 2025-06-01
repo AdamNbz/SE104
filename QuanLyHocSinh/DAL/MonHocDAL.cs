@@ -20,4 +20,23 @@ public class MonHocDAL
         var context = DataContext.Context;
         return context.Set<MonHoc>().FirstOrDefault(m => m.MaMH == maMH);
     }
+
+    public static bool CapNhatTenMonHoc(string maMH, string tenMoi)
+    {
+        try
+        {
+            var context = DataContext.Context;
+            var monHoc = context.Set<MonHoc>().FirstOrDefault(m => m.MaMH == maMH);
+
+            if (monHoc == null) return false;
+
+            monHoc.TenMH = tenMoi;
+            context.SaveChanges();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 }
