@@ -95,4 +95,10 @@ public static class BangDiemMonDAL
         }
         return false;
     }
+
+    public static bool KiemTraMonHocCoDiem(string maMH)
+    {
+        using var context = DataContext.Context;
+        return context.BANGDIEMMON.Any(b => b.MaMH == maMH);
+    }
 }
