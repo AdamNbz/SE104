@@ -261,17 +261,62 @@ namespace GUI.Sprint3
             System.Diagnostics.Debug.WriteLine($"AddResultRow - STT: {stt}, MaHS: {maHS}, HoTen: {hoTen}, GioiTinh: {gioiTinh}");
             for (int i = 0; i < values.Length; i++)
             {
-                TextBlock textBlock = new TextBlock
+                if (i == 2) // Họ Tên column
                 {
-                    Text = values[i],
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    FontSize = 12,
-                    Foreground = string.IsNullOrEmpty(values[i]) ? Brushes.LightGray : Brushes.Black,
-                    Padding = new Thickness(4)
-                };
-                Grid.SetColumn(textBlock, i);
-                grid.Children.Add(textBlock);
+                    TextBox txtHoTen = new TextBox
+                    {
+                        Text = values[i],
+                        TextAlignment = TextAlignment.Center,
+                        Margin = new Thickness(4),
+                        VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        Background = Brushes.White,
+                        BorderThickness = new Thickness(0),
+                        BorderBrush = Brushes.Transparent,
+                        IsReadOnly = true,
+                        Focusable = false,
+                        FontSize = 12,
+                        Foreground = string.IsNullOrEmpty(values[i]) ? Brushes.LightGray : Brushes.Black
+                    };
+                    Grid.SetColumn(txtHoTen, i);
+                    grid.Children.Add(txtHoTen);
+                }
+                // Use TextBox for Email and Địa Chỉ columns as well for better text display
+                else if (i == 4 || i == 5) // Địa Chỉ and Email columns
+                {
+                    TextBox txtContent = new TextBox
+                    {
+                        Text = values[i],
+                        TextAlignment = TextAlignment.Center,
+                        Margin = new Thickness(4),
+                        VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        Background = Brushes.White,
+                        BorderThickness = new Thickness(0),
+                        BorderBrush = Brushes.Transparent,
+                        IsReadOnly = true,
+                        Focusable = false,
+                        FontSize = 12,
+                        Foreground = string.IsNullOrEmpty(values[i]) ? Brushes.LightGray : Brushes.Black
+                    };
+                    Grid.SetColumn(txtContent, i);
+                    grid.Children.Add(txtContent);
+                }
+                else // Use TextBlock for other columns
+                {
+                    TextBlock textBlock = new TextBlock
+                    {
+                        Text = values[i],
+                        TextAlignment = TextAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        FontSize = 12,
+                        Foreground = string.IsNullOrEmpty(values[i]) ? Brushes.LightGray : Brushes.Black,
+                        Padding = new Thickness(4)
+                    };
+                    Grid.SetColumn(textBlock, i);
+                    grid.Children.Add(textBlock);
+                }
             }
 
             border.Child = grid;

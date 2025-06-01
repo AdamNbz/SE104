@@ -320,6 +320,7 @@ namespace GUI.Sprint4
             TextBox txtHocSinh = new TextBox
             {
                 Name = $"txt_HocSinh_{stt}",
+                TextAlignment = TextAlignment.Center,
                 Text = stt <= danhSachHocSinh.Count ? $"{danhSachHocSinh[stt - 1].MaHS} - {danhSachHocSinh[stt - 1].HoTen}" : "",
                 Margin = new Thickness(4),
                 VerticalAlignment = VerticalAlignment.Center,
