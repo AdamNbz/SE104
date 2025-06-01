@@ -34,25 +34,25 @@ public static class LopDAL
 
     public static List<Lop> LayDanhSachLop()
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         return context.Set<Lop>().Include(l => l.Khoi).ToList();
     }
 
     public static List<Lop> LayDanhSachLopTheoKhoi(string maKhoi)
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         return context.Set<Lop>().Include(l => l.Khoi).Where(l => l.MaKhoi == maKhoi).ToList();
     }
 
     public static Lop LayLopTheoMa(string maLop)
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         return context.Set<Lop>().Include(l => l.Khoi).FirstOrDefault(l => l.MaLop == maLop);
     }
 
     public static string PhatSinhMaLop()
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
 
         var lastLopCode = context.Set<Lop>().Select(l => l.MaLop).OrderByDescending(code => code).FirstOrDefault();
 
@@ -74,7 +74,7 @@ public static class LopDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
 
             if (context.Set<Lop>().Any(l => l.TenLop == lop.TenLop))
             {
@@ -94,7 +94,7 @@ public static class LopDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var existingLop = context.Set<Lop>().Find(lop.MaLop);
             if (existingLop == null) return false;
 
@@ -118,7 +118,7 @@ public static class LopDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var existingLop = context.Set<Lop>().Find(maLop);
             if (existingLop == null) return false;
 
@@ -142,7 +142,7 @@ public static class LopDAL
     {
         try
         {
-            using var context = DataContext.Context;
+            var context = DataContext.Context;
             var lop = context.Set<Lop>().Find(maLop);
             if (lop == null) return false;
 

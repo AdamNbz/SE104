@@ -16,11 +16,9 @@ public static class BangDiemMonDAL
 {
     public static void ThemBangDiem(BangDiemMon bangDiem)
     {
-        using (var context = new DataContext())
-        {
-            context.BANGDIEMMON.Add(bangDiem);
-            context.SaveChanges();
-        }
+        var context = new DataContext();
+        context.BANGDIEMMON.Add(bangDiem);
+        context.SaveChanges();
     }
 
     // Thêm hoặc cập nhật điểm
@@ -98,7 +96,7 @@ public static class BangDiemMonDAL
 
     public static bool KiemTraMonHocCoDiem(string maMH)
     {
-        using var context = DataContext.Context;
+        var context = DataContext.Context;
         return context.BANGDIEMMON.Any(b => b.MaMH == maMH);
     }
 }
