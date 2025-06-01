@@ -15,7 +15,7 @@
     <Grid>
         <!-- Chia layout thành 2 cột -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180"/> <!-- Cột cho thanh điều hướng - thu nhỏ từ 250 xuống 180 -->
+            <ColumnDefinition Width="220"/> <!-- Cột cho thanh điều hướng - tăng lên 250 để hiển thị đầy đủ text -->
             <ColumnDefinition Width="*"/>   <!-- Cột cho nội dung -->
         </Grid.ColumnDefinitions>
 
