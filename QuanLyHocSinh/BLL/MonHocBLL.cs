@@ -33,4 +33,36 @@ public class MonHocBLL
 
         return MonHocDAL.CapNhatTenMonHoc(maMH, tenMoi);
     }
+
+    public static string PhatSinhMaMonHoc()
+    {
+        return MonHocDAL.PhatSinhMaMonHoc();
+    }
+
+    public static bool ThemMonHocMoi(string tenMonHoc)
+    {
+        if (string.IsNullOrWhiteSpace(tenMonHoc))
+        {
+            throw new ArgumentException("Tên môn học không được để trống");
+        }
+
+        // Check if subject name already exists
+        var existingMonHoc = MonHocDAL.LayDanhSachMonHoc()
+            .FirstOrDefault(m => m.TenMH.Equals(tenMonHoc, StringComparison.OrdinalIgnoreCase));
+
+        if (existingMonHoc != null)
+        {
+            return false; // Subject name already exists
+        }
+
+        string maMonHoc = PhatSinhMaMonHoc();
+
+        MonHoc monHoc = new MonHoc
+        {
+            MaMH = maMonHoc,
+            TenMH = tenMonHoc
+        };
+
+        return MonHocDAL.ThemMonHoc(monHoc);
+    }
 }

@@ -52,22 +52,26 @@ public static class LopDAL
 
     public static string PhatSinhMaLop()
     {
-        var context = DataContext.Context;
-
-        var lastLopCode = context.Set<Lop>().Select(l => l.MaLop).OrderByDescending(code => code).FirstOrDefault();
-
-        int nxt = 1;
-
-        if (lastLopCode != null && lastLopCode.StartsWith("L"))
+        // Use fresh context to avoid cache issues
+        using (var context = new DataContext())
         {
-            string numberPart = lastLopCode.Substring(1);
-            if (int.TryParse(numberPart, out int cur))
-            {
-                nxt = cur + 1;
-            }
-        }
+            var lastLopCode = context.Set<Lop>().Select(l => l.MaLop).OrderByDescending(code => code).FirstOrDefault();
 
-        return $"L{nxt:D3}";
+            int nxt = 1;
+
+            if (lastLopCode != null && lastLopCode.StartsWith("L"))
+            {
+                string numberPart = lastLopCode.Substring(1);
+                if (int.TryParse(numberPart, out int cur))
+                {
+                    nxt = cur + 1;
+                }
+            }
+
+            string newMaLop = $"L{nxt:D3}";
+            System.Diagnostics.Debug.WriteLine($"Generated new MaLop: {newMaLop} (last was: {lastLopCode})");
+            return newMaLop;
+        }
     }
 
     public static bool ThemLop(Lop lop)

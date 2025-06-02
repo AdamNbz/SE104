@@ -107,6 +107,35 @@ public class QuyDinhBLL
         return QuyDinhDAL.LayQuyDinh();
     }
 
+    // MAIN METHOD: Update all parameters at once with validation
+    public bool CapNhatTatCaQuyDinh(int tuoiToiThieu, int tuoiToiDa, int siSoToiDa, int diemChuanDatMon)
+    {
+        // Validate tuổi
+        if (tuoiToiThieu <= 0 || tuoiToiDa <= 0)
+        {
+            throw new ArgumentException("Tuổi phải lớn hơn 0");
+        }
+
+        if (tuoiToiThieu >= tuoiToiDa)
+        {
+            throw new ArgumentException("Tuổi tối thiểu phải nhỏ hơn tuổi tối đa");
+        }
+
+        // Validate sĩ số
+        if (siSoToiDa <= 0)
+        {
+            throw new ArgumentException("Sĩ số tối đa phải lớn hơn 0");
+        }
+
+        // Validate điểm chuẩn
+        if (diemChuanDatMon < 0 || diemChuanDatMon > 10)
+        {
+            throw new ArgumentException("Điểm chuẩn đạt môn phải từ 0 đến 10");
+        }
+
+        return QuyDinhDAL.CapNhatTatCaQuyDinh(tuoiToiThieu, tuoiToiDa, siSoToiDa, diemChuanDatMon);
+    }
+
     public List<MonHoc> LayDanhSachMonHoc()
     {
         return MonHocDAL.LayDanhSachMonHoc();

@@ -9,120 +9,496 @@
         Loaded="UserControl_Loaded">
     <materialDesign:Card Margin="16" UniformCornerRadius="8">
         <Grid Margin="16">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <!-- TabControl with 4 tabs -->
+            <TabControl x:Name="tabControl_Sprint7"
+                        Style="{StaticResource MaterialDesignTabControl}"
+                        FontSize="16">
 
-            <!-- Main Content -->
-            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <!-- Header -->
-                <TextBlock Text="THAY ĐỔI TÊN LỚP"
-                           Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,32"/>
+                <!-- Tab 1: Thay đổi quy định -->
+                <TabItem Header="Thay đổi quy định">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                <!-- Selection Controls -->
-                <Grid HorizontalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="24"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="24"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                        <!-- Main Content -->
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Header -->
+                            <TextBlock Text="THAY ĐỔI QUY ĐỊNH"
+                                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,32"/>
 
-                <!-- Tên lớp hiện tại -->
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="400"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                            <!-- Settings Controls -->
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Column="0"
-                               Text="Tên lớp hiện tại"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               VerticalAlignment="Center"
-                               Margin="0,0,16,0"/>
+                                <!-- Quy định tuổi tối thiểu -->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="300"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                    <ComboBox Grid.Column="1"
-                              x:Name="cbx_MonHoc"
-                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                              FontSize="15"
-                              SelectionChanged="cbx_MonHoc_SelectionChanged"/>
-                </Grid>
+                                    <TextBlock Grid.Column="0"
+                                               Text="Quy định tuổi tối thiểu"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
 
-                <!-- Mã lớp hiện tại -->
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="400"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_TuoiToiThieu"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"/>
+                                </Grid>
 
-                    <TextBlock Grid.Column="0"
-                               Text="Mã lớp hiện tại"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               VerticalAlignment="Center"
-                               Margin="0,0,16,0"/>
+                                <!-- Quy định tuổi tối đa -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="300"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="1"
-                             x:Name="txb_MaMonHoc"
-                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             FontSize="15"
-                             IsReadOnly="True"
-                             Background="#CCCCCC"
-                             Cursor="Arrow"/>
-                </Grid>
+                                    <TextBlock Grid.Column="0"
+                                               Text="Quy định tuổi tối đa"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
 
-                <!-- Tên lớp mới -->
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="400"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_TuoiToiDa"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"/>
+                                </Grid>
 
-                    <TextBlock Grid.Column="0"
-                               Text="Tên lớp mới"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               VerticalAlignment="Center"
-                               Margin="0,0,16,0"/>
+                                <!-- Sĩ số lớp tối đa của các lớp -->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="300"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="1"
-                             x:Name="txb_TenMoi"
-                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             FontSize="15"
-                             MaxLength="100"
-                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"/>
-                </Grid>
-                </Grid>
+                                    <TextBlock Grid.Column="0"
+                                               Text="Sĩ số lớp tối đa của các lớp"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
 
-                <!-- Buttons -->
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,32,0,0">
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_SiSoToiDa"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"/>
+                                </Grid>
 
-                    <Button x:Name="btn_LuuThayDoi"
-                            Content="Lưu thay đổi"
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            FontSize="16"
-                            Margin="0,0,8,0"
-                            Click="btn_LuuThayDoi_Click"/>
+                                <!-- Điểm chuẩn đạt môn -->
+                                <Grid Grid.Row="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="300"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                    <Button x:Name="btn_Thoat"
-                            Content="Thoát"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            FontSize="16"
-                            Margin="8,0,0,0"
-                            Click="btn_Thoat_Click"/>
-                </StackPanel>
-            </StackPanel>
+                                    <TextBlock Grid.Column="0"
+                                               Text="Điểm chuẩn đạt môn"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_DiemChuanDatMon"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,32,0,0">
+
+                                <Button x:Name="btn_LuuQuyDinh"
+                                        Content="Lưu thay đổi"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        FontSize="16"
+                                        Margin="0,0,8,0"
+                                        Click="btn_LuuQuyDinh_Click"/>
+
+                                <Button x:Name="btn_TaiLaiQuyDinh"
+                                        Content="Tải lại"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        FontSize="16"
+                                        Margin="8,0,0,0"
+                                        Click="btn_TaiLaiQuyDinh_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <!-- Tab 2: Thêm một lớp mới -->
+                <TabItem Header="Thêm một lớp mới">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Main Content -->
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Header -->
+                            <TextBlock Text="THÊM MỘT LỚP MỚI"
+                                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,32"/>
+
+                            <!-- Form Controls -->
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Tên lớp mới -->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Tên lớp mới"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_TenLopMoi"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             MaxLength="50"
+                                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                             TextChanged="txb_TenLopMoi_TextChanged"/>
+                                </Grid>
+
+                                <!-- Mã lớp học -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Mã lớp học"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_MaLopHoc"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             IsReadOnly="True"
+                                             Background="#CCCCCC"
+                                             Foreground="#888888"
+                                             Text="&lt;Giá trị phát sinh&gt;"/>
+                                </Grid>
+
+                                <!-- Lớp thuộc khối -->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Lớp thuộc khối"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <ComboBox Grid.Column="1"
+                                              x:Name="cbx_LopThuocKhoi"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              FontSize="15"
+                                              DisplayMemberPath="TenKhoi"
+                                              SelectedValuePath="MaKhoi"
+                                              SelectionChanged="cbx_LopThuocKhoi_SelectionChanged"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,32,0,0">
+
+                                <Button x:Name="btn_ThemLop"
+                                        Content="Thêm lớp"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                        FontSize="16"
+                                        Margin="0,0,8,0"
+                                        IsEnabled="False"
+                                        Click="btn_ThemLop_Click"/>
+
+                                <Button x:Name="btn_HuyThemLop"
+                                        Content="Hủy"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        FontSize="16"
+                                        Margin="8,0,0,0"
+                                        Click="btn_HuyThemLop_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <!-- Tab 3: Thay đổi tên lớp -->
+                <TabItem Header="Thay đổi tên lớp">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Main Content -->
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Header -->
+                            <TextBlock Text="THAY ĐỔI TÊN LỚP"
+                                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,32"/>
+
+                            <!-- Selection Controls -->
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Tên lớp hiện tại -->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Tên lớp hiện tại"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <ComboBox Grid.Column="1"
+                                              x:Name="cbx_MonHoc"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              FontSize="15"
+                                              SelectionChanged="cbx_MonHoc_SelectionChanged"/>
+                                </Grid>
+
+                                <!-- Mã lớp hiện tại -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Mã lớp hiện tại"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_MaMonHoc"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             IsReadOnly="True"
+                                             Background="#CCCCCC"
+                                             Cursor="Arrow"/>
+                                </Grid>
+
+                                <!-- Tên lớp mới -->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Tên lớp mới"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_TenMoi"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             MaxLength="100"
+                                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,32,0,0">
+
+                                <Button x:Name="btn_LuuThayDoi"
+                                        Content="Lưu thay đổi"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        FontSize="16"
+                                        Margin="0,0,8,0"
+                                        Click="btn_LuuThayDoi_Click"/>
+
+                                <Button x:Name="btn_Thoat"
+                                        Content="Thoát"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        FontSize="16"
+                                        Margin="8,0,0,0"
+                                        Click="btn_Thoat_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <!-- Tab 4: Thêm môn học mới -->
+                <TabItem Header="Thêm môn học mới">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Main Content -->
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Header -->
+                            <TextBlock Text="THÊM MÔN HỌC MỚI"
+                                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,32"/>
+
+                            <!-- Form Controls -->
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Tên môn học -->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Tên môn học"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_TenMonHoc"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             MaxLength="100"
+                                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                             TextChanged="txb_TenMonHoc_TextChanged"/>
+                                </Grid>
+
+                                <!-- Mã môn học -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Mã môn học"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="txb_MaMonHocMoi"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             IsReadOnly="True"
+                                             Background="#CCCCCC"
+                                             Foreground="#888888"
+                                             Text="&lt;Giá trị phát sinh&gt;"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,32,0,0">
+
+                                <Button x:Name="btn_ThemMonHoc"
+                                        Content="Thêm môn học"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                        FontSize="16"
+                                        Margin="0,0,8,0"
+                                        IsEnabled="False"
+                                        Click="btn_ThemMonHoc_Click"/>
+
+                                <Button x:Name="btn_HuyThemMonHoc"
+                                        Content="Hủy"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        FontSize="16"
+                                        Margin="8,0,0,0"
+                                        Click="btn_HuyThemMonHoc_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </Grid>
     </materialDesign:Card>
 </UserControl>

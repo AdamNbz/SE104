@@ -28,7 +28,8 @@ namespace GUI.Sprint1
             txBx_HoTen.Clear();
             dtPk_NgaySinh.SelectedDate = null;
 
-            // Load tuổi tối đa từ quy định
+            // Load tuổi từ quy định
+            LoadTuoiToiThieu();
             LoadTuoiToiDa();
 
             // Clear tuổi học sinh
@@ -76,6 +77,20 @@ namespace GUI.Sprint1
         private void dtPk_NgaySinh_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             CapNhatTuoiHocSinh();
+        }
+
+        private void LoadTuoiToiThieu()
+        {
+            try
+            {
+                int tuoiToiThieu = DAL.ThamSoDAL.LayTuoiToiThieu();
+                txBx_TuoiToiThieu.Text = tuoiToiThieu.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải tuổi tối thiểu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                txBx_TuoiToiThieu.Text = "15"; // Giá trị mặc định
+            }
         }
 
         private void LoadTuoiToiDa()

@@ -76,6 +76,17 @@ public class DataContext : DbContext
         }
     }
 
+    // Method to refresh the singleton context (clear cache)
+    public static void RefreshContext()
+    {
+        if (_instance != null)
+        {
+            _instance.Dispose();
+            _instance = null;
+        }
+        System.Diagnostics.Debug.WriteLine("DataContext refreshed - cache cleared");
+    }
+
     private void Migrations()
     {
         var migrations = Database.GetAppliedMigrations();

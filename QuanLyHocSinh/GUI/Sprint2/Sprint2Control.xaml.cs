@@ -192,9 +192,21 @@ namespace GUI.Sprint2
                     {
                         foreach (UIElement control in hocSinhGrid.Children)
                         {
-                            if (control is ComboBox comboBox && comboBox.SelectedItem is HocSinh selectedStudent)
+                            if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1)
                             {
-                                selectedStudentIds.Add(selectedStudent.MaHS);
+                                if (comboBox.SelectedItem is HocSinh selectedStudent)
+                                {
+                                    selectedStudentIds.Add(selectedStudent.MaHS);
+                                }
+                                // Nếu ComboBox bị readonly (đã nhận vào lớp), cũng coi như đã chọn học sinh
+                                else if (comboBox.IsReadOnly && !string.IsNullOrEmpty(comboBox.Text))
+                                {
+                                    HocSinh hocSinhFromDisabledComboBox = danhSachHocSinh.FirstOrDefault(hs => hs.HoTen == comboBox.Text);
+                                    if (hocSinhFromDisabledComboBox != null)
+                                    {
+                                        selectedStudentIds.Add(hocSinhFromDisabledComboBox.MaHS);
+                                    }
+                                }
                             }
                             else if (control is TextBox textBox && Grid.GetColumn(textBox) == 1 && !string.IsNullOrEmpty(textBox.Text))
                             {
@@ -222,14 +234,14 @@ namespace GUI.Sprint2
                     baseStudentList = danhSachHocSinh.Where(hs => string.IsNullOrEmpty(hs.MaLop)).ToList();
                 }
 
-                // Cập nhật ItemsSource cho từng ComboBox (chỉ những ô chưa thành TextBox)
+                // Cập nhật ItemsSource cho từng ComboBox (chỉ những ô enabled và chưa thành TextBox)
                 foreach (UIElement element in sp_DanhSachHocSinh.Children)
                 {
                     if (element is Grid hocSinhGrid)
                     {
                         foreach (UIElement control in hocSinhGrid.Children)
                         {
-                            if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1)
+                            if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1 && !comboBox.IsReadOnly)
                             {
                                 // Lưu lại học sinh hiện tại được chọn
                                 HocSinh currentSelected = comboBox.SelectedItem as HocSinh;
@@ -323,8 +335,8 @@ namespace GUI.Sprint2
 
                                         if (hocSinhTrongDS != null)
                                         {
-                                            // Thay thế ComboBox bằng TextBox readonly
-                                            ReplaceComboBoxWithTextBox(hocSinhGrid, hocSinhTrongDS.HoTen);
+                                            // Disable ComboBox thay vì thay thế bằng TextBox
+                                            DisableComboBox(comboBox, hocSinhTrongDS.HoTen);
                                             UpdateHocSinhInfo(hocSinhGrid, hocSinhTrongDS);
                                         }
                                         break;
@@ -508,16 +520,8 @@ namespace GUI.Sprint2
                         {
                             if (control is ComboBox comboBox)
                             {
-                                // Xóa selection và cả text hiển thị
-                                comboBox.SelectedItem = null;
-                                comboBox.Text = string.Empty;
-
-                                // Reset trạng thái enabled và màu sắc
-                                comboBox.IsReadOnly = false;
-                                comboBox.IsEnabled = true;
-                                comboBox.Background = Brushes.White;
-                                comboBox.Foreground = Brushes.Black;
-                                comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border mặc định
+                                // Enable lại ComboBox nếu bị disabled
+                                EnableComboBox(comboBox);
 
                                 // Thiết lập lại ItemsSource như cũ
                                 comboBox.ItemsSource = danhSachHocSinhChuaCoLop;
@@ -640,7 +644,40 @@ namespace GUI.Sprint2
             }
         }
 
-        // Phương thức thay thế ComboBox bằng TextBox readonly
+        // Phương thức disable ComboBox sau khi học sinh được nhận vào lớp
+        private void DisableComboBox(ComboBox comboBox, string hoTen)
+        {
+            if (comboBox != null)
+            {
+                // Set text và làm readonly thay vì disable
+                comboBox.Text = hoTen;
+                comboBox.SelectedItem = danhSachHocSinh.FirstOrDefault(hs => hs.HoTen == hoTen);
+                comboBox.IsReadOnly = true; // Readonly thay vì disable
+                comboBox.IsHitTestVisible = false; // Không thể click dropdown
+                comboBox.Focusable = false; // Không thể focus
+                comboBox.Background = Brushes.White; // Nền trắng
+                comboBox.Foreground = Brushes.Black; // Chữ đen bình thường
+                comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border giống các ô khác
+            }
+        }
+
+        // Phương thức enable lại ComboBox
+        private void EnableComboBox(ComboBox comboBox)
+        {
+            if (comboBox != null)
+            {
+                comboBox.IsEnabled = true;
+                comboBox.IsReadOnly = false;
+                comboBox.IsHitTestVisible = true;
+                comboBox.Focusable = true;
+                comboBox.Background = Brushes.White;
+                comboBox.Foreground = Brushes.Black;
+                comboBox.Text = string.Empty;
+                comboBox.SelectedItem = null;
+            }
+        }
+
+        // Phương thức thay thế ComboBox bằng TextBox readonly (giữ lại cho tương thích)
         private void ReplaceComboBoxWithTextBox(Grid hocSinhGrid, string hoTen)
         {
             // Tìm ComboBox trong grid
@@ -756,23 +793,20 @@ namespace GUI.Sprint2
 
                     if (hocSinhTrongDS != null)
                     {
-                        // Kiểm tra xem đã là TextBox chưa
-                        bool isAlreadyTextBox = false;
+                        // Tìm ComboBox trong grid và disable nó
                         foreach (UIElement control in hocSinhGrid.Children)
                         {
-                            if (control is TextBox textBox && Grid.GetColumn(textBox) == 1)
+                            if (control is ComboBox comboBox && Grid.GetColumn(comboBox) == 1)
                             {
-                                isAlreadyTextBox = true;
-                                // Cập nhật lại thông tin nếu cần
+                                DisableComboBox(comboBox, hocSinhTrongDS.HoTen);
+                                break;
+                            }
+                            else if (control is TextBox textBox && Grid.GetColumn(textBox) == 1)
+                            {
+                                // Nếu đã là TextBox, cập nhật lại thông tin
                                 textBox.Text = hocSinhTrongDS.HoTen;
                                 break;
                             }
-                        }
-
-                        if (!isAlreadyTextBox)
-                        {
-                            // Thay thế ComboBox bằng TextBox readonly
-                            ReplaceComboBoxWithTextBox(hocSinhGrid, hocSinhTrongDS.HoTen);
                         }
 
                         // Cập nhật thông tin học sinh vào các ô bên phải
@@ -879,16 +913,8 @@ namespace GUI.Sprint2
                             {
                                 if (control is ComboBox comboBox)
                                 {
-                                    // Xóa lựa chọn và text hiển thị
-                                    comboBox.SelectedItem = null;
-                                    comboBox.Text = string.Empty;
-
-                                    // Reset màu nền và enable lại ComboBox
-                                    comboBox.IsReadOnly = false;
-                                    comboBox.IsEnabled = true;
-                                    comboBox.Background = Brushes.White;
-                                    comboBox.Foreground = Brushes.Black;
-                                    comboBox.BorderBrush = SystemColors.ControlDarkBrush; // Border mặc định
+                                    // Enable lại ComboBox nếu bị disabled
+                                    EnableComboBox(comboBox);
                                 }
                                 else if (control is TextBox textBox)
                                 {

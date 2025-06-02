@@ -10,17 +10,35 @@ namespace DAL;
 
 public static class ThamSoDAL
 {
-    public static int LayTuoiToiDa() => DataContext.Context.THAMSO.First().TuoiToiDa;
-    public static int LayTuoiToiThieu() => DataContext.Context.THAMSO.First().TuoiToiThieu;
+    // Use fresh context to avoid cache issues
+    public static int LayTuoiToiDa()
+    {
+        using (var context = new DataContext())
+        {
+            return context.THAMSO.First().TuoiToiDa;
+        }
+    }
+
+    public static int LayTuoiToiThieu()
+    {
+        using (var context = new DataContext())
+        {
+            return context.THAMSO.First().TuoiToiThieu;
+        }
+    }
+
     public static int LayMocDiemDat()
     {
-        var thamSo = DataContext.Context.Set<ThamSo>().FirstOrDefault();
-
-        if (thamSo.MocDiemDat == 0)
+        using (var context = new DataContext())
         {
-            thamSo.MocDiemDat = 5;
-            DataContext.Context.SaveChanges();
+            var thamSo = context.Set<ThamSo>().FirstOrDefault();
+
+            if (thamSo != null && thamSo.MocDiemDat == 0)
+            {
+                thamSo.MocDiemDat = 5;
+                context.SaveChanges();
+            }
+            return thamSo?.MocDiemDat ?? 5;
         }
-        return thamSo.MocDiemDat;
     }
 }

@@ -74,7 +74,7 @@
 
             <Grid Style="{StaticResource grid}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1.5*"/>
                     <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="0.3*"/>
@@ -84,17 +84,19 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <Label Style="{StaticResource lb}" Content="Email"/>
-                    <TextBox x:Name="txBx_Email"
-     Style="{StaticResource CustomTextBox2}"/>
-
+                    <Label Style="{StaticResource lb}" Content="Tuổi tối thiểu"/>
+                    <TextBox x:Name="txBx_TuoiToiThieu"
+                         Style="{StaticResource CustomTextBox2}"
+                         IsReadOnly="True"
+                         Background="#CCCCCC"
+                         Cursor="Arrow"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2">
                     <Label Style="{StaticResource lb}" Content="Ngày sinh"/>
                     <DatePicker x:Name="dtPk_NgaySinh"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
-                            FontSize="{Binding ElementName=txBx_Email, Path=FontSize}"
+                            FontSize="15"
                             Height="53"
                             Focusable="False"
                             IsTabStop="True"
@@ -121,7 +123,18 @@
             </Grid>
 
             <Grid Style="{StaticResource grid}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+
                 <StackPanel Grid.Column="0">
+                    <Label Style="{StaticResource lb}" Content="Email"/>
+                    <TextBox x:Name="txBx_Email" Style="{StaticResource CustomTextBox2}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
                     <Label Style="{StaticResource lb}" Content="Địa chỉ"/>
                     <TextBox x:Name="txBx_DiaChi" Style="{StaticResource CustomTextBox2}"/>
                 </StackPanel>
