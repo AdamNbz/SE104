@@ -24,6 +24,32 @@ namespace GUI.Sprint2
             InitializeComponent();
         }
 
+        // Method public để reload danh sách lớp từ bên ngoài
+        public void ReloadDanhSachLop()
+        {
+            try
+            {
+                // Cập nhật lại danh sách lớp
+                danhSachLop = BLL.LopBLL.GetDanhSachLop();
+                cbx_Lop.ItemsSource = danhSachLop;
+
+                // Giữ lại selection hiện tại nếu có
+                if (cbx_Lop.SelectedItem != null)
+                {
+                    var currentSelection = cbx_Lop.SelectedItem as Lop;
+                    var updatedLop = danhSachLop.FirstOrDefault(l => l.MaLop == currentSelection.MaLop);
+                    if (updatedLop != null)
+                    {
+                        cbx_Lop.SelectedItem = updatedLop;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi reload danh sách lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             try

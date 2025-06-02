@@ -28,6 +28,60 @@ namespace GUI.Sprint7
             InitializeComponent();
         }
 
+        // Method public để reload danh sách lớp từ bên ngoài
+        public void ReloadDanhSachLop()
+        {
+            try
+            {
+                LoadLop(); // Reload tab 3 (Thay đổi tên lớp)
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi reload danh sách lớp: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Method để reload các controls khác (Sprint 2, etc.)
+        private void ReloadOtherControls()
+        {
+            try
+            {
+                // Tìm MainWindow và reload Sprint 2 nếu có
+                var mainWindow = Window.GetWindow(this) as MainWindow;
+                if (mainWindow != null)
+                {
+                    // Tìm Sprint2Control trong MainWindow
+                    var sprint2Control = FindVisualChild<Sprint2.Sprint2Control>(mainWindow);
+                    if (sprint2Control != null)
+                    {
+                        sprint2Control.ReloadDanhSachLop();
+                        System.Diagnostics.Debug.WriteLine("Reloaded Sprint 2 danh sách lớp");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error reloading other controls: {ex.Message}");
+                // Không hiển thị MessageBox để tránh làm phiền user
+            }
+        }
+
+        // Helper method để tìm child control
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T)
+                    return (T)child;
+
+                var childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                    return childOfChild;
+            }
+            return null;
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             LoadLop();
@@ -177,6 +231,9 @@ namespace GUI.Sprint7
         }
 
         // Methods for "Thay đổi quy định" tab
+        // Lưu giá trị cũ để reset khi có lỗi
+        private int oldTuoiToiThieu, oldTuoiToiDa, oldSiSoToiDa, oldDiemChuanDatMon;
+
         private void LoadQuyDinh()
         {
             try
@@ -186,6 +243,12 @@ namespace GUI.Sprint7
 
                 if (thamSo != null)
                 {
+                    // Lưu giá trị cũ
+                    oldTuoiToiThieu = thamSo.TuoiToiThieu;
+                    oldTuoiToiDa = thamSo.TuoiToiDa;
+                    oldSiSoToiDa = thamSo.SiSoToiDa;
+                    oldDiemChuanDatMon = thamSo.MocDiemDat;
+
                     // Ensure TextBoxes are properly set with current values
                     txb_TuoiToiThieu.Text = thamSo.TuoiToiThieu.ToString();
                     txb_TuoiToiDa.Text = thamSo.TuoiToiDa.ToString();
@@ -198,6 +261,11 @@ namespace GUI.Sprint7
                 else
                 {
                     // Set default values if no data found
+                    oldTuoiToiThieu = 15;
+                    oldTuoiToiDa = 20;
+                    oldSiSoToiDa = 40;
+                    oldDiemChuanDatMon = 5;
+
                     txb_TuoiToiThieu.Text = "15";
                     txb_TuoiToiDa.Text = "20";
                     txb_SiSoToiDa.Text = "40";
@@ -225,32 +293,43 @@ namespace GUI.Sprint7
                 System.Diagnostics.Debug.WriteLine($"- SiSoToiDa: '{txb_SiSoToiDa.Text}'");
                 System.Diagnostics.Debug.WriteLine($"- DiemChuanDatMon: '{txb_DiemChuanDatMon.Text}'");
 
-                // Validate input
-                if (string.IsNullOrWhiteSpace(txb_TuoiToiThieu.Text) || !int.TryParse(txb_TuoiToiThieu.Text, out int tuoiToiThieu))
+                // Validate input và reset về giá trị cũ nếu có ô trống
+                bool hasEmptyField = false;
+                int tuoiToiThieu, tuoiToiDa, siSoToiDa, diemChuanDatMon;
+
+                if (string.IsNullOrWhiteSpace(txb_TuoiToiThieu.Text) || !int.TryParse(txb_TuoiToiThieu.Text, out tuoiToiThieu))
                 {
-                    MessageBox.Show("Vui lòng nhập tuổi tối thiểu (số nguyên)", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    txb_TuoiToiThieu.Focus();
-                    return;
+                    txb_TuoiToiThieu.Text = oldTuoiToiThieu.ToString();
+                    tuoiToiThieu = oldTuoiToiThieu;
+                    hasEmptyField = true;
                 }
 
-                if (string.IsNullOrWhiteSpace(txb_TuoiToiDa.Text) || !int.TryParse(txb_TuoiToiDa.Text, out int tuoiToiDa))
+                if (string.IsNullOrWhiteSpace(txb_TuoiToiDa.Text) || !int.TryParse(txb_TuoiToiDa.Text, out tuoiToiDa))
                 {
-                    MessageBox.Show("Vui lòng nhập tuổi tối đa (số nguyên)", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    txb_TuoiToiDa.Focus();
-                    return;
+                    txb_TuoiToiDa.Text = oldTuoiToiDa.ToString();
+                    tuoiToiDa = oldTuoiToiDa;
+                    hasEmptyField = true;
                 }
 
-                if (string.IsNullOrWhiteSpace(txb_SiSoToiDa.Text) || !int.TryParse(txb_SiSoToiDa.Text, out int siSoToiDa))
+                if (string.IsNullOrWhiteSpace(txb_SiSoToiDa.Text) || !int.TryParse(txb_SiSoToiDa.Text, out siSoToiDa))
                 {
-                    MessageBox.Show("Vui lòng nhập sĩ số tối đa (số nguyên)", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    txb_SiSoToiDa.Focus();
-                    return;
+                    txb_SiSoToiDa.Text = oldSiSoToiDa.ToString();
+                    siSoToiDa = oldSiSoToiDa;
+                    hasEmptyField = true;
                 }
 
-                if (string.IsNullOrWhiteSpace(txb_DiemChuanDatMon.Text) || !int.TryParse(txb_DiemChuanDatMon.Text, out int diemChuanDatMon))
+                if (string.IsNullOrWhiteSpace(txb_DiemChuanDatMon.Text) || !int.TryParse(txb_DiemChuanDatMon.Text, out diemChuanDatMon))
                 {
-                    MessageBox.Show("Vui lòng nhập điểm chuẩn đạt môn (số nguyên)", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    txb_DiemChuanDatMon.Focus();
+                    txb_DiemChuanDatMon.Text = oldDiemChuanDatMon.ToString();
+                    diemChuanDatMon = oldDiemChuanDatMon;
+                    hasEmptyField = true;
+                }
+
+                // Thông báo nếu có ô trống đã được reset
+                if (hasEmptyField)
+                {
+                    MessageBox.Show("Hãy nhập giá trị mới.",
+                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
 
@@ -460,6 +539,12 @@ namespace GUI.Sprint7
                         txb_TenLopMoi.Text = "";
                         GenerateMaLop(); // Generate new code
                         cbx_LopThuocKhoi.SelectedIndex = 0;
+
+                        // Reload danh sách lớp trong tab 3 (Thay đổi tên lớp)
+                        LoadLop();
+
+                        // Reload danh sách lớp trong Sprint 2 nếu có
+                        ReloadOtherControls();
                     }
                     else
                     {

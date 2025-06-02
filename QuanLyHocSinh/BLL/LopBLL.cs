@@ -93,7 +93,15 @@ public static class LopBLL
             MaKhoi = maKhoi
         };
 
-        return LopDAL.ThemLop(lop);
+        bool result = LopDAL.ThemLop(lop);
+
+        if (result)
+        {
+            // Cập nhật danh sách lớp trong memory
+            DanhSachLop.Add(lop);
+        }
+
+        return result;
     }
 
     public static bool CapNhatLop(string maLop, string tenLop, string maKhoi)
