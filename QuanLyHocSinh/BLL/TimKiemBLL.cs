@@ -81,7 +81,7 @@ public static class TimKiemBLL
                 MinSiSo = null;
             }
             
-            if (int.TryParse(minSiSo, out var resultmax))
+            if (int.TryParse(maxSiSo, out var resultmax))
             {
                 MaxSiSo = resultmax;
             }
