@@ -101,9 +101,6 @@ namespace GUI.Sprint6
 
                 // TODO: Generate actual report
                 GenerateReport();
-
-                MessageBox.Show($"Đã lập báo cáo tổng kết {cbx_HocKy.SelectedItem}",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
