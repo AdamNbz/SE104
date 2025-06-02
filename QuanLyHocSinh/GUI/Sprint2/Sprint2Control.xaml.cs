@@ -24,6 +24,26 @@ namespace GUI.Sprint2
             InitializeComponent();
         }
 
+        // Helper method để convert mã khối thành tên hiển thị
+        private string ConvertMaKhoiToDisplay(string maKhoi)
+        {
+            if (string.IsNullOrEmpty(maKhoi))
+                return "";
+
+            // Nếu mã khối có dạng "K010", "K011", "K012" thì convert thành "10", "11", "12"
+            if (maKhoi.StartsWith("K") && maKhoi.Length >= 4)
+            {
+                string numberPart = maKhoi.Substring(1); // Bỏ chữ "K"
+                if (int.TryParse(numberPart, out int number))
+                {
+                    return number.ToString(); // "K010" -> "10", "K011" -> "11", "K012" -> "12"
+                }
+            }
+
+            // Fallback: trả về mã gốc
+            return maKhoi;
+        }
+
         // Method public để reload danh sách lớp từ bên ngoài
         public void ReloadDanhSachLop()
         {
@@ -306,8 +326,8 @@ namespace GUI.Sprint2
                     Lop lopDuocChon = cbx_Lop.SelectedItem as Lop;
                     if (lopDuocChon == null) return;
 
-                    // Cập nhật thông tin khối
-                    txb_Khoi.Text = lopDuocChon.MaKhoi ?? "";
+                    // Cập nhật thông tin khối với format hiển thị
+                    txb_Khoi.Text = ConvertMaKhoiToDisplay(lopDuocChon.MaKhoi);
 
                     // Tính sĩ số lớp
                     List<HocSinh> danhSachHocSinhTrongLop = BLL.LopBLL.LayDanhSachHocSinh(lopDuocChon.MaLop);
