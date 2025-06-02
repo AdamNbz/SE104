@@ -386,6 +386,28 @@ namespace GUI.Sprint3
                     // Debug: Kiểm tra dữ liệu
                     System.Diagnostics.Debug.WriteLine($"Debug - STT: {i + 1}, MaHS: {hocSinh.MaHS}, HoTen: {hocSinh.HoTen}, GioiTinh: {hocSinh.GioiTinh}");
 
+                    // Lấy điểm TB học kỳ
+                    string diemTBHK1 = "";
+                    string diemTBHK2 = "";
+                    try
+                    {
+                        // Lấy điểm TB từ DiemBLL
+                        var diemTB = BLL.DiemBLL.LayDiemTrungBinhHocSinh(hocSinh.MaHS);
+                        if (diemTB != null && diemTB.Count > 0)
+                        {
+                            // Tìm điểm HK1 và HK2
+                            var diemHK1 = diemTB.FirstOrDefault(d => d.MaHK == "HK1");
+                            var diemHK2 = diemTB.FirstOrDefault(d => d.MaHK == "HK2");
+
+                            diemTBHK1 = diemHK1?.DiemTB?.ToString("F1") ?? "";
+                            diemTBHK2 = diemHK2?.DiemTB?.ToString("F1") ?? "";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Lỗi khi lấy điểm TB cho {hocSinh.MaHS}: {ex.Message}");
+                    }
+
                     AddResultRow(
                         (i + 1).ToString(),     // STT
                         hocSinh.MaHS ?? "",     // Mã Học Sinh
@@ -394,8 +416,8 @@ namespace GUI.Sprint3
                         hocSinh.DiaChi ?? "",   // Địa Chỉ
                         hocSinh.Email ?? "",    // Email
                         tenLop,                 // Lớp
-                        "",                     // Điểm TB Học Kỳ 1
-                        ""                      // Điểm TB Học Kỳ 2
+                        diemTBHK1,              // Điểm TB Học Kỳ 1
+                        diemTBHK2               // Điểm TB Học Kỳ 2
                     );
                 }
             }

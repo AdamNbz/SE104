@@ -177,7 +177,7 @@
                         Foreground="White"
                         Margin="8,0" Padding="16,8" Click="btn_TimKiem_Click"/>
 
-                <Button x:Name="btn_Reset" Content="Reset"
+                <Button x:Name="btn_Reset" Content="Làm mới"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#2196F3"
                         Foreground="White"
@@ -197,9 +197,9 @@
                         <Grid Margin="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="110"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="80"/>
@@ -208,14 +208,14 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="STT" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Mã Học Sinh" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Họ Tên" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Giới Tính" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="Địa Chỉ" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="5" Text="Email" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="6" Text="Lớp" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="7" Text="Điểm TB Học Kỳ 1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="8" Text="Điểm TB Học Kỳ 2" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Mã Học Sinh" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            <TextBlock Grid.Column="2" Text="Họ Tên" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-27,0,0,0"/>
+                            <TextBlock Grid.Column="3" Text="Giới Tính" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-48,0,0,0"/>
+                            <TextBlock Grid.Column="4" Text="Địa Chỉ" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-29,0,0,0"/>
+                            <TextBlock Grid.Column="5" Text="Email" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-36,0,0,0"/>
+                            <TextBlock Grid.Column="6" Text="Lớp" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-36,0,0,0"/>
+                            <TextBlock Grid.Column="7" Text="Điểm TB Học Kỳ 1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-22,0,0,0"/>
+                            <TextBlock Grid.Column="8" Text="Điểm TB Học Kỳ 2" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-22,0,0,0"/>
                         </Grid>
                     </Border>
 

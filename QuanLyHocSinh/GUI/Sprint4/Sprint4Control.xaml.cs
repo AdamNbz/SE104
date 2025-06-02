@@ -44,16 +44,17 @@ namespace GUI.Sprint4
             {
                 cbx_Lop.Items.Clear();
 
+                // Thêm placeholder
+                cbx_Lop.Items.Add("--Chọn lớp--");
+
                 var danhSachLop = LopBLL.GetDanhSachLop();
                 foreach (var lop in danhSachLop)
                 {
                     cbx_Lop.Items.Add(lop.TenLop);
                 }
 
-                if (cbx_Lop.Items.Count > 0)
-                {
-                    cbx_Lop.SelectedIndex = 0;
-                }
+                // Set về placeholder (index 0)
+                cbx_Lop.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -113,6 +114,14 @@ namespace GUI.Sprint4
         {
             try
             {
+                // Kiểm tra nếu là placeholder thì không load gì
+                if (cbx_Lop.SelectedIndex == 0 && cbx_Lop.SelectedItem?.ToString() == "--Chọn lớp--")
+                {
+                    // Clear danh sách học sinh khi chọn placeholder
+                    sp_DanhSachHocSinh.Children.Clear();
+                    return;
+                }
+
                 // TODO: Load students for selected class
                 LoadStudentsForClass();
                 LoadScoresForSubject(); // Load điểm theo môn học hiện tại
@@ -155,9 +164,9 @@ namespace GUI.Sprint4
             {
                 sp_DanhSachHocSinh.Children.Clear();
 
-                if (cbx_Lop.SelectedItem == null)
+                if (cbx_Lop.SelectedItem == null || cbx_Lop.SelectedItem.ToString() == "--Chọn lớp--")
                 {
-                    // Không có lớp được chọn - để trống
+                    // Không có lớp được chọn hoặc đang chọn placeholder - để trống
                     return;
                 }
 
@@ -222,7 +231,8 @@ namespace GUI.Sprint4
 
         private void LoadExistingScores()
         {
-            if (cbx_Lop.SelectedItem == null || cbx_MonHoc.SelectedItem == null || cbx_HocKy.SelectedItem == null)
+            if (cbx_Lop.SelectedItem == null || cbx_Lop.SelectedItem.ToString() == "--Chọn lớp--" ||
+                cbx_MonHoc.SelectedItem == null || cbx_HocKy.SelectedItem == null)
             {
                 return; // Không đủ thông tin để tải điểm
             }
@@ -493,7 +503,8 @@ namespace GUI.Sprint4
             try
             {
                 // Kiểm tra các lựa chọn
-                if (cbx_Lop.SelectedItem == null || cbx_MonHoc.SelectedItem == null || cbx_HocKy.SelectedItem == null)
+                if (cbx_Lop.SelectedItem == null || cbx_Lop.SelectedItem.ToString() == "--Chọn lớp--" ||
+                    cbx_MonHoc.SelectedItem == null || cbx_HocKy.SelectedItem == null)
                 {
                     MessageBox.Show("Vui lòng chọn đầy đủ lớp, môn học và học kỳ!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
