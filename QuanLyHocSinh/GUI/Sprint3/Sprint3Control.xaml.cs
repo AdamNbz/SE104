@@ -193,9 +193,8 @@ namespace GUI.Sprint3
                 cbx_TenKhoiLop.SelectedIndex = 0;
                 cbx_TenLop.SelectedIndex = 0;
 
-                // Clear results
+                // Clear results only - don't show empty rows
                 sp_KetQuaTimKiem.Children.Clear();
-                AddEmptyResultRows();
             }
             catch (Exception ex)
             {
@@ -257,8 +256,7 @@ namespace GUI.Sprint3
             // Header: STT | Mã Học Sinh | Họ Tên | Giới Tính | Địa Chỉ | Email | Lớp | Điểm TB HK1 | Điểm TB HK2
             string[] values = { stt, maHS, hoTen, gioiTinh, diaChi, email, lop, diemHK1, diemHK2 };
 
-            // Debug: In ra giá trị để kiểm tra
-            System.Diagnostics.Debug.WriteLine($"AddResultRow - STT: {stt}, MaHS: {maHS}, HoTen: {hoTen}, GioiTinh: {gioiTinh}");
+
             for (int i = 0; i < values.Length; i++)
             {
                 if (i == 2) // Họ Tên column
@@ -383,8 +381,7 @@ namespace GUI.Sprint3
                     }
                     catch { }
 
-                    // Debug: Kiểm tra dữ liệu
-                    System.Diagnostics.Debug.WriteLine($"Debug - STT: {i + 1}, MaHS: {hocSinh.MaHS}, HoTen: {hocSinh.HoTen}, GioiTinh: {hocSinh.GioiTinh}");
+
 
                     // Lấy điểm TB học kỳ
                     string diemTBHK1 = "";
@@ -405,7 +402,7 @@ namespace GUI.Sprint3
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi khi lấy điểm TB cho {hocSinh.MaHS}: {ex.Message}");
+                        // Ignore errors when getting scores
                     }
 
                     AddResultRow(

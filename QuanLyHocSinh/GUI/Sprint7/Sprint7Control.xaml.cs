@@ -88,6 +88,7 @@ namespace GUI.Sprint7
             LoadQuyDinh();
             LoadTab2Data(); // Load for tab 2
             LoadTab4Data(); // Load for tab 4
+            LoadTab5Data(); // Load for tab 5
         }
 
         private void LoadLop()
@@ -154,6 +155,13 @@ namespace GUI.Sprint7
                 }
 
                 var selectedLop = cbx_MonHoc.SelectedItem as Lop;
+
+                if (selectedLop == null)
+                {
+                    MessageBox.Show("Vui lòng chọn lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 string maLop = selectedLop.MaLop;
                 string tenMoi = txb_TenMoi.Text.Trim();
 
@@ -517,6 +525,14 @@ namespace GUI.Sprint7
 
                 string tenLop = txb_TenLopMoi.Text.Trim();
                 var selectedKhoi = cbx_LopThuocKhoi.SelectedItem as Khoi;
+
+                if (selectedKhoi == null)
+                {
+                    MessageBox.Show("Vui lòng chọn khối cho lớp", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    cbx_LopThuocKhoi.Focus();
+                    return;
+                }
+
                 string maKhoi = selectedKhoi.MaKhoi;
 
                 // Confirm action
@@ -559,15 +575,10 @@ namespace GUI.Sprint7
             }
         }
 
-        private void btn_HuyThemLop_Click(object sender, RoutedEventArgs e)
+        private void btn_ThoatThemLop_Click(object sender, RoutedEventArgs e)
         {
-            // Reset form
-            txb_TenLopMoi.Text = "";
-            GenerateMaLop(); // Generate new code
-            if (cbx_LopThuocKhoi.Items.Count > 0)
-            {
-                cbx_LopThuocKhoi.SelectedIndex = 0;
-            }
+            // Thoát khỏi ứng dụng
+            Application.Current.Shutdown();
         }
 
         // Methods for Tab 4: Thêm môn học mới
@@ -656,11 +667,158 @@ namespace GUI.Sprint7
             }
         }
 
-        private void btn_HuyThemMonHoc_Click(object sender, RoutedEventArgs e)
+        private void btn_ThoatThemMonHoc_Click(object sender, RoutedEventArgs e)
         {
-            // Reset form
-            txb_TenMonHoc.Text = "";
-            GenerateMaMonHoc(); // Generate new code
+            // Thoát khỏi ứng dụng
+            Application.Current.Shutdown();
+        }
+
+        // Methods for Tab 5: Thay đổi tên môn học
+        private void LoadTab5Data()
+        {
+            try
+            {
+                LoadDanhSachMonHoc();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải dữ liệu tab 5: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Diagnostics.Debug.WriteLine($"Error in LoadTab5Data: {ex.Message}");
+            }
+        }
+
+        private void LoadDanhSachMonHoc()
+        {
+            try
+            {
+                var danhSachMonHoc = MonHocBLL.LayDanhSachMonHoc();
+                cbx_MonHocHienTai.ItemsSource = danhSachMonHoc;
+                cbx_MonHocHienTai.DisplayMemberPath = "TenMH";
+                cbx_MonHocHienTai.SelectedValuePath = "MaMH";
+
+                if (danhSachMonHoc.Count > 0)
+                {
+                    cbx_MonHocHienTai.SelectedIndex = 0;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Loaded {danhSachMonHoc.Count} môn học for ComboBox");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải danh sách môn học: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Diagnostics.Debug.WriteLine($"Error in LoadDanhSachMonHoc: {ex.Message}");
+            }
+        }
+
+        private void cbx_MonHocHienTai_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (cbx_MonHocHienTai.SelectedItem is MonHoc selectedMonHoc)
+                {
+                    txb_MaMonHocHienTai.Text = selectedMonHoc.MaMH;
+                    txb_TenMonHocMoi.Text = selectedMonHoc.TenMH;
+                }
+                else
+                {
+                    txb_MaMonHocHienTai.Text = "";
+                    txb_TenMonHocMoi.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi chọn môn học: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Diagnostics.Debug.WriteLine($"Error in cbx_MonHocHienTai_SelectionChanged: {ex.Message}");
+            }
+        }
+
+        private void btn_ThayDoiTenMonHoc_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (cbx_MonHocHienTai.SelectedItem == null)
+                {
+                    MessageBox.Show("Vui lòng chọn môn học", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(txb_TenMonHocMoi.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập tên mới cho môn học", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var selectedMonHoc = cbx_MonHocHienTai.SelectedItem as MonHoc;
+
+                if (selectedMonHoc == null)
+                {
+                    MessageBox.Show("Vui lòng chọn môn học", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                string maMonHoc = selectedMonHoc.MaMH;
+                string tenMoi = txb_TenMonHocMoi.Text.Trim();
+
+                // Kiểm tra tên mới có khác tên cũ không
+                if (tenMoi == selectedMonHoc.TenMH)
+                {
+                    MessageBox.Show("Tên mới phải khác tên hiện tại", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Xác nhận thay đổi
+                var result = MessageBox.Show($"Bạn có chắc chắn muốn thay đổi tên môn học '{selectedMonHoc.TenMH}' thành '{tenMoi}'?",
+                    "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        // Call BLL to update in database
+                        bool ketQua = MonHocBLL.ThayDoiTenMonHoc(maMonHoc, tenMoi);
+
+                        if (ketQua)
+                        {
+                            MessageBox.Show("Thay đổi tên môn học thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                            // Reload danh sách môn học để cập nhật giao diện
+                            LoadDanhSachMonHoc();
+
+                            // Tìm và chọn lại môn học vừa cập nhật
+                            if (cbx_MonHocHienTai.ItemsSource is List<MonHoc> danhSachMonHoc)
+                            {
+                                for (int i = 0; i < danhSachMonHoc.Count; i++)
+                                {
+                                    if (danhSachMonHoc[i].MaMH == maMonHoc)
+                                    {
+                                        cbx_MonHocHienTai.SelectedIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không thể cập nhật tên môn học. Tên môn học có thể đã tồn tại.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (Exception updateEx)
+                    {
+                        MessageBox.Show($"Lỗi khi cập nhật môn học: {updateEx.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi thay đổi tên môn học: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Diagnostics.Debug.WriteLine($"Error in btn_ThayDoiTenMonHoc_Click: {ex.Message}");
+            }
+        }
+
+        private void btn_ThoatThayDoiMonHoc_Click(object sender, RoutedEventArgs e)
+        {
+            // Thoát khỏi ứng dụng
+            Application.Current.Shutdown();
         }
     }
 }

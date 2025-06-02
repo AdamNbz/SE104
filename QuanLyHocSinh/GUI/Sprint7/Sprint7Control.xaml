@@ -267,12 +267,12 @@
                                         IsEnabled="False"
                                         Click="btn_ThemLop_Click"/>
 
-                                <Button x:Name="btn_HuyThemLop"
-                                        Content="Hủy"
+                                <Button x:Name="btn_ThoatThemLop"
+                                        Content="Thoát"
                                         Style="{StaticResource MaterialDesignOutlinedButton}"
                                         FontSize="16"
                                         Margin="8,0,0,0"
-                                        Click="btn_HuyThemLop_Click"/>
+                                        Click="btn_ThoatThemLop_Click"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -314,7 +314,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0"
-                                               Text="Tên lớp hiện tại"
+                                               Text="Lớp hiện tại"
                                                FontWeight="Bold"
                                                FontSize="16"
                                                VerticalAlignment="Center"
@@ -360,7 +360,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0"
-                                               Text="Tên lớp mới"
+                                               Text="Tên mới của lớp"
                                                FontWeight="Bold"
                                                FontSize="16"
                                                VerticalAlignment="Center"
@@ -432,7 +432,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0"
-                                               Text="Tên môn học"
+                                               Text="Tên môn học mới"
                                                FontWeight="Bold"
                                                FontSize="16"
                                                VerticalAlignment="Center"
@@ -488,12 +488,132 @@
                                         IsEnabled="False"
                                         Click="btn_ThemMonHoc_Click"/>
 
-                                <Button x:Name="btn_HuyThemMonHoc"
-                                        Content="Hủy"
+                                <Button x:Name="btn_ThoatThemMonHoc"
+                                        Content="Thoát"
                                         Style="{StaticResource MaterialDesignOutlinedButton}"
                                         FontSize="16"
                                         Margin="8,0,0,0"
-                                        Click="btn_HuyThemMonHoc_Click"/>
+                                        Click="btn_ThoatThemMonHoc_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <!-- Tab 5: Thay đổi tên môn học -->
+                <TabItem Header="Thay đổi tên môn học">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Main Content -->
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Header -->
+                            <TextBlock Text="THAY ĐỔI TÊN MÔN HỌC"
+                                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,32"/>
+
+                            <!-- Form Controls -->
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Môn học hiện tại -->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Môn học hiện tại"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <ComboBox x:Name="cbx_MonHocHienTai"
+                                              Grid.Column="1"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              FontSize="15"
+                                              SelectionChanged="cbx_MonHocHienTai_SelectionChanged"/>
+                                </Grid>
+
+                                <!-- Mã môn học hiện tại -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Mã môn học hiện tại"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox x:Name="txb_MaMonHocHienTai"
+                                             Grid.Column="1"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             IsReadOnly="True"
+                                             Background="#CCCCCC"
+                                             Cursor="Arrow"/>
+                                </Grid>
+
+                                <!-- Tên mới của môn học -->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Tên mới của môn học"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,16,0"/>
+
+                                    <TextBox x:Name="txb_TenMonHocMoi"
+                                             Grid.Column="1"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="15"
+                                             MaxLength="100"
+                                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,32,0,0">
+
+                                <Button x:Name="btn_ThayDoiTenMonHoc"
+                                        Content="Lưu thay đổi"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        FontSize="16"
+                                        Margin="0,0,8,0"
+                                        Click="btn_ThayDoiTenMonHoc_Click"/>
+
+                                <Button x:Name="btn_ThoatThayDoiMonHoc"
+                                        Content="Thoát"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        FontSize="16"
+                                        Margin="8,0,0,0"
+                                        Click="btn_ThoatThayDoiMonHoc_Click"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

@@ -81,7 +81,7 @@ public static class TimKiemBLL
                 MinSiSo = null;
             }
             
-            if (int.TryParse(minSiSo, out var resultmax))
+            if (int.TryParse(maxSiSo, out var resultmax))
             {
                 MaxSiSo = resultmax;
             }
@@ -143,11 +143,30 @@ public static class TimKiemBLL
         //}
         if (thongTin.MaxSiSo != null)
         {
+            System.Windows.MessageBox.Show($"Before MaxSiSo filter: {CacKetQuaKhaThi.Count} students\nMaxSiSo: {thongTin.MaxSiSo}", "Debug - Before MaxSiSo");
             TimKiemTheoMaxSiSo(ref CacKetQuaKhaThi, (int)thongTin.MaxSiSo);
+            System.Windows.MessageBox.Show($"After MaxSiSo filter: {CacKetQuaKhaThi.Count} students", "Debug - After MaxSiSo");
         }
         if (thongTin.MinSiSo != null)
         {
+            System.Windows.MessageBox.Show($"Before MinSiSo filter: {CacKetQuaKhaThi.Count} students\nMinSiSo: {thongTin.MinSiSo}", "Debug - Before MinSiSo");
             TimKiemTheoMinSiSo(ref CacKetQuaKhaThi, (int)thongTin.MinSiSo);
+        }
+        if (thongTin.MinDiemTrungBinhHK1 != null)
+        {
+            TimKiemTheoMinDiemTBHK1(ref CacKetQuaKhaThi, (float)thongTin.MinDiemTrungBinhHK1);
+        }
+        if (thongTin.MaxDiemTrungBinhHK1 != null)
+        {
+            TimKiemTheoMaxDiemTBHK1(ref CacKetQuaKhaThi, (float)thongTin.MaxDiemTrungBinhHK1);
+        }
+        if (thongTin.MinDiemTrungBinhHK2 != null)
+        {
+            TimKiemTheoMinDiemTBHK2(ref CacKetQuaKhaThi, (float)thongTin.MinDiemTrungBinhHK2);
+        }
+        if (thongTin.MaxDiemTrungBinhHK2 != null)
+        {
+            TimKiemTheoMaxDiemTBHK2(ref CacKetQuaKhaThi, (float)thongTin.MaxDiemTrungBinhHK2);
         }
         if(thongTin.MinNgaySinh!=null)
         {
@@ -257,38 +276,136 @@ public static class TimKiemBLL
     //{
     //    hocSinhs = hocSinhs.Where(x => x.DiemTrungBinhHKI >= MinDiemTrungBinhHKI).ToList();
     //}
-    //private static void TimKiemTheoMinDiemTrungBinhHocKiII(ref List<HocSinh> hocSinhs, float MinDiemTrungBinhHKII)
-    //{
-    //    hocSinhs = hocSinhs.Where(x => x.DiemTrungBinhHKII >= MinDiemTrungBinhHKII).ToList();
-    //}
-    private static void TimKiemTheoMinSiSo(ref List<HocSinh> hocSinhs, int MinSiSo)
+    // Tìm kiếm theo điểm TB HK1 tối thiểu
+    private static void TimKiemTheoMinDiemTBHK1(ref List<HocSinh> hocSinhs, float minDiem)
     {
         List<HocSinh> KetQua = new List<HocSinh>();
-        List<HocSinh> HocSinhList = HocSinhBLL.GetDanhSachHocSinh();
-        
+
         for (int i = 0; i < hocSinhs.Count; i++)
         {
-            int siso=LopBLL.TinhSiSo(HocSinhList, hocSinhs[i].MaLop);
-            if (siso >= MinSiSo)
+            var diemTB = DiemBLL.LayDiemTrungBinhHocSinhTheoHocKy(hocSinhs[i].MaHS, "HK1");
+            if (diemTB.HasValue && diemTB.Value >= minDiem)
             {
                 KetQua.Add(hocSinhs[i]);
             }
         }
         hocSinhs = KetQua;
     }
-    private static void TimKiemTheoMaxSiSo(ref List<HocSinh> hocSinhs, int MaxSiSo)
+
+    // Tìm kiếm theo điểm TB HK1 tối đa
+    private static void TimKiemTheoMaxDiemTBHK1(ref List<HocSinh> hocSinhs, float maxDiem)
     {
         List<HocSinh> KetQua = new List<HocSinh>();
-        List<HocSinh> HocSinhList = HocSinhBLL.GetDanhSachHocSinh();
 
         for (int i = 0; i < hocSinhs.Count; i++)
         {
-            int siso = LopBLL.TinhSiSo(HocSinhList, hocSinhs[i].MaLop);
-            if (siso <= MaxSiSo)
+            var diemTB = DiemBLL.LayDiemTrungBinhHocSinhTheoHocKy(hocSinhs[i].MaHS, "HK1");
+            if (diemTB.HasValue && diemTB.Value <= maxDiem)
             {
                 KetQua.Add(hocSinhs[i]);
             }
         }
+        hocSinhs = KetQua;
+    }
+
+    // Tìm kiếm theo điểm TB HK2 tối thiểu
+    private static void TimKiemTheoMinDiemTBHK2(ref List<HocSinh> hocSinhs, float minDiem)
+    {
+        List<HocSinh> KetQua = new List<HocSinh>();
+
+        for (int i = 0; i < hocSinhs.Count; i++)
+        {
+            var diemTB = DiemBLL.LayDiemTrungBinhHocSinhTheoHocKy(hocSinhs[i].MaHS, "HK2");
+            if (diemTB.HasValue && diemTB.Value >= minDiem)
+            {
+                KetQua.Add(hocSinhs[i]);
+            }
+        }
+        hocSinhs = KetQua;
+    }
+
+    // Tìm kiếm theo điểm TB HK2 tối đa
+    private static void TimKiemTheoMaxDiemTBHK2(ref List<HocSinh> hocSinhs, float maxDiem)
+    {
+        List<HocSinh> KetQua = new List<HocSinh>();
+
+        for (int i = 0; i < hocSinhs.Count; i++)
+        {
+            var diemTB = DiemBLL.LayDiemTrungBinhHocSinhTheoHocKy(hocSinhs[i].MaHS, "HK2");
+            if (diemTB.HasValue && diemTB.Value <= maxDiem)
+            {
+                KetQua.Add(hocSinhs[i]);
+            }
+        }
+        hocSinhs = KetQua;
+    }
+    private static void TimKiemTheoMinSiSo(ref List<HocSinh> hocSinhs, int MinSiSo)
+    {
+        List<HocSinh> KetQua = new List<HocSinh>();
+
+        System.Diagnostics.Debug.WriteLine($"=== TimKiemTheoMinSiSo: MinSiSo={MinSiSo}, Input count={hocSinhs.Count} ===");
+
+        // Temporary MessageBox for debugging
+        System.Windows.MessageBox.Show($"TimKiemTheoMinSiSo\nMinSiSo: {MinSiSo}\nInput count: {hocSinhs.Count}", "Debug Info");
+
+        // Group học sinh theo lớp để tính sĩ số
+        var lopGroups = hocSinhs.GroupBy(hs => hs.MaLop).ToList();
+
+        System.Diagnostics.Debug.WriteLine($"Found {lopGroups.Count} lop groups");
+
+        foreach (var lopGroup in lopGroups)
+        {
+            string maLop = lopGroup.Key;
+            int countInGroup = lopGroup.Count();
+
+            System.Diagnostics.Debug.WriteLine($"Processing group - MaLop: '{maLop}', Students in group: {countInGroup}");
+
+            if (string.IsNullOrEmpty(maLop))
+            {
+                System.Diagnostics.Debug.WriteLine("Skipping null/empty MaLop");
+                continue;
+            }
+
+            // Tính sĩ số thật từ database
+            int siso = LopBLL.TinhSiSo(null, maLop);
+
+            System.Diagnostics.Debug.WriteLine($"Debug SiSo - Lop: {maLop}, SiSo: {siso}, MinSiSo: {MinSiSo}, Match: {siso >= MinSiSo}");
+
+            if (siso >= MinSiSo)
+            {
+                // Thêm tất cả học sinh trong lớp này
+                KetQua.AddRange(lopGroup);
+                System.Diagnostics.Debug.WriteLine($"Added {countInGroup} students from lop {maLop}");
+            }
+        }
+
+        System.Diagnostics.Debug.WriteLine($"=== Result: {KetQua.Count} students found ===");
+        hocSinhs = KetQua;
+    }
+    private static void TimKiemTheoMaxSiSo(ref List<HocSinh> hocSinhs, int MaxSiSo)
+    {
+        List<HocSinh> KetQua = new List<HocSinh>();
+
+        // Group học sinh theo lớp để tính sĩ số
+        var lopGroups = hocSinhs.GroupBy(hs => hs.MaLop).ToList();
+
+        foreach (var lopGroup in lopGroups)
+        {
+            string maLop = lopGroup.Key;
+            if (string.IsNullOrEmpty(maLop)) continue;
+
+            // Tính sĩ số thật từ database
+            int siso = LopBLL.TinhSiSo(null, maLop); // Không cần HocSinhList vì method dùng database
+
+            System.Diagnostics.Debug.WriteLine($"Debug SiSo - Lop: {maLop}, SiSo: {siso}, MaxSiSo: {MaxSiSo}");
+
+            if (siso <= MaxSiSo)
+            {
+                // Thêm tất cả học sinh trong lớp này
+                KetQua.AddRange(lopGroup);
+            }
+        }
+
         hocSinhs = KetQua;
     }
     private static void TimKiemTheoMinNgaySinh(ref List<HocSinh> hocSinhs, DateTime MinNgaySinh)
