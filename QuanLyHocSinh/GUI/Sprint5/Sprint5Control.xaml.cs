@@ -143,9 +143,6 @@ namespace GUI.Sprint5
 
                 // Generate report từ BLL
                 GenerateReportFromBLL();
-
-                MessageBox.Show($"Đã lập báo cáo tổng kết môn {cbx_Mon.SelectedItem} - {cbx_HocKy.SelectedItem}",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
