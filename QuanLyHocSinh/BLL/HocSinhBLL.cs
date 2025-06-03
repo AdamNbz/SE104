@@ -106,66 +106,40 @@ public static class HocSinhBLL
         List<HocSinh> CacKetQuaKhaThi = new List<HocSinh>();
         try
         {
-           
-            for (int i = 0; i < hocSinh.Count; i++)
-            {
-                if (DuLieu == hocSinh[i].MaHS)
-                {
-                    CacKetQuaKhaThi.Add(hocSinh[i]);
-                    return CacKetQuaKhaThi;
-                }
-            }
-            for (int i = 0; i < hocSinh.Count; i++)
-            {
-                if (DuLieu == hocSinh[i].Email)
-                {
-                    CacKetQuaKhaThi.Add(hocSinh[i]);
-                }
-                if(CacKetQuaKhaThi.Count > 0)
+            if (string.IsNullOrEmpty(DuLieu))
                 return CacKetQuaKhaThi;
-            }
+
+            string tuKhoa = DuLieu.ToLower();
+
+            // TÌM KIẾM TOÀN DIỆN - tìm trong tất cả các trường
             for (int i = 0; i < hocSinh.Count; i++)
             {
-                if (DuLieu == hocSinh[i].HoTen)
+                var hs = hocSinh[i];
+                bool timThay = false;
+
+                // Kiểm tra từng trường có chứa từ khóa không (sử dụng Contains thay vì ==)
+                if (!string.IsNullOrEmpty(hs.MaHS) && hs.MaHS.ToLower().Contains(tuKhoa))
+                    timThay = true;
+                else if (!string.IsNullOrEmpty(hs.HoTen) && hs.HoTen.ToLower().Contains(tuKhoa))
+                    timThay = true;
+                else if (!string.IsNullOrEmpty(hs.GioiTinh) && hs.GioiTinh.ToLower().Contains(tuKhoa))
+                    timThay = true;
+                else if (!string.IsNullOrEmpty(hs.DiaChi) && hs.DiaChi.ToLower().Contains(tuKhoa))
+                    timThay = true;
+                else if (!string.IsNullOrEmpty(hs.Email) && hs.Email.ToLower().Contains(tuKhoa))
+                    timThay = true;
+                else if (!string.IsNullOrEmpty(hs.MaLop) && hs.MaLop.ToLower().Contains(tuKhoa))
+                    timThay = true;
+
+                if (timThay)
                 {
-                    CacKetQuaKhaThi.Add(hocSinh[i]);
+                    CacKetQuaKhaThi.Add(hs);
                 }
-                if (CacKetQuaKhaThi.Count > 0)
-                    return CacKetQuaKhaThi;
             }
-            for (int i = 0; i < hocSinh.Count; i++)
-            {
-                if (DuLieu == hocSinh[i].GioiTinh)
-                {
-                    CacKetQuaKhaThi.Add(hocSinh[i]);
-                }
-                if (CacKetQuaKhaThi.Count > 0)
-                    return CacKetQuaKhaThi;
-            }
-            for (int i = 0; i < hocSinh.Count; i++)
-            {
-                if (DuLieu == hocSinh[i].MaLop)
-                {
-                    CacKetQuaKhaThi.Add(hocSinh[i]);
-                }
-                if (CacKetQuaKhaThi.Count > 0)
-                    return CacKetQuaKhaThi;
-            }
-            for (int i = 0; i < hocSinh.Count; i++)
-            {
-                if (DuLieu == hocSinh[i].DiaChi)
-                {
-                    CacKetQuaKhaThi.Add(hocSinh[i]);
-                }
-                if (CacKetQuaKhaThi.Count > 0)
-                    return CacKetQuaKhaThi;
-            }
-            throw new Exception("Khong Tim Thay hoc Sinh");
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "LOI TIM KIEM", MessageBoxButton.OK, MessageBoxImage.Error);
-            
+            MessageBox.Show($"Lỗi khi tìm kiếm học sinh: {ex.Message}", "Lỗi tìm kiếm", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         return CacKetQuaKhaThi;
     }
