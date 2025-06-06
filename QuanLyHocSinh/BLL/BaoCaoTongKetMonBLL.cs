@@ -10,7 +10,7 @@ namespace BLL;
 
 public class BaoCaoTongKetMonBLL
 {
-    private static BaoCaoMonResult? _currentBaoCaoMon;
+    private static KetQuaBaoCaoMon? _currentBaoCaoMon;
 
     public static List<MonHoc> LayDanhSachMonHoc()
     {
@@ -28,7 +28,7 @@ public class BaoCaoTongKetMonBLL
         _currentBaoCaoMon = BaoCaoTongKetMonDAL.LapBaoCaoTongKetMon(maMH, maHK, mocDiemDat);
     }
 
-    public static BaoCaoMonResult? LayBaoCaoTongKetMon()
+    public static KetQuaBaoCaoMon? LayBaoCaoTongKetMon()
     {
         return _currentBaoCaoMon;
     }

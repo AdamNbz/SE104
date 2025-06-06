@@ -63,7 +63,7 @@ public static class BaoCaoTongKetMonDAL
         return tongDiem / tongHeSo;
     }
 
-    public static BaoCaoMonResult LapBaoCaoTongKetMon(string maMH, string maHK, int mocDiemDat)
+    public static KetQuaBaoCaoMon LapBaoCaoTongKetMon(string maMH, string maHK, int mocDiemDat)
     {
         var context = DataContext.Context;
 
@@ -84,7 +84,7 @@ public static class BaoCaoTongKetMonDAL
         int soKhongDat = tongSo - soDat;
         double tyLeDat = tongSo > 0 ? (soDat * 100.0 / tongSo) : 0;
 
-        return new BaoCaoMonResult
+        return new KetQuaBaoCaoMon
         {
             TongSo = tongSo,
             SoLuongDat = soDat,

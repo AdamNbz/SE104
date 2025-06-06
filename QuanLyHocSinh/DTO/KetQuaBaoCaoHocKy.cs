@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTO;
 
-public class BaoCaoHocKyResult
+public class KetQuaBaoCaoHocKy
 {
     public List<ChiTietBaoCaoHocKyLop> DanhSachThongKeLop { get; set; } = new List<ChiTietBaoCaoHocKyLop>();
 }

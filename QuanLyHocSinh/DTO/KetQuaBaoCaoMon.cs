@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTO;
 
-public class BaoCaoMonResult
+public class KetQuaBaoCaoMon
 {
     public int TongSo { get; set; }
     public int SoLuongDat { get; set; }
