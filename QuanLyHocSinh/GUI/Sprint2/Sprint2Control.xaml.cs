@@ -191,9 +191,13 @@ namespace GUI.Sprint2
                     // Xử lý trường hợp người dùng nhập text
                     string searchText = editableComboBox.Text.ToLower();
 
-                    // Tìm học sinh phù hợp với text đã nhập
+                    // Tìm học sinh phù hợp với text đã nhập - TÌM KIẾM TOÀN DIỆN
                     HocSinh hocSinhTimThay = danhSachHocSinh.FirstOrDefault(hs =>
-                        hs.HoTen.ToLower().Contains(searchText));
+                        (hs.HoTen?.ToLower().Contains(searchText) ?? false) ||
+                        (hs.GioiTinh?.ToLower().Contains(searchText) ?? false) ||
+                        (hs.DiaChi?.ToLower().Contains(searchText) ?? false) ||
+                        (hs.Email?.ToLower().Contains(searchText) ?? false) ||
+                        (hs.MaHS?.ToLower().Contains(searchText) ?? false));
 
                     if (hocSinhTimThay != null)
                     {
@@ -1136,9 +1140,14 @@ namespace GUI.Sprint2
 
                         if (!string.IsNullOrEmpty(searchText))
                         {
-                            // Lọc danh sách học sinh dựa trên text đã nhập
+                            // Lọc danh sách học sinh dựa trên text đã nhập - TÌM KIẾM TOÀN DIỆN
                             List<HocSinh> filteredList = currentList
-                                .Where(hs => hs.HoTen.ToLower().Contains(searchText))
+                                .Where(hs =>
+                                    (hs.HoTen?.ToLower().Contains(searchText) ?? false) ||
+                                    (hs.GioiTinh?.ToLower().Contains(searchText) ?? false) ||
+                                    (hs.DiaChi?.ToLower().Contains(searchText) ?? false) ||
+                                    (hs.Email?.ToLower().Contains(searchText) ?? false) ||
+                                    (hs.MaHS?.ToLower().Contains(searchText) ?? false))
                                 .ToList();
 
                             // Cập nhật ItemsSource của ComboBox
