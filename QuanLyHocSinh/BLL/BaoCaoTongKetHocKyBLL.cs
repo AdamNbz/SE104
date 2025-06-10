@@ -10,7 +10,7 @@ namespace BLL;
 
 public class BaoCaoTongKetHocKyBLL
 {
-    private static BaoCaoHocKyResult? _currentBaoCaoHocKy;
+    private static KetQuaBaoCaoHocKy? _currentBaoCaoHocKy;
 
     public static List<HocKy> LayDanhSachHocKy()
     {
@@ -23,7 +23,7 @@ public class BaoCaoTongKetHocKyBLL
         _currentBaoCaoHocKy = BaoCaoTongKetHocKyDAL.LapBaoCaoTongKetHocKy(maHK, mocDiemDat);
     }
 
-    public static BaoCaoHocKyResult? LayBaoCaoTongKetHocKy()
+    public static KetQuaBaoCaoHocKy? LayBaoCaoTongKetHocKy()
     {
         return _currentBaoCaoHocKy;
     }

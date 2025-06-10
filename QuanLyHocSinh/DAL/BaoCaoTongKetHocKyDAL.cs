@@ -11,7 +11,7 @@ namespace DAL;
 
 public class BaoCaoTongKetHocKyDAL
 {
-    public static BaoCaoHocKyResult LapBaoCaoTongKetHocKy(string maHK, int mocDiemDat)
+    public static KetQuaBaoCaoHocKy LapBaoCaoTongKetHocKy(string maHK, int mocDiemDat)
     {
         var context = DataContext.Context;
 
@@ -66,7 +66,7 @@ public class BaoCaoTongKetHocKyDAL
                 };
             }).OrderBy(r => r.TenLop).ToList();
 
-        return new BaoCaoHocKyResult
+        return new KetQuaBaoCaoHocKy
         {
             DanhSachThongKeLop = reportByClass
         };
